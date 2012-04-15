@@ -13,11 +13,11 @@ Main functions:
 [push X STATE]  ... pushes the current state of X onto X's stack, places X into state STATE
 [pop X]  ... pops state off X's state stack, places X into popped state
 
-[story STATE FUNC]   ... shortcut for [describe 'story STATE FUNC]
-[goto STATE]   ... shortcut for [now 'story STATE]
-[gosub STATE]   ... shortcut for [push 'story STATE]
-[return]   ... shortcut for [pop 'story]
-[chapter]  ... shortcut for [state 'story]
+[story STATE FUNC]   ... shortcut for [describe 'narrative STATE FUNC]
+[goto STATE]   ... shortcut for [now 'narrative STATE]
+[gosub STATE]   ... shortcut for [push 'narrative STATE]
+[return]   ... shortcut for [pop 'narrative]
+[chapter]  ... shortcut for [state 'narrative]
 
 [link TEXT ACTION FUNC]  ... returns a hyperlink with text TEXT that calls FUNC, with mouseover text ACTION
 [menu TEXT [[ACTIONTEXT1 FUNC1] [ACTIONTEXT2 FUNC2] ...]]  ... returns text hyperlinked to a popup menu

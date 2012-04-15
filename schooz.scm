@@ -58,18 +58,18 @@
   (hash-set! (schooz-stack X) (cdr (schooz-stack X))))
 
 ;; Main story object
-(define story "story")
+(define narrative "narrative")
 ;; Syntactic-sugar shortcuts for working with the main story graph
 ;; (story STATE FUNC)
-(define (story STATE FUNC) (describe story STATE FUNC))
+(define (story STATE FUNC) (describe narrative STATE FUNC))
 ;; (goto STATE)
-(define (goto STATE) (now story STATE))
+(define (goto STATE) (now narrative STATE))
 ;; (gosub STATE)
-(define (gosub STATE) (push story STATE))
+(define (gosub STATE) (push narrative STATE))
 ;; (return)
-(define (return) (pop story))
+(define (return) (pop narrative))
 ;; (chapter)
-(define (chapter) (state story))
+(define (chapter) (state narrative))
 
 ;; (link TEXT ACTION FUNC)  ... returns a hyperlink with text TEXT that calls FUNC, with mouseover text ACTION
 ;; (menu TEXT ((ACTIONTEXT1 FUNC1) (ACTIONTEXT2 FUNC2) ...))  ... returns text hyperlinked to a popup menu
