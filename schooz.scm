@@ -11,7 +11,7 @@
 ;; Object->stack hashtable
 (define schooz-stack (make-hash-table))
 
-
+;; Internal functions.
 ;; (ensure-object X)  ... ensures that X has valid entries in hashtables
 (define
   (ensure-object X)
@@ -25,6 +25,7 @@
    (not (hash-ref schooz-stack X))
    (hash-set! schooz-desc X '())))
 
+;; API functions.
 ;; (now X STATE)  ... places object X in state STATE
 (define
   (now X STATE)
