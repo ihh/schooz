@@ -1,6 +1,3 @@
-#!/usr/local/bin/guile
--s
-!#
 ;; (load "./schooz.scm")
 (load "./guile-1.8-schooz.scm")
 
