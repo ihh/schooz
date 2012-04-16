@@ -65,6 +65,8 @@
 ;; Syntactic-sugar shortcuts for working with the main story graph
 ;; (story STATE FUNC)
 (define (story STATE FUNC) (describe narrative STATE FUNC))
+;; (look)
+(define* (look #:optional ARGS) (tell narrative ARGS))
 ;; (goto STATE)
 (define (goto STATE) (now narrative STATE))
 ;; (gosub STATE)
@@ -81,5 +83,5 @@
 ;; (choice ((ACTIONTEXT1 FUNC1) (ACTIONTEXT2 FUNC2) ...))  ... returns a menu (rendered as a list)
 
 ;; The following functions do I/O in an implementation-dependent manner.
-;; (ask X PROMPT)  ... creates a popup input form with PROMPT; blocks until user responds; sets state of X directly.
-;; (say TEXT)  ... outputs TEXT.
+;; (say TEXT)  ... queues TEXT for output before the next (ask...) or .
+;; (ask X PROMPT)  ... outputs PROMPT; blocks until user responds; sets state of X directly.

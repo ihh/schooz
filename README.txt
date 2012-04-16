@@ -14,6 +14,7 @@ Main functions:
 [pop X]  ... pops state off X's state stack, places X into popped state
 
 [story STATE FUNC]   ... shortcut for [describe 'narrative STATE FUNC]
+[look ARGS]  ... shortcut for [tell 'narrative]
 [goto STATE]   ... shortcut for [now 'narrative STATE]
 [gosub STATE]   ... shortcut for [push 'narrative STATE]
 [return]   ... shortcut for [pop 'narrative]
