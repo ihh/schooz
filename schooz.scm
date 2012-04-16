@@ -77,7 +77,7 @@
 
 ;; Interface implementation-dependent methods.
 ;; The following functions must return a string, list, or nested list
-;; (link TEXT ACTION FUNC)  ... returns a hyperlink with text TEXT that calls FUNC, with mouseover text ACTION
+;; (link TEXT ACTIONTEXT FUNC)  ... returns a hyperlink with text TEXT that calls FUNC, with mouseover text ACTIONTEXT
 ;; (menu TEXT ((ACTIONTEXT1 FUNC1) (ACTIONTEXT2 FUNC2) ...))  ... returns text hyperlinked to a popup menu
 ;; (choice ((ACTIONTEXT1 FUNC1) (ACTIONTEXT2 FUNC2) ...))  ... returns a menu (rendered as a list)
 
@@ -88,5 +88,7 @@
 ;; Roughly speaking, this is as follows:
 ;;  While not (game-over?):
 ;;  The current scene is given by (look).
-;;   Optionally the interface can render available choices as a menu, instead of hyperlinks.
-;;  After an action function is triggered, the current scene should be refreshed.
+;;   Optionally the interface can render available action texts (link,menu,choice) in a separate menu,
+;;    but embedded hyperlinks are preferred.
+;;  After an action function is triggered:
+;;   The results of the action function are displayed, and the current scene (look) is refreshed.
