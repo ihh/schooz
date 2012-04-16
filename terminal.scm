@@ -42,7 +42,7 @@
 
 (define (main-loop)
   (if (game-over?)
-      1
+      (display "GAME OVER\n")
       (begin
 	(reset-action-list)
 	(display (schooz-flatten-strings (look)))
@@ -57,7 +57,7 @@
   (display-action-text-list)
   (let ((actions (length action-func-list)))
     (display "Choice? ")
-    (if (= actions 0) (lambda () ((quit) ""))  ;; auto-quit if no available actions
+    (if (= actions 0) (lambda () ((return) ""))  ;; auto-quit if no available actions
 	  (let ((n (read)))
 	    (if (and (number? n) (>= n 1) (<= n actions))
 		(list-ref action-func-list (- actions n))  ;; return n'th function from action-func-list

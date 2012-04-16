@@ -51,39 +51,42 @@
   (state X)
   (hash-ref schooz-state X))
 
-;; (describe X STATE FUNC)  ... set object X's descriptor function for state STATE to FUNC
+;; (description X STATE FUNC)  ... set object X's descriptor function for state STATE to FUNC
 (define
-  (describe X STATE FUNC)
+  (description X STATE FUNC)
   (ensure-object X)
   (hash-set! (hash-ref schooz-desc X) STATE FUNC))
 
-;; (tell X)  ... looks up the descriptor function for current state of object X, calls it
+;; (describe X)  ... looks up the descriptor function for current state of object X, calls it
 (define
-  (tell X)
+  (describe X)
   (let ((desc (hash-ref (hash-ref schooz-desc X) (state X))))
 ;; Uncomment to debug
-;;    (display "tell ") (display X) (display ": ") (display desc) (display "\n")
+;;    (display "describe ") (display X) (display ": ") (display desc) (display "\n")
     (eval-or-return desc)))
 
 ;; (push X STATE)  ... pushes the current state of X onto X's stack, places X into state STATE
 (define
   (push X STATE)
-  (hash-set! (schooz-stack X) (cons (state X) (schooz-stack X)))
+  (hash-set! schooz-stack X (cons (state X) (hash-ref schooz-stack X)))
   (now X STATE))
 
-;; (pop X)  ... pops state off X's state stack, places X into popped state
+;; (pop X)  ... pops state off X's state stack, places X into popped state (or "end" if stack empty)
 (define
   (pop X)
-  (now X (car (schooz-stack X)))
-  (hash-set! (schooz-stack X) (cdr (schooz-stack X))))
+  (if (null? (hash-ref schooz-stack X))
+      (now X "end")
+      (begin
+	(now X (car (hash-ref schooz-stack X)))
+	(hash-set! schooz-stack X (cdr (hash-ref schooz-stack X))))))
 
 ;; Main story object
 (define narrative "narrative")
 ;; Syntactic-sugar shortcuts for working with the main story graph
 ;; (story STATE FUNC)
-(define (story STATE FUNC) (describe narrative STATE FUNC))
+(define (story STATE FUNC) (description narrative STATE FUNC))
 ;; (look)
-(define (look) (tell narrative))
+(define (look) (describe narrative))
 ;; (goto STATE)
 (define (goto STATE) (now narrative STATE))
 ;; (gosub STATE)

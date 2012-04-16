@@ -15,14 +15,14 @@ Core API functions:
 [now X STATE]  ... places object X in state STATE
 [state X]  ... returns the current state (typically a string) of object named X
 
-[describe X STATE FUNC]  ... set object X's descriptor function for state STATE to FUNC
-[tell X]  ... looks up the descriptor function for current state of object X, calls it
+[description X STATE FUNC]  ... set object X's descriptor function for state STATE to FUNC
+[describe X]  ... looks up the descriptor function for current state of object X, calls it
 
 [push X STATE]  ... pushes X's current state onto X's stack, places X into state STATE
 [pop X]  ... pops state off X's stack, places X into popped state
 
-[story STATE FUNC]   ... shortcut for [describe 'narrative STATE FUNC]
-[look]  ... shortcut for [tell 'narrative]
+[story STATE FUNC]   ... shortcut for [description 'narrative STATE FUNC]
+[look]  ... shortcut for [describe 'narrative]
 [goto STATE]   ... shortcut for [now 'narrative STATE]
 [gosub STATE]   ... shortcut for [push 'narrative STATE]
 [return]   ... shortcut for [pop 'narrative]
