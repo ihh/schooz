@@ -1,9 +1,11 @@
 Minimal scheme-based CYOA framework.
 
 Simple text substitution swaps (...) with [...]
-Wraps all text with quotes
+Wraps all text with quotes.
 
-Main functions:
+
+API functions:
+
 [now X STATE]  ... places object X in state STATE
 [state X]  ... returns the current state (typically a string) of object named X, where X is an atom
 
@@ -20,13 +22,18 @@ Main functions:
 [return]   ... shortcut for [pop 'narrative]
 [chapter]  ... shortcut for [state 'narrative]
 
+
+Functions to be defined by user interface:
+
 [link TEXT ACTION FUNC]  ... returns a hyperlink with text TEXT that calls FUNC, with mouseover text ACTION
 [menu TEXT [[ACTIONTEXT1 FUNC1] [ACTIONTEXT2 FUNC2] ...]]  ... returns text hyperlinked to a popup menu
 [choice [[ACTIONTEXT1 FUNC1] [ACTIONTEXT2 FUNC2] ...]]  ... returns a menu (rendered as a list)
 
 [ask X PROMPT]  ... queues a popup text input box with prompt PROMPT, that sets state of X directly
 
+
 Global objects:
+
 Object->state hashtable
 Object->state->descriptor hashtable
 Object->stack hashtable
