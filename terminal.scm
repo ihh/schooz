@@ -48,11 +48,22 @@
 
 (define
   (action-chosen-from-list)
-  (display action-text-list)  ;; should display action texts with numbers here
-  (display "Choice? ")
+  (display-action-text-list)
   (let ((actions (length action-func-list)))
+    (display "Choice? ")
     (if (= actions 0) (lambda () ((quit) ""))  ;; auto-quit if no available actions
 	  (let ((n (read)))
 	    (if (and (number? n) (>= n 1) (<= n actions))
 		  (list-ref action-func-list (- actions n)  ;; return n'th function from action-func-list
 			    (action-chosen-from-list)))))))  ;; can't parse, try again (should print error message)
+
+(define (display-action-text-list)
+  (display-action-text 0))
+
+(define (display-action-text n)
+  (let ((actions (length action-text-list)))
+    (if (>= n actions) 1
+	(begin
+	  (display (+ n 1) ". " (list-ref action-text-list (- actions n 1)) "\n")
+	  (display-action-text (+ n 1) action-text-list)))))
+
