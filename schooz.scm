@@ -49,11 +49,13 @@
 ;; (push X STATE)  ... pushes the current state of X onto X's stack, places X into state STATE
 (define
   (push X STATE)
-  (hash-set! (schooz-stack X) (cons STATE (schooz-stack X))))
+  (hash-set! (schooz-stack X) (cons (state X) (schooz-stack X)))
+  (now X STATE))
 
 ;; (pop X)  ... pops state off X's state stack, places X into popped state
 (define
   (pop X)
+  (now X (car (schooz-stack X)))
   (hash-set! (schooz-stack X) (cdr (schooz-stack X))))
 
 ;; Main story object
