@@ -25,6 +25,10 @@
    (not (hash-ref schooz-stack X))
    (hash-set! schooz-stack X '())))
 
+;; (eval-or-return f)  ... if f is a function, evaluate; otherwise, return
+(define (eval-or-return f)
+  (if (procedure? f) (f) f))
+
 ;; API functions.
 ;; (now X STATE)  ... places object X in state STATE
 (define
@@ -45,8 +49,7 @@
 ;; (tell X)  ... looks up the descriptor function for current state of object X, calls it
 (define
   (tell X)
-  ((hash-ref schooz-desc (state X))))
-
+  (eval-or-return (hash-ref schooz-desc (state X))))
 
 ;; (push X STATE)  ... pushes the current state of X onto X's stack, places X into state STATE
 (define
