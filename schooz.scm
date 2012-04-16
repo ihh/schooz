@@ -1,3 +1,7 @@
+#!/usr/local/bin/guile
+-s
+!#
+
 ;; Minimal scheme-based CYOA framework.
 (use-modules (ice-9 optargs))
 
