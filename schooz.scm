@@ -21,13 +21,13 @@
   (ensure-object X)
   (if
    (not (hash-ref schooz-state X))
-   (hash-set! schooz-desc X "start"))
+   (hash-set! schooz-state X "start"))
   (if
    (not (hash-ref schooz-desc X))
    (hash-set! schooz-desc X (make-hash-table)))
   (if
    (not (hash-ref schooz-stack X))
-   (hash-set! schooz-desc X '())))
+   (hash-set! schooz-stack X '())))
 
 ;; API functions.
 ;; (now X STATE)  ... places object X in state STATE
