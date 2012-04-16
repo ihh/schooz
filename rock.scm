@@ -2,8 +2,13 @@
 -s
 !#
 
+;; An ultra-simple (3-room) test adventure.
+;; Illustrates various ways of forming simple (goto...) links.
+
+;; Load the interface
 (load "./terminal.scm")
 
+;; Define the story graph
 (story
  "start"
  (lambda ()
@@ -35,4 +40,5 @@
 	     (choice-goto (chapter) "It may be hard, but there are no better alternatives." "You're quite possibly correct...")
 	     (choice-goto "start" "Let's get out of here. I don't like hard places." "No problem."))))))
 
+;; And.... run.
 (main-loop)
