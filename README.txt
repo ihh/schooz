@@ -24,7 +24,7 @@ Main functions:
 [choice [[ACTIONTEXT1 FUNC1] [ACTIONTEXT2 FUNC2] ...]]  ... returns a menu (rendered as a list)
 
 [say TEXT]  ... queues TEXT for output
-
+[input X PROMPT]  ... queues a popup text input box with prompt PROMPT, that sets state of X directly
 
 Global objects:
 Text output queue (for [say...])
