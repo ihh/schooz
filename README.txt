@@ -10,13 +10,13 @@ Files:
 API functions:
 
 [now X STATE]  ... places object X in state STATE
-[state X]  ... returns the current state (typically a string) of object named X, where X is an atom
+[state X]  ... returns the current state (typically a string) of object named X
 
 [describe X STATE FUNC]  ... set object X's descriptor function for state STATE to FUNC
 [tell X]  ... looks up the descriptor function for current state of object X, calls it
 
-[push X STATE]  ... pushes the current state of X onto X's stack, places X into state STATE
-[pop X]  ... pops state off X's state stack, places X into popped state
+[push X STATE]  ... pushes X's current state onto X's stack, places X into state STATE
+[pop X]  ... pops state off X's stack, places X into popped state
 
 [story STATE FUNC]   ... shortcut for [describe 'narrative STATE FUNC]
 [look]  ... shortcut for [tell 'narrative]
