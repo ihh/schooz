@@ -1,17 +1,12 @@
-#!/usr/local/bin/guile
--s
-!#
-
-;; Minimal scheme-based CYOA framework.
-(use-modules (ice-9 optargs))
+;; Minimal Scheme-based CYOA framework.
 
 ;; Main objects.
 ;; Object->state hashtable
-(define schooz-state (make-hash-table))
+(define schooz-state (make-eq-hashtable))
 ;; Object->state->descriptor hashtable
-(define schooz-desc (make-hash-table))
+(define schooz-desc (make-eq-hashtable))
 ;; Object->stack hashtable
-(define schooz-stack (make-hash-table))
+(define schooz-stack (make-eq-hashtable))
 
 ;; Internal functions.
 ;; (ensure-object X)  ... ensures that X has valid entries in hashtables
@@ -22,7 +17,7 @@
    (hash-set! schooz-state X "start"))
   (if
    (not (hash-ref schooz-desc X))
-   (hash-set! schooz-desc X (make-hash-table)))
+   (hash-set! schooz-desc X (make-eq-hashtable)))
   (if
    (not (hash-ref schooz-stack X))
    (hash-set! schooz-stack X '())))
@@ -44,11 +39,11 @@
   (ensure-object X)
   (hash-set! (schooz-desc X) STATE FUNC))
 
-;; (tell X ARGS)  ... looks up the descriptor function for current state of object X, calls it with ARGS
-(define*
-  (tell X #:optional ARGS)
-  (let (DESC (hash-ref schooz-desc (state X)))
-    (DESC ARGS)))
+;; (tell X)  ... looks up the descriptor function for current state of object X, calls it
+(define
+  (tell X)
+  ((hash-ref schooz-desc (state X))))
+
 
 ;; (push X STATE)  ... pushes the current state of X onto X's stack, places X into state STATE
 (define
@@ -66,7 +61,7 @@
 ;; (story STATE FUNC)
 (define (story STATE FUNC) (describe narrative STATE FUNC))
 ;; (look)
-(define* (look #:optional ARGS) (tell narrative ARGS))
+(define (look ARGS) (tell narrative))
 ;; (goto STATE)
 (define (goto STATE) (now narrative STATE))
 ;; (gosub STATE)
@@ -83,5 +78,4 @@
 ;; (choice ((ACTIONTEXT1 FUNC1) (ACTIONTEXT2 FUNC2) ...))  ... returns a menu (rendered as a list)
 
 ;; The following functions do I/O in an implementation-dependent manner.
-;; (say TEXT)  ... queues TEXT for output before the next (ask...) or .
 ;; (ask X PROMPT)  ... outputs PROMPT; blocks until user responds; sets state of X directly.
