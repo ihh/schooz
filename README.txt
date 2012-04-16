@@ -25,7 +25,7 @@ API functions:
 
 Functions to be defined by user interface:
 
-[link TEXT ACTION FUNC]  ... returns a hyperlink with text TEXT that calls FUNC, with mouseover text ACTION
+[link TEXT ACTIONTEXT FUNC]  ... returns a hyperlink with text TEXT that calls FUNC, with mouseover text ACTION
 [menu TEXT [[ACTIONTEXT1 FUNC1] [ACTIONTEXT2 FUNC2] ...]]  ... returns text hyperlinked to a popup menu
 [choice [[ACTIONTEXT1 FUNC1] [ACTIONTEXT2 FUNC2] ...]]  ... returns a menu (rendered as a list)
 
