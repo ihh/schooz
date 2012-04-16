@@ -1,5 +1,5 @@
 Minimal scheme-based CYOA framework.
-Dependencies: node, biwascheme.
+Dependencies: node+biwascheme, or guile.
 Files:
  schooz.scm - main API (R6RS Scheme)
  sketch.scm - sketch of minimal command-line implementation
