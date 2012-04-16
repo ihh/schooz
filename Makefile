@@ -5,3 +5,6 @@ guile:
 
 node:
 	node server.js
+
+rock:
+	guile --debug -s rock.scm

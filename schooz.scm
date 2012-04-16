@@ -29,6 +29,17 @@
 (define (eval-or-return f)
   (if (procedure? f) (f) f))
 
+;; concatenate a (nested) list of strings
+(define (flatten-strings str lst)
+  (cond ((null? lst) str)
+	((not (pair? lst)) (string-append str lst))
+	(else (flatten-strings
+	       (flatten-strings str (car lst))
+	       (cdr lst)))))
+
+;; default list->string conversion
+(define (schooz-flatten-strings lst) (flatten-strings "" lst))
+
 ;; API functions.
 ;; (now X STATE)  ... places object X in state STATE
 (define
@@ -44,12 +55,15 @@
 (define
   (describe X STATE FUNC)
   (ensure-object X)
-  (hash-set! (schooz-desc X) STATE FUNC))
+  (hash-set! (hash-ref schooz-desc X) STATE FUNC))
 
 ;; (tell X)  ... looks up the descriptor function for current state of object X, calls it
 (define
   (tell X)
-  (eval-or-return (hash-ref schooz-desc (state X))))
+  (let ((desc (hash-ref (hash-ref schooz-desc X) (state X))))
+;; Uncomment to debug
+;;    (display "tell ") (display X) (display ": ") (display desc) (display "\n")
+    (eval-or-return desc)))
 
 ;; (push X STATE)  ... pushes the current state of X onto X's stack, places X into state STATE
 (define
@@ -83,11 +97,38 @@
 ;; (quit)
 (define (quit) (goto "end"))
 
+;; (link-goto STATE LINK-TEXT ACTION-TEXT RESULT-TEXT)
+(define (link-goto STATE LINK ACTION RESULT)
+  (link LINK ACTION (lambda () (begin (goto STATE) RESULT))))
+
+;; (link-gosub STATE LINK-TEXT ACTION-TEXT RESULT-TEXT)
+(define (link-gosub STATE LINK ACTION RESULT)
+  (link LINK ACTION (lambda () (begin (gosub STATE) RESULT))))
+
+;; (link-return LINK-TEXT ACTION-TEXT RESULT-TEXT)
+(define (link-return LINK ACTION RESULT)
+  (link LINK ACTION (lambda () (begin (return) RESULT))))
+
+;; (choice-goto STATE ACTION-TEXT RESULT-TEXT)
+(define (choice-goto STATE ACTION RESULT)
+  (choice ACTION (lambda () (begin (goto STATE) RESULT))))
+
+;; (choice-gosub STATE ACTION-TEXT RESULT-TEXT)
+(define (choice-gosub STATE ACTION RESULT)
+  (choice ACTION (lambda () (begin (gosub STATE) RESULT))))
+
+;; (choice-return ACTION-TEXT RESULT-TEXT)
+(define (choice-return ACTION RESULT)
+  (choice ACTION (lambda () (begin (return) RESULT))))
+
+;; (choice ACTIONTEXT FUNC)  ... simple helper/wrapper
+(define (choice ACTIONTEXT FUNC) (list ACTIONTEXT FUNC))
+
 ;; Interface implementation-dependent methods.
 ;; The following functions must return a string, list, or nested list
 ;; (link TEXT ACTIONTEXT FUNC)  ... returns a hyperlink with text TEXT that calls FUNC, with mouseover text ACTIONTEXT
 ;; (menu TEXT ((ACTIONTEXT1 FUNC1) (ACTIONTEXT2 FUNC2) ...))  ... returns text hyperlinked to a popup menu
-;; (choice ((ACTIONTEXT1 FUNC1) (ACTIONTEXT2 FUNC2) ...))  ... returns a menu (rendered as a list)
+;; (explicit-menu ((ACTIONTEXT1 FUNC1) (ACTIONTEXT2 FUNC2) ...))  ... returns a menu (rendered as a list)
 
 ;; The following functions do I/O in an implementation-dependent manner.
 ;; (ask X PROMPT)  ... outputs PROMPT; blocks until user responds; sets state of X directly.
@@ -100,3 +141,5 @@
 ;;    but embedded hyperlinks are preferred.
 ;;  After an action function is triggered:
 ;;   The results of the action function are displayed, and the current scene (look) is refreshed.
+;; Use schooz-flatten-strings to convert look & action results to simple strings,
+;;  or define your own handler (e.g. SXML).
