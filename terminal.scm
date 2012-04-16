@@ -51,8 +51,8 @@
   (display action-text-list)  ;; should display action texts with numbers here
   (display "Choice? ")
   (let ((actions (length action-func-list)))
-    (cond (= actions 0) (lambda () ((quit) ""))  ;; auto-quit if no available actions
+    (if (= actions 0) (lambda () ((quit) ""))  ;; auto-quit if no available actions
 	  (let ((n (read)))
-	    (cond (and (number? n) (>= n 1) (<= n actions))
+	    (if (and (number? n) (>= n 1) (<= n actions))
 		  (list-ref action-func-list (- actions n)  ;; return n'th function from action-func-list
 			    (action-chosen-from-list)))))))  ;; can't parse, try again (should print error message)
