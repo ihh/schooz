@@ -1,7 +1,10 @@
 Minimal scheme-based CYOA framework.
-
-Simple text substitution swaps (...) with [...]
-Wraps all text with quotes.
+Dependencies: node, biwascheme.
+Files:
+ schooz.scm - main API (R6RS Scheme)
+ sketch.scm - sketch of minimal command-line implementation
+ server.js - simple biwascheme wrapper
+ Makefile - runs wrapper using node
 
 
 API functions:
@@ -38,3 +41,8 @@ Object->state hashtable
 Object->state->descriptor hashtable
 Object->stack hashtable
 
+
+Vague future plans:
+
+Simple text substitution swaps (...) with [...]
+Wraps all text with quotes.

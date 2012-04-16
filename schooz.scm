@@ -1,4 +1,5 @@
 ;; Minimal Scheme-based CYOA framework.
+;; R6RS compliant
 
 ;; Main objects.
 ;; Object->state hashtable
