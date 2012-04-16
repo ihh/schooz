@@ -61,7 +61,7 @@
 ;; (story STATE FUNC)
 (define (story STATE FUNC) (describe narrative STATE FUNC))
 ;; (look)
-(define (look ARGS) (tell narrative))
+(define (look) (tell narrative))
 ;; (goto STATE)
 (define (goto STATE) (now narrative STATE))
 ;; (gosub STATE)
