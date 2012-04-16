@@ -70,8 +70,12 @@
 (define (return) (pop narrative))
 ;; (chapter)
 (define (chapter) (state narrative))
+;; (game-over)
+(define (game-over?) (equal? (chapter) "end"))
+;; (quit)
+(define (quit) (goto "end"))
 
-;; Interface-dependent methods.
+;; Interface implementation-dependent methods.
 ;; The following functions must return a string, list, or nested list
 ;; (link TEXT ACTION FUNC)  ... returns a hyperlink with text TEXT that calls FUNC, with mouseover text ACTION
 ;; (menu TEXT ((ACTIONTEXT1 FUNC1) (ACTIONTEXT2 FUNC2) ...))  ... returns text hyperlinked to a popup menu
@@ -79,3 +83,10 @@
 
 ;; The following functions do I/O in an implementation-dependent manner.
 ;; (ask X PROMPT)  ... outputs PROMPT; blocks until user responds; sets state of X directly.
+
+;; The interface must also implement the logic of the main loop.
+;; Roughly speaking, this is as follows:
+;;  While not (game-over?):
+;;  The current scene is given by (look).
+;;   Optionally the interface can render available choices as a menu, instead of hyperlinks.
+;;  After an action function is triggered, the current scene should be refreshed.
