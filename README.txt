@@ -10,7 +10,7 @@ Files:
  biwascheme/ - bundled biwascheme (primarily for client wrapper)
 
 
-API functions:
+Core API functions:
 
 [now X STATE]  ... places object X in state STATE
 [state X]  ... returns the current state (typically a string) of object named X
@@ -29,7 +29,7 @@ API functions:
 [chapter]  ... shortcut for [state 'narrative]
 
 
-Functions to be defined by user interface:
+Functions implemented by user interface:
 
 [link TEXT ACTIONTEXT FUNC]  ... returns a hyperlink with text TEXT that calls FUNC, with mouseover text ACTION
 [menu TEXT [[ACTIONTEXT1 FUNC1] [ACTIONTEXT2 FUNC2] ...]]  ... returns text hyperlinked to a popup menu
