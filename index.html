@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" /> 
+  <title>Schooz in BiwaScheme</title>
+</head>
+<body>
+
+<p/>
+Scheme console:
+<div id="bs-console"></div>
+
+<p/>
+Script tag with Scheme inside:
+<script src="biwascheme/biwascheme.js">
+(display "hello, world! Scheme is working, up in this piece\n")
+</script>
+
+<p/>
+Script tag that loads Scheme from URL:
+<script>
+  var console_log = function(e) { puts(e); };
+  var dummy_log = function(e) { };
+  console_log ("hi there, logging function seems to be working ");
+  dummy_log ("you schmuck ");  // shouldn't appear
+  var intp = new BiwaScheme.Interpreter (dummy_log);
+  var the_url = "schooz.scm";
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+    console_log ("loaded Scheme (" + xhr.responseText.length + " bytes)");
+    intp.evaluate (xhr.responseText, function(e) { console_log("evaluated Scheme: " + e); } );
+    intp.evaluate ("schooz-version", function(e) { console_log("evaluated schooz-version: " + e); } );
+  };
+  xhr.open("GET", the_url, true);
+  xhr.send(null);
+</script>
+
+</body>
+</html>

@@ -1,6 +1,8 @@
 ;; Minimal Scheme-based CYOA framework.
 ;; R6RS compliant
 
+(define schooz-version 1)
+
 ;; Main objects.
 ;; Object->state hashtable
 (define schooz-state (make-eq-hashtable))
