@@ -6,8 +6,6 @@
 (use-modules (ice-9 optargs))
 
 ;; Main objects.
-;; Text output queue
-(define schooz-outq (make-hash-table))
 ;; Object->state hashtable
 (define schooz-state (make-hash-table))
 ;; Object->state->descriptor hashtable
@@ -76,10 +74,12 @@
 ;; (chapter)
 (define (chapter) (state narrative))
 
+;; Interface-dependent methods.
+;; The following functions must return a string, list, or nested list
 ;; (link TEXT ACTION FUNC)  ... returns a hyperlink with text TEXT that calls FUNC, with mouseover text ACTION
 ;; (menu TEXT ((ACTIONTEXT1 FUNC1) (ACTIONTEXT2 FUNC2) ...))  ... returns text hyperlinked to a popup menu
 ;; (choice ((ACTIONTEXT1 FUNC1) (ACTIONTEXT2 FUNC2) ...))  ... returns a menu (rendered as a list)
 
-;; (say TEXT)  ... queues TEXT for output
-;; (input X PROMPT)  ... queues a popup text input box with prompt PROMPT, that sets state of X directly
-
+;; The following functions do I/O in an implementation-dependent manner.
+;; (ask X PROMPT)  ... creates a popup input form with PROMPT; blocks until user responds; sets state of X directly.
+;; (say TEXT)  ... outputs TEXT.
