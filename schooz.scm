@@ -1,66 +1,66 @@
 ;; Minimal Scheme-based CYOA framework.
 ;; R6RS compliant
 
-(define schooz-version 1)
+(define schooz:version 1)
 
 ;; Main objects.
 ;; Object->state hashtable
-(define schooz-state (make-eq-hashtable))
+(define schooz:state (make-eq-hashtable))
 ;; Object->state->descriptor hashtable
-(define schooz-desc (make-eq-hashtable))
+(define schooz:desc (make-eq-hashtable))
 ;; Object->stack hashtable
-(define schooz-stack (make-eq-hashtable))
+(define schooz:stack (make-eq-hashtable))
 
 ;; Internal functions.
 ;; (ensure-object X)  ... ensures that X has valid entries in hashtables
 (define
   (ensure-object X)
   (if
-   (not (hash-ref schooz-state X))
-   (hash-set! schooz-state X "start"))
+   (not (hash-ref schooz:state X))
+   (hash-set! schooz:state X "start"))
   (if
-   (not (hash-ref schooz-desc X))
-   (hash-set! schooz-desc X (make-eq-hashtable)))
+   (not (hash-ref schooz:desc X))
+   (hash-set! schooz:desc X (make-eq-hashtable)))
   (if
-   (not (hash-ref schooz-stack X))
-   (hash-set! schooz-stack X '())))
+   (not (hash-ref schooz:stack X))
+   (hash-set! schooz:stack X '())))
 
 ;; (eval-or-return f)  ... if f is a function, evaluate; otherwise, return
 (define (eval-or-return f)
   (if (procedure? f) (f) f))
 
 ;; concatenate a (nested) list of strings
-(define (flatten-strings str lst)
+(define (schooz:fold-strings str lst)
   (cond ((null? lst) str)
 	((not (pair? lst)) (string-append str lst))
-	(else (flatten-strings
-	       (flatten-strings str (car lst))
+	(else (schooz:fold-strings
+	       (schooz:fold-strings str (car lst))
 	       (cdr lst)))))
 
 ;; default list->string conversion
-(define (schooz-flatten-strings lst) (flatten-strings "" lst))
+(define (schooz:flatten-strings lst) (schooz:fold-strings "" lst))
 
 ;; API functions.
 ;; (now X STATE)  ... places object X in state STATE
 (define
   (now X STATE)
-  (hash-set! schooz-state X STATE))
+  (hash-set! schooz:state X STATE))
 
 ;; (state X)  ... returns the current state (typically a string) of object named X, where X is an atom
 (define
   (state X)
-  (hash-ref schooz-state X))
+  (hash-ref schooz:state X))
 
 ;; (description X STATE FUNC)  ... set object X's descriptor function for state STATE to FUNC
 (define
   (description X STATE FUNC)
   (ensure-object X)
-  (hash-set! (hash-ref schooz-desc X) STATE FUNC))
+  (hash-set! (hash-ref schooz:desc X) STATE FUNC))
 
 ;; (describe X)  ... looks up the descriptor function for current state of object X, calls it
 (define
   (describe X)
-  (let ((desc (hash-ref (hash-ref schooz-desc X) (state X))))
+  (let ((desc (hash-ref (hash-ref schooz:desc X) (state X))))
 ;; Uncomment to debug
 ;;    (display "describe ") (display X) (display ": ") (display desc) (display "\n")
     (eval-or-return desc)))
@@ -68,17 +68,17 @@
 ;; (push X STATE)  ... pushes the current state of X onto X's stack, places X into state STATE
 (define
   (push X STATE)
-  (hash-set! schooz-stack X (cons (state X) (hash-ref schooz-stack X)))
+  (hash-set! schooz:stack X (cons (state X) (hash-ref schooz:stack X)))
   (now X STATE))
 
 ;; (pop X)  ... pops state off X's state stack, places X into popped state (or "end" if stack empty)
 (define
   (pop X)
-  (if (null? (hash-ref schooz-stack X))
+  (if (null? (hash-ref schooz:stack X))
       (now X "end")
       (begin
-	(now X (car (hash-ref schooz-stack X)))
-	(hash-set! schooz-stack X (cdr (hash-ref schooz-stack X))))))
+	(now X (car (hash-ref schooz:stack X)))
+	(hash-set! schooz:stack X (cdr (hash-ref schooz:stack X))))))
 
 ;; Main story object
 (define narrative "narrative")
@@ -144,5 +144,5 @@
 ;;    but embedded hyperlinks are preferred.
 ;;  After an action function is triggered:
 ;;   The results of the action function are displayed, and the current scene (look) is refreshed.
-;; Use schooz-flatten-strings to convert look & action results to simple strings,
+;; Use schooz:flatten-strings to convert look & action results to simple strings,
 ;;  or define your own handler (e.g. SXML).
