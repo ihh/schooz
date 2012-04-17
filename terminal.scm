@@ -67,12 +67,13 @@
   (let ((actions (length schooz:action-func-list)))
     (display "Choice? ")
     (if (= actions 0) (lambda () ((return) ""))  ;; auto-quit if no available actions
-	  (let ((n (read)))
-	    (if (and (number? n) (>= n 1) (<= n actions))
-		(begin
-		  (display "\n")
-		  (list-ref schooz:action-func-list (- actions n)))  ;; return n'th function from schooz:action-func-list
-		(schooz:action-chosen-from-list))))))  ;; can't parse, try again (should print error message)
+	(let* ((l (read))
+	       (n (if (integer? l) (inexact->exact l) -1)))
+	  (if (and (>= n 1) (<= n actions))
+	      (begin
+		(display "\n")
+		(list-ref schooz:action-func-list (- actions n)))  ;; return n'th function from schooz:action-func-list
+	      (schooz:action-chosen-from-list))))))  ;; can't parse, try again (should print error message)
 
 (define (schooz:display-action-text-list)
   (schooz:display-action-text 0))
