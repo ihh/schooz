@@ -100,12 +100,12 @@
 ;; (quit)
 (define (quit) (goto "end"))
 
-;; (link-goto STATE LINK-TEXT ACTION-TEXT RESULT-TEXT)
-(define (link-goto STATE LINK ACTION RESULT)
+;; (link-goto LINK-TEXT STATE ACTION-TEXT RESULT-TEXT)
+(define (link-goto LINK STATE ACTION RESULT)
   (link LINK ACTION (lambda () (begin (goto STATE) RESULT))))
 
-;; (link-gosub STATE LINK-TEXT ACTION-TEXT RESULT-TEXT)
-(define (link-gosub STATE LINK ACTION RESULT)
+;; (link-gosub LINK-TEXT STATE ACTION-TEXT RESULT-TEXT)
+(define (link-gosub LINK STATE ACTION RESULT)
   (link LINK ACTION (lambda () (begin (gosub STATE) RESULT))))
 
 ;; (link-return LINK-TEXT ACTION-TEXT RESULT-TEXT)

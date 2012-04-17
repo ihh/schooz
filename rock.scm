@@ -17,11 +17,11 @@
     (menu "standing"
 	  (list
 	   (choice "Stand my ground." "Yup. Just standing around.")
-	   (choice-gosub "sleep" "Go to sleep." "You fall asleep.")))
+	   (choice-gosub "sleep" "Go to sleep." "You close your eyes. Just for a moment...")))
     " between a "
     (link-goto "rock" "rock" "Go to the rock." "As you command.")
     " and a "
-    (link-goto "hardplace" "hard place" "Go to the hard place." "OK, if you say so.")
+    (link-goto "hard place" "hardplace" "Go to the hard place." "OK, if you say so.")
     ".")))
 
 (story
@@ -76,7 +76,7 @@
  (lambda ()
    (list
     "A "
-    (link-gosub "sleep" "mattress" "Time for a little nap!" "You quickly drift off to sleep.")
+    (link-gosub "mattress" "sleep" "Time for a little nap!" "Place, hard; mattress, soft. You quickly drift off.")
     " lies invitingly on the floor.")))
 
 ;; And.... run.

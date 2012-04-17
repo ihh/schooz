@@ -29,8 +29,8 @@ Core API functions:
 [chapter]  ... shortcut for [state 'narrative]
 
 Helper functions to form simple (goto...), (gosub...) and (return) hyperlinks:
-[link-goto STATE LINK-TEXT ACTION-TEXT RESULT-TEXT]
-[link-gosub STATE LINK-TEXT ACTION-TEXT RESULT-TEXT]
+[link-goto LINK-TEXT STATE ACTION-TEXT RESULT-TEXT]
+[link-gosub LINK-TEXT STATE ACTION-TEXT RESULT-TEXT]
 [link-return LINK-TEXT ACTION-TEXT RESULT-TEXT]
 
 Helper functions to form simple (goto...), (gosub...) and (return) menu choices:
