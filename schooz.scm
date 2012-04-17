@@ -30,6 +30,7 @@
   (if (procedure? f) (f) f))
 
 ;; convert an SXML S-expression to an XML string
+;; Can't yet handle attributes...
 (define (schooz:fold-sxml-outer str lst)
   (cond ((null? lst) str)
 	((not (pair? lst)) (string-append str lst))
