@@ -22,10 +22,10 @@
 
 (define (link link-text action-text action-func)
   (add-action action-text action-func)
-  link-text)
+  (highlight link-text))
 
 (define (menu link-text action-list)
-  (if (null? action-list) link-text
+  (if (null? action-list) (highlight link-text)
       (let* ((action (car action-list))
 	     (action-text (car action))
 	     (action-func (cadr action))
@@ -35,6 +35,11 @@
 	  (menu link-text rest-of-list)))))
 
 (define (explicit-menu action-list) (menu "" action-list))
+
+(define
+  (highlight text)
+  (list
+   (string (integer->char 27)) "[1m" text (string (integer->char 27)) "[0m"))
 
 (define (ask X PROMPT)
   (display PROMPT)
