@@ -20,28 +20,6 @@
   (set! schooz:action-text-list (cons action-text schooz:action-text-list))
   (set! schooz:action-func-list (cons action-func schooz:action-func-list)))
 
-;; convert an SXML S-expression to an XML string
-(define (schooz:fold-sxml-outer str lst)
-  (cond ((null? lst) str)
-	((not (pair? lst)) (string-append str lst))
-	(else
-	 (let ((tag (car lst))
-	       (rest (cdr lst)))
-	   (if (null? rest)
-	       (string-append str "<" tag "/>")
-	       (string-append str "<" tag ">" (schooz:fold-sxml-inner "" rest) "</" tag ">"))))))
-
-(define (schooz:fold-sxml-inner str lst)
-  (cond ((null? lst) str)
-	((not (pair? lst)) (string-append str lst))
-	(else
-	 (let ((elem (car lst))
-	       (rest (cdr lst)))
-	   (schooz:fold-sxml-inner (schooz:fold-sxml-outer str elem) rest)))))
-
-;; default output adapter: SXML
-(define (schooz:fold-strings lst) (schooz:fold-sxml-inner "" lst))
-
 ;; Highlighting of links (just to show where they would be)
 (define
   (schooz:highlight text)

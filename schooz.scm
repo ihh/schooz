@@ -29,6 +29,28 @@
 (define (eval-or-return f)
   (if (procedure? f) (f) f))
 
+;; convert an SXML S-expression to an XML string
+(define (schooz:fold-sxml-outer str lst)
+  (cond ((null? lst) str)
+	((not (pair? lst)) (string-append str lst))
+	(else
+	 (let ((tag (car lst))
+	       (rest (cdr lst)))
+	   (if (null? rest)
+	       (string-append str "<" tag "/>")
+	       (string-append str "<" tag ">" (schooz:fold-sxml-inner "" rest) "</" tag ">"))))))
+
+(define (schooz:fold-sxml-inner str lst)
+  (cond ((null? lst) str)
+	((not (pair? lst)) (string-append str lst))
+	(else
+	 (let ((elem (car lst))
+	       (rest (cdr lst)))
+	   (schooz:fold-sxml-inner (schooz:fold-sxml-outer str elem) rest)))))
+
+;; default output adapter: SXML
+(define (schooz:fold-strings lst) (schooz:fold-sxml-inner "" lst))
+
 ;; API functions.
 ;; (now X STATE)  ... places object X in state STATE
 (define
