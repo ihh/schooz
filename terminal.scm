@@ -20,7 +20,7 @@
   (set! schooz:action-text-list (cons action-text schooz:action-text-list))
   (set! schooz:action-func-list (cons action-func schooz:action-func-list)))
 
-;; concatenate a (nested) list of strings
+;; convert an SXML S-expression to an XML string
 (define (schooz:fold-sxml str lst)
   (cond ((null? lst) str)
 	((not (pair? lst)) (string-append str lst))
