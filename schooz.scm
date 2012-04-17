@@ -4,30 +4,29 @@
 (define schooz:version 1)
 
 ;; Main objects.
-;; Object->state hashtable
-(define schooz:state (make-eq-hashtable))
 ;; Object->state->descriptor hashtable
 (define schooz:desc (make-eq-hashtable))
 ;; Object->stack hashtable
 (define schooz:stack (make-eq-hashtable))
 
 ;; Internal functions.
-;; (ensure-object X)  ... ensures that X has valid entries in hashtables
+;; (schooz:ensure-object X)  ... ensures that X has valid entries in hashtables
 (define
-  (ensure-object X)
-  (if
-   (not (hash-ref schooz:state X))
-   (hash-set! schooz:state X "start"))
+  (schooz:ensure-object X)
   (if
    (not (hash-ref schooz:desc X))
    (hash-set! schooz:desc X (make-eq-hashtable)))
   (if
    (not (hash-ref schooz:stack X))
-   (hash-set! schooz:stack X '())))
+   (hash-set! schooz:stack X '("start"))))
 
-;; (eval-or-return f)  ... if f is a function, evaluate; otherwise, return
-(define (eval-or-return f)
+;; (schooz:eval-or-return f)  ... if f is a function, evaluate; otherwise, return
+(define (schooz:eval-or-return f)
   (if (procedure? f) (f) f))
+
+;; clear stack of object X
+(define (schooz:clear-stack X)
+  (hash-set! schooz:stack X '()))
 
 ;; convert an SXML S-expression to an XML string
 ;; Can't yet handle attributes...
@@ -56,17 +55,22 @@
 ;; (now X STATE)  ... places object X in state STATE
 (define
   (now X STATE)
-  (hash-set! schooz:state X STATE))
+  (let ((old-stack (hash-ref schooz:stack X)))
+    (hash-set! schooz:stack X
+	       (if (null? old-stack)
+		   (list STATE)
+		   (cons STATE (cdr old-stack))))))
 
 ;; (state X)  ... returns the current state (typically a string) of object named X, where X is an atom
 (define
   (state X)
-  (hash-ref schooz:state X))
+  (let ((stack (hash-ref schooz:stack X)))
+    (if (null? stack) #f (car stack))))
 
 ;; (description X STATE FUNC)  ... set object X's descriptor function for state STATE to FUNC
 (define
   (description X STATE FUNC)
-  (ensure-object X)
+  (schooz:ensure-object X)
   (hash-set! (hash-ref schooz:desc X) STATE FUNC))
 
 ;; (describe X)  ... looks up the descriptor function for current state of object X, calls it
@@ -75,22 +79,22 @@
   (let ((desc (hash-ref (hash-ref schooz:desc X) (state X))))
 ;; Uncomment to debug
 ;;    (display "describe ") (display X) (display ": ") (display desc) (display "\n")
-    (eval-or-return desc)))
+    (schooz:eval-or-return desc)))
 
-;; (push X STATE)  ... pushes the current state of X onto X's stack, places X into state STATE
+;; (push X STATE)  ... pushes STATE onto X's stack
 (define
   (push X STATE)
-  (hash-set! schooz:stack X (cons (state X) (hash-ref schooz:stack X)))
-  (now X STATE))
+  (hash-set! schooz:stack X (cons STATE (hash-ref schooz:stack X))))
 
-;; (pop X)  ... pops state off X's state stack, places X into popped state (or "end" if stack empty)
+;; (pop X)  ... pops state off X's stack
 (define
   (pop X)
-  (if (null? (hash-ref schooz:stack X))
-      (now X "end")
-      (begin
-	(now X (car (hash-ref schooz:stack X)))
-	(hash-set! schooz:stack X (cdr (hash-ref schooz:stack X))))))
+  (let ((stack (hash-ref schooz:stack X)))
+    (if (null? stack)
+	#f
+	(begin
+	  (hash-set! schooz:stack X (cdr stack))
+	  (car stack)))))
 
 ;; Main story object
 (define narrative "narrative")
@@ -108,9 +112,9 @@
 ;; (chapter)
 (define (chapter) (state narrative))
 ;; (game-over)
-(define (game-over?) (equal? (chapter) "end"))
+(define (game-over?) (equal? (chapter) #f))
 ;; (quit)
-(define (quit) (goto "end"))
+(define (quit) (schooz:clear-stack narrative))
 
 ;; (link-goto LINK-TEXT STATE ACTION-TEXT RESULT-TEXT)
 (define (link-goto LINK STATE ACTION RESULT)

@@ -55,7 +55,7 @@
 	(schooz:reset-action-list)
 	(display (schooz:fold-strings (look)))
 	(display "\n")
-	(display (schooz:fold-strings (eval-or-return (schooz:action-chosen-from-list))))
+	(display (schooz:fold-strings (schooz:eval-or-return (schooz:action-chosen-from-list))))
 	(display "\n")
 	(main-loop))))
 
