@@ -20,6 +20,8 @@ Core API functions:
 [push X STATE]  ... pushes X's current state onto X's stack, places X into state STATE
 [pop X]  ... pops state off X's stack, places X into popped state
 
+
+The special object named "narrative" has the overall story graph:
 [story STATE FUNC]   ... shortcut for [description 'narrative STATE FUNC]
 [look]  ... shortcut for [describe 'narrative]
 [goto STATE]   ... shortcut for [now 'narrative STATE]
