@@ -53,14 +53,16 @@
 
 (define
   (action-chosen-from-list)
-  (display "Options:\n")
+  (display "\nOptions:\n")
   (display-action-text-list)
   (let ((actions (length action-func-list)))
     (display "Choice? ")
     (if (= actions 0) (lambda () ((return) ""))  ;; auto-quit if no available actions
 	  (let ((n (read)))
 	    (if (and (number? n) (>= n 1) (<= n actions))
-		(list-ref action-func-list (- actions n))  ;; return n'th function from action-func-list
+		(begin
+		  (display "\n")
+		  (list-ref action-func-list (- actions n)))  ;; return n'th function from action-func-list
 		(action-chosen-from-list))))))  ;; can't parse, try again (should print error message)
 
 (define (display-action-text-list)
