@@ -29,17 +29,6 @@
 (define (eval-or-return f)
   (if (procedure? f) (f) f))
 
-;; concatenate a (nested) list of strings
-(define (schooz:fold-strings str lst)
-  (cond ((null? lst) str)
-	((not (pair? lst)) (string-append str lst))
-	(else (schooz:fold-strings
-	       (schooz:fold-strings str (car lst))
-	       (cdr lst)))))
-
-;; default list->string conversion
-(define (schooz:flatten-strings lst) (schooz:fold-strings "" lst))
-
 ;; API functions.
 ;; (now X STATE)  ... places object X in state STATE
 (define
@@ -144,5 +133,3 @@
 ;;    but embedded hyperlinks are preferred.
 ;;  After an action function is triggered:
 ;;   The results of the action function are displayed, and the current scene (look) is refreshed.
-;; Use schooz:flatten-strings to convert look & action results to simple strings,
-;;  or define your own handler (e.g. SXML).

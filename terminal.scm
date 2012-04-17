@@ -20,6 +20,35 @@
   (set! schooz:action-text-list (cons action-text schooz:action-text-list))
   (set! schooz:action-func-list (cons action-func schooz:action-func-list)))
 
+;; concatenate a (nested) list of strings
+(define (schooz:fold-sxml str lst)
+  (cond ((null? lst) str)
+	((not (pair? lst)) (string-append str lst))
+	(else
+	 (let ((tag (car lst))
+	       (rest (cdr lst)))
+	   (if (null? rest)
+	       (string-append str "<" tag "/>")
+	       (string-append str "<" tag ">" (schooz:fold-sxml-inner "" rest) "</" tag ">"))))))
+
+(define (schooz:fold-sxml-inner str lst)
+  (cond ((null? lst) str)
+	((not (pair? lst)) (string-append str lst))
+	(else
+	 (let ((elem (car lst))
+	       (rest (cdr lst)))
+	   (schooz:fold-sxml-inner (schooz:fold-sxml str elem) rest)))))
+
+;; default list->string conversion
+(define (schooz:fold-strings lst) (schooz:fold-sxml-inner "" lst))
+
+;; Highlighting of links (just to show where they would be)
+(define
+  (schooz:highlight text)
+  (string-append
+   (string (integer->char 27)) "[1m" text (string (integer->char 27)) "[0m"))
+
+;; Interface methods
 (define (link link-text action-text action-func)
   (schooz:add-action action-text action-func)
   (schooz:highlight link-text))
@@ -36,26 +65,23 @@
 
 (define (explicit-menu action-list) (menu "" action-list))
 
-(define
-  (schooz:highlight text)
-  (list
-   (string (integer->char 27)) "[1m" text (string (integer->char 27)) "[0m"))
-
 (define (ask X PROMPT)
   (display PROMPT)
   (now X (read)))
 
+;; Main entry point
 (define (main-loop)
   (if (game-over?)
       (display "GAME OVER\n")
       (begin
 	(schooz:reset-action-list)
-	(display (schooz:flatten-strings (look)))
+	(display (schooz:fold-strings (look)))
 	(display "\n")
-	(display (schooz:flatten-strings (eval-or-return (schooz:action-chosen-from-list))))
+	(display (schooz:fold-strings (eval-or-return (schooz:action-chosen-from-list))))
 	(display "\n")
 	(main-loop))))
 
+;; Menu
 (define
   (schooz:action-chosen-from-list)
   (display "\nOptions:\n")
