@@ -43,7 +43,7 @@
     (describe "mattress")
     (explicit-menu
      (list
-      (choice-goto (chapter) "This place may be hard, but there are no better alternatives." "You're quite possibly correct...")
+      (choice-goto (chapter) "This place may be hard, but there are no better alternatives." "You're quite possibly correct...")  ;; (chapter) returns the current chapter, so (goto (chapter)) does nothing
       (choice-goto "start" "Let's get out of here. I don't like hard places." "No problem."))))))
 
 ;; This chapter can be entered via a gosub from two different places...
