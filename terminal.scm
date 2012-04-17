@@ -21,7 +21,7 @@
   (set! schooz:action-func-list (cons action-func schooz:action-func-list)))
 
 ;; convert an SXML S-expression to an XML string
-(define (schooz:fold-sxml str lst)
+(define (schooz:fold-sxml-outer str lst)
   (cond ((null? lst) str)
 	((not (pair? lst)) (string-append str lst))
 	(else
@@ -37,9 +37,9 @@
 	(else
 	 (let ((elem (car lst))
 	       (rest (cdr lst)))
-	   (schooz:fold-sxml-inner (schooz:fold-sxml str elem) rest)))))
+	   (schooz:fold-sxml-inner (schooz:fold-sxml-outer str elem) rest)))))
 
-;; default list->string conversion
+;; default output adapter: SXML
 (define (schooz:fold-strings lst) (schooz:fold-sxml-inner "" lst))
 
 ;; Highlighting of links (just to show where they would be)
