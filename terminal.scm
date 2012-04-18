@@ -2,7 +2,7 @@
 (load "./guile-1.8-schooz.scm")
 
 ;; Basic terminal interface
-;; Defines a (main-loop) function that should be called to start the game.
+;; Defines a (schooz:main-loop) function that should be called to start the game.
 
 ;; We keep track of (link,menu,explicit-menu) actions during calls to descriptors,
 ;; so that we can present them as a numbered menu of options.
@@ -50,7 +50,7 @@
   (schooz:now X (read)))
 
 ;; Main entry point
-(define (main-loop)
+(define (schooz:main-loop)
   (if (schooz:game-over?)
       (display "GAME OVER\n")
       (begin
@@ -59,7 +59,7 @@
 	(display "\n")
 	(display (schooz:fold-strings (schooz:eval-or-return (schooz:action-chosen-from-list))))
 	(display "\n")
-	(main-loop))))
+	(schooz:main-loop))))
 
 ;; Menu
 (define

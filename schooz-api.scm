@@ -138,3 +138,7 @@
 (define-macro
   (explicit-menu ACTION-LIST)
   `(schooz:explicit-menu ,ACTION-LIST))
+
+
+;; (main-loop)  ... terminal only
+(define (main-loop) (schooz:main-loop))
