@@ -1,7 +1,8 @@
 Minimal scheme-based CYOA framework.
 Dependencies: node+biwascheme, or guile.
 Files:
- schooz.scm - main API (R6RS Scheme)
+ schooz-api.scm - core API (R6RS Scheme)
+ schooz.scm - implementation of core API
  server.js - simple biwascheme server wrapper (using node)
  index.html - simple biwascheme client wrapper
  guile-1.8-schooz.scm - server wrapper for guile 1.8 (R5RS Scheme)
@@ -21,7 +22,7 @@ Core API functions:
 [pop X]  ... pops state off X's stack, places X into popped state
 
 
-The special object named "narrative" has the overall story graph:
+The state machine named "narrative" determines the overall story graph:
 [story STATE FUNC]   ... shortcut for [description 'narrative STATE FUNC]
 [look]  ... shortcut for [describe 'narrative]
 [goto STATE]   ... shortcut for [now 'narrative STATE]
@@ -42,21 +43,8 @@ Helper functions to form simple (goto...), (gosub...) and (return) menu choices:
 
 Functions implemented by user interface:
 
-[link TEXT ACTIONTEXT FUNC]  ... returns a hyperlink with text TEXT that calls FUNC, with mouseover text ACTION
+[link* TEXT ACTIONTEXT FUNC]  ... returns a hyperlink with text TEXT that calls FUNC, with mouseover text ACTION
 [menu TEXT [[ACTIONTEXT1 FUNC1] [ACTIONTEXT2 FUNC2] ...]]  ... returns text hyperlinked to a popup menu
 [explicit-menu [[ACTIONTEXT1 FUNC1] [ACTIONTEXT2 FUNC2] ...]]  ... returns a menu (rendered as a list)
 
 [ask X PROMPT]  ... queues a popup text input box with prompt PROMPT, that sets state of X directly
-
-
-Global objects:
-
-Object->state hashtable
-Object->state->descriptor hashtable
-Object->stack hashtable
-
-
-Vague future plans:
-
-Simple text substitution swaps (...) with [...]
-Wraps all text with quotes.

@@ -27,11 +27,11 @@
    (string (integer->char 27)) "[1m" text (string (integer->char 27)) "[0m"))
 
 ;; Interface methods
-(define (link link-text action-text action-func)
+(define (schooz:link* link-text action-text action-func)
   (schooz:add-action action-text action-func)
   (schooz:highlight link-text))
 
-(define (menu link-text action-list)
+(define (schooz:menu* link-text action-list)
   (if (null? action-list) (schooz:highlight link-text)
       (let* ((action (car action-list))
 	     (action-text (car action))
@@ -39,21 +39,21 @@
 	     (rest-of-list (cdr action-list)))
 	(begin
 	  (schooz:add-action action-text action-func)
-	  (menu link-text rest-of-list)))))
+	  (schooz:menu* link-text rest-of-list)))))
 
-(define (explicit-menu action-list) (menu "" action-list))
+(define (schooz:explicit-menu* action-list) (menu* "" action-list))
 
-(define (ask X PROMPT)
+(define (schooz:ask X PROMPT)
   (display PROMPT)
-  (now X (read)))
+  (schooz:now X (read)))
 
 ;; Main entry point
 (define (main-loop)
-  (if (game-over?)
+  (if (schooz:game-over?)
       (display "GAME OVER\n")
       (begin
 	(schooz:reset-action-list)
-	(display (schooz:fold-strings (look)))
+	(display (schooz:fold-strings (schooz:look)))
 	(display "\n")
 	(display (schooz:fold-strings (schooz:eval-or-return (schooz:action-chosen-from-list))))
 	(display "\n")
