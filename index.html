@@ -31,6 +31,10 @@ Script tag that loads Scheme from URL:
       console_log ("loaded Scheme (" + xhr.responseText.length + " bytes)");
       intp.evaluate (xhr.responseText, function(e) { console_log("evaluated Scheme: " + e); } );
       intp.evaluate ("schooz:version", function(e) { console_log("evaluated schooz:version = " + e); } );
+      intp.evaluate ("(js-call (js-closure (lambda () \"crazy\")))", function(e) { console_log("crazy function-wrapping is working if the word 'crazy' appears here: " + e); } );
+      console_log ("Now going to try a popup window...")
+      intp.evaluate ("(js-call (js-eval \"( function() { alert('hello, this is a popup window from BiwaScheme'); } )\"))", dummy_log);
+      console_log ("...OK, hopefully you got that")
     }
   };
   xhr.open("GET", the_url, true);
