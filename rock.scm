@@ -7,7 +7,10 @@
 
 ;; Load the interface
 (load "./terminal.scm")
-(load "./schooz-api.scm")
+(load "./api.scm")
+
+;; Uncomment to disable SXML, rendering everything as plain text
+;; (schooz:output-plain)
 
 ;; Define the story graph
 (story

@@ -48,11 +48,29 @@
 	       (rest (cdr lst)))
 	   (schooz:fold-sxml-inner (schooz:fold-sxml-outer str elem) rest)))))
 
-;; default output adapter: SXML
-(define (schooz:fold-strings lst)
-  ;; Uncomment to debug
-  ;; (write lst)
+(define (schooz:fold-strings-sxml lst)
   (schooz:fold-sxml-inner "" lst))
+
+;; alternate (non-SXML) output adapter: just flattens everything
+(define (schooz:fold-plain str lst)
+  (cond ((string? lst) (string-append str lst))
+	((null? lst) str)
+	((pair? lst)
+	 (let ((elem (car lst))
+	       (rest (cdr lst)))
+	   (schooz:fold-plain (schooz:fold-plain str elem) rest)))))
+
+(define (schooz:fold-strings-plain lst)
+  (schooz:fold-plain "" lst))
+
+;; define default output adapter, and ways to change output adapter
+(define schooz:fold-strings schooz:fold-strings-sxml)
+
+(define (schooz:output-plain)
+  (set! schooz:fold-strings schooz:fold-strings-plain))
+
+(define (schooz:output-sxml)
+  (set! schooz:fold-strings schooz:fold-strings-sxml))
 
 ;; API functions.
 ;; (schooz:now X STATE)  ... places object X in state STATE
