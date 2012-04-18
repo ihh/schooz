@@ -12,7 +12,7 @@
 ;; Uncomment to disable SXML, rendering everything as plain text
 ;; (schooz:output-plain)
 
-;; Uncomment to disable automatic (look) at start of game & after every choice
+;; Comment out to disable automatic (look) at start of game & after every choice
 (schooz:look-after-every-action)
 
 ;; Define the story graph
