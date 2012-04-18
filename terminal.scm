@@ -4,6 +4,8 @@
 ;; Basic terminal interface
 ;; Defines a (main-loop) function that should be called to start the game.
 
+;; We keep track of (link,menu,explicit-menu) actions during calls to descriptors,
+;; so that we can present them as a numbered menu of options.
 (define schooz:action-text-list '())
 (define schooz:action-func-list '())
 
@@ -41,7 +43,7 @@
 	  (schooz:add-action action-text action-func)
 	  (schooz:menu* link-text rest-of-list)))))
 
-(define (schooz:explicit-menu* action-list) (menu* "" action-list))
+(define (schooz:explicit-menu* action-list) (schooz:menu* "" action-list))
 
 (define (schooz:ask X PROMPT)
   (display PROMPT)
