@@ -8,3 +8,4 @@ Files:
  guile-1.8-schooz.scm - server wrapper for guile 1.8 (R5RS Scheme)
  Makefile - runs server wrappers
  biwascheme/ - bundled biwascheme (primarily for client wrapper)
+ rock.scm - a tiny demo
