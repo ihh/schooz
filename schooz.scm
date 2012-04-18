@@ -24,6 +24,10 @@
 (define (schooz:eval-or-return f)
   (if (procedure? f) (f) f))
 
+;; (schooz:as-function f)  ... if f is a function, return f; otherwise, return function returning f
+(define (schooz:as-function f)
+  (if (procedure? f) f (lambda () f)))
+
 ;; clear stack of object X
 (define (schooz:clear-stack X)
   (hash-set! schooz:stack X '()))
@@ -36,9 +40,12 @@
 	((pair? lst)
 	 (let ((tag (car lst))
 	       (rest (cdr lst)))
-	   (if (null? rest)
-	       (string-append str "<" tag "/>")
-	       (string-append str "<" tag ">" (schooz:fold-sxml-inner "" rest) "</" tag ">"))))))
+	   (if (string? tag)
+	       (if (null? rest)
+		   (string-append str "<" tag "/>")
+		   (string-append str "<" tag ">" (schooz:fold-sxml-inner "" rest) "</" tag ">"))
+	       (schooz:fold-sxml-inner str lst))))
+	(else str)))
 
 (define (schooz:fold-sxml-inner str lst)
   (cond ((string? lst) (string-append str lst))
@@ -46,7 +53,8 @@
 	((pair? lst)
 	 (let ((elem (car lst))
 	       (rest (cdr lst)))
-	   (schooz:fold-sxml-inner (schooz:fold-sxml-outer str elem) rest)))))
+	   (schooz:fold-sxml-inner (schooz:fold-sxml-outer str elem) rest)))
+	(else str)))
 
 (define (schooz:fold-strings-sxml lst)
   (schooz:fold-sxml-inner "" lst))
@@ -71,6 +79,12 @@
 
 (define (schooz:output-sxml)
   (set! schooz:fold-strings schooz:fold-strings-sxml))
+
+;; list helpers
+(define (schooz:as-list lst) (if (pair? lst) lst (list lst)))
+
+(define (schooz:append-as-lists lst1 lst2)
+  (append (schooz:as-list lst1) (schooz:as-list lst2)))
 
 ;; API functions.
 ;; (schooz:now X STATE)  ... places object X in state STATE
@@ -154,6 +168,10 @@
 (define (schooz:quit) (schooz:finish schooz:narrative))
 
 
+;; (schooz:link* TEXT ACTION-TEXT FUNC-BODY)
+(define (schooz:link* link-text action-text action-func)
+  (schooz:impl-link* link-text action-text (schooz:transform-action action-func)))
+
 ;; (schooz:link TEXT ACTION-TEXT FUNC-BODY)
 (define-macro (schooz:link LINK ACTION FUNC-BODY)
   `(schooz:link* ,LINK ,ACTION (lambda () ,FUNC-BODY)))
@@ -170,6 +188,32 @@
 (define (schooz:link-return LINK ACTION RESULT)
   (schooz:link* LINK ACTION (lambda () (begin (return) RESULT))))
 
+;; (schooz:menu* TEXT ACTION-LIST)
+(define (schooz:menu* link-text action-list)
+  (schooz:impl-menu* link-text (schooz:transform-action-list action-list)))
+
+;; (schooz:menu TEXT ACTION-LIST)
+(define-macro
+  (schooz:menu TEXT ACTION-LIST)
+  `(schooz:menu* ,TEXT (list ,@ACTION-LIST)))
+
+;; (schooz:explicit-menu* ACTION-LIST)
+(define (schooz:explicit-menu* action-list)
+  (schooz:impl-explicit-menu* (schooz:transform-action-list action-list)))
+
+;; (schooz:explicit-menu ACTION-LIST)
+(define-macro
+  (schooz:explicit-menu ACTION-LIST)
+  `(schooz:explicit-menu* (list ,@ACTION-LIST)))
+
+;; (schooz:choice* ACTIONTEXT FUNC)  ... simple helper/wrapper
+(define (schooz:choice* ACTIONTEXT FUNC) (list ACTIONTEXT FUNC))
+
+;; (schooz:choice ACTIONTEXT FUNC-BODY)
+(define-macro
+  (schooz:choice ACTIONTEXT FUNC-BODY)
+  `(schooz:choice* ,ACTIONTEXT (lambda () ,FUNC-BODY)))
+
 ;; (schooz:choice-goto STATE ACTION-TEXT RESULT-TEXT)
 (define (schooz:choice-goto STATE ACTION RESULT)
   (schooz:choice* ACTION (lambda () (begin (goto STATE) RESULT))))
@@ -182,38 +226,63 @@
 (define (schooz:choice-return ACTION RESULT)
   (schooz:choice* ACTION (lambda () (begin (return) RESULT))))
 
-;; (schooz:choice* ACTIONTEXT FUNC)  ... simple helper/wrapper
-(define (schooz:choice* ACTIONTEXT FUNC) (list ACTIONTEXT FUNC))
+;; (schooz:ask X PROMPT)
+(define (schooz:ask X PROMPT)
+  (display PROMPT)
+  (schooz:now X (read)))
 
-;; (schooz:choice ACTIONTEXT FUNC-BODY)
-(define-macro
-  (schooz:choice ACTIONTEXT FUNC-BODY)
-  `(schooz:choice* ,ACTIONTEXT (lambda () ,FUNC-BODY)))
 
-;; (schooz:menu TEXT ACTION-LIST)
-(define-macro
-  (schooz:menu TEXT ACTION-LIST)
-  `(schooz:menu* ,TEXT (list ,@ACTION-LIST)))
+;; UI implementation should call this procedure to fire the initial action
+(define (schooz:dummy-action) '())
+(define schooz:initial-action* schooz:dummy-action)  ;; untransformed
+(define (schooz:initial-action) (schooz:transform-action schooz:initial-action*))  ;; transformed
 
-;; (schooz:explicit-menu ACTION-LIST)
-(define-macro
-  (schooz:explicit-menu ACTION-LIST)
-  `(schooz:explicit-menu* (list ,@ACTION-LIST)))
+;; Action transformations, applied automatically by (link...), (menu...), (explicit-menu...), (fire-action...)
+;; Default action transformation just ensures that all actions are functions
+(define schooz:transform-action schooz:as-function)
+
+;; method to compose a new action transformation
+(define (schooz:compose-transform-action new-transform)
+  (let ((old-transform schooz:transform-action))
+    (set! schooz:transform-action (lambda (f) (new-transform (old-transform f))))))
+
+;; action transformation: do something after every action
+(define (schooz:after-every-action g)
+  (schooz:compose-transform-action
+   (lambda (f) (lambda () (schooz:append-as-lists (f) (g))))))
+
+;; action transformation: do something before every action
+(define (schooz:before-every-action g)
+  (schooz:compose-transform-action
+   (lambda (f) (lambda () (schooz:append-as-lists (g) (f))))))
+
+;; look after every action
+(define (schooz:look-after-every-action)
+  (schooz:after-every-action schooz:look))
+
+;; application of transform-action to list of the form ((ACTIONTEXT1 FUNC1) (ACTIONTEXT2 FUNC2)...)
+(define (schooz:transform-action-list lst)
+  (if
+   (null? lst)
+   lst
+   (let* ((action (car lst))
+	  (rest (cdr lst))
+	  (action-text (car action))
+	  (action-func (cadr action)))
+     (cons (list action-text (schooz:transform-action action-func)) (schooz:transform-action-list rest)))))
 
 ;; Interface implementation-dependent methods.
 ;; The following functions must return a string, list, or nested list
-;; (schooz:link* TEXT ACTIONTEXT FUNC)  ... returns hyperlinked text TEXT that calls FUNC with mouseover text ACTIONTEXT
-;; (schooz:menu* TEXT ((ACTIONTEXT1 FUNC1) (ACTIONTEXT2 FUNC2) ...))  ... returns text hyperlinked to a popup menu
-;; (schooz:explicit-menu* ((ACTIONTEXT1 FUNC1) (ACTIONTEXT2 FUNC2) ...))  ... returns a menu (rendered as a list)
+;; (schooz:impl-link* TEXT ACTIONTEXT FUNC)  ... returns hyperlinked text TEXT that calls FUNC with mouseover text ACTIONTEXT
+;; (schooz:impl-menu* TEXT ((ACTIONTEXT1 FUNC1) (ACTIONTEXT2 FUNC2) ...))  ... returns text hyperlinked to a popup menu
+;; (schooz:impl-explicit-menu* ((ACTIONTEXT1 FUNC1) (ACTIONTEXT2 FUNC2) ...))  ... returns a menu (rendered as a list)
 
 ;; The following functions do I/O in an implementation-dependent manner.
-;; (schooz:ask X PROMPT)  ... outputs PROMPT; blocks until user responds; sets state of X directly.
+;; (schooz:impl-ask X PROMPT)  ... outputs PROMPT; blocks until user responds; sets state of X directly.
 
 ;; The interface must also implement the logic of the main loop.
 ;; Roughly speaking, this is as follows:
-;;  While not (game-over?):
-;;  The current scene is given by (look).
-;;   Optionally the interface can render available action texts (link,menu,choice) in a separate menu,
-;;    but embedded hyperlinks are preferred.
-;;  After an action function is triggered:
-;;   The results of the action function are displayed, and the current scene (look) is refreshed.
+;; Loop:
+;;  Evaluate and display results of current action (starting with (schooz:initial-action))
+;;  If not (game-over?):
+;;   Acquire next action; continue to Loop.

@@ -10,3 +10,20 @@ Files:
  Makefile - runs server wrappers
  biwascheme/ - bundled biwascheme (primarily for client wrapper)
  rock.scm - a tiny demo
+
+
+Basic concepts:
+
+An action is a function that returns hyperlinked SXML.
+Each hyperlink corresponds to a possible next action.
+Hyperlinks are made using (link...), (menu...), and variants.
+
+The core API also provides state machines with stacks (pushdown automata).
+Each state has an associated descriptor function, that generates hyperlinked SXML.
+
+A distinguished state machine called "narrative" models the overall story graph.
+Special functions are provided for working with this narrative automaton
+(for example, "look" always maps to the current narrative descriptor function).
+
+Actions and state machines can be coupled, so "look" is appended to every action.
+A common action is to change the narrative state; this amounts to a simple CYOA game.

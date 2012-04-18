@@ -29,11 +29,11 @@
    (string (integer->char 27)) "[1m" text (string (integer->char 27)) "[0m"))
 
 ;; Interface methods
-(define (schooz:link* link-text action-text action-func)
+(define (schooz:impl-link* link-text action-text action-func)
   (schooz:add-action action-text action-func)
   (schooz:highlight link-text))
 
-(define (schooz:menu* link-text action-list)
+(define (schooz:impl-menu* link-text action-list)
   (if (null? action-list) (schooz:highlight link-text)
       (let* ((action (car action-list))
 	     (action-text (car action))
@@ -41,25 +41,25 @@
 	     (rest-of-list (cdr action-list)))
 	(begin
 	  (schooz:add-action action-text action-func)
-	  (schooz:menu* link-text rest-of-list)))))
+	  (schooz:impl-menu* link-text rest-of-list)))))
 
-(define (schooz:explicit-menu* action-list) (schooz:menu* "" action-list))
+(define (schooz:impl-explicit-menu* action-list) (schooz:impl-menu* "" action-list))
 
-(define (schooz:ask X PROMPT)
+(define (schooz:impl-ask X PROMPT)
   (display PROMPT)
   (schooz:now X (read)))
 
 ;; Main entry point
 (define (schooz:main-loop)
+  (schooz:action-loop (schooz:initial-action)))
+
+(define (schooz:action-loop action-func)
+  (schooz:reset-action-list)
+  (display (schooz:fold-strings (action-func)))
+  (display "\n")
   (if (schooz:game-over?)
       (display "GAME OVER\n")
-      (begin
-	(schooz:reset-action-list)
-	(display (schooz:fold-strings (schooz:look)))
-	(display "\n")
-	(display (schooz:fold-strings (schooz:eval-or-return (schooz:action-chosen-from-list))))
-	(display "\n")
-	(schooz:main-loop))))
+      (schooz:action-loop (schooz:action-chosen-from-list))))
 
 ;; Menu
 (define

@@ -139,6 +139,10 @@
   (explicit-menu ACTION-LIST)
   `(schooz:explicit-menu ,ACTION-LIST))
 
+;; (ask X PROMPT)
+(define (ask X PROMPT)
+  (schooz:ask X PROMPT))
+
 
 ;; (main-loop)  ... terminal only
 (define (main-loop) (schooz:main-loop))
