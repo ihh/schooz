@@ -29,7 +29,7 @@ Script tag that loads Scheme from URL:
   xhr.onreadystatechange = function() {
     console_log ("loaded Scheme (" + xhr.responseText.length + " bytes)");
     intp.evaluate (xhr.responseText, function(e) { console_log("evaluated Scheme: " + e); } );
-    intp.evaluate ("schooz-version", function(e) { console_log("evaluated schooz-version: " + e); } );
+    intp.evaluate ("schooz:version", function(e) { console_log("evaluated schooz:version = " + e); } );
   };
   xhr.open("GET", the_url, true);
   xhr.send(null);
