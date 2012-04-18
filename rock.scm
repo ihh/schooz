@@ -29,7 +29,7 @@
      ,(menu "rock"
 	    ((choice "I like this rock. I'm staying here." "OK.")
 	     (choice-return "I take a swan-dive off the rock." "You plummet to your doom.")
-	     (choice "I need to get away from this rock. It's not safe." (lambda () (begin (goto "start") "I agree.")))))
+	     (choice* "I need to get away from this rock. It's not safe." (lambda () (begin (goto "start") "I agree.")))))  ;; just to illustrate (choice*...) as an alternative to (choice-goto...)
      ".")))
 
 (story
