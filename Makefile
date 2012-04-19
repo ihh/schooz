@@ -1,10 +1,13 @@
-all: node
+all: test
+
+test:
+	prove
 
 guile:
-	guile -s guile-1.8-schooz.scm
+	guile -s schooz.guile-1.8.scm
 
 node:
 	node server.js
 
 rock:
-	guile --debug -s guile-1.8-rock.scm
+	guile --debug -s rock.guile-1.8.scm
