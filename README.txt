@@ -44,9 +44,13 @@ but the (link...) function still returns the boldfaced link text).
 
 
 (b) Hypertext.
-A hypertext is a S-expression constructed using the (link...) and (menu...) macros,
+A hypertext is an S-expression constructed using the (link...) and (menu...) macros,
 as well as regular quoting, quasiquoting, other function calls, etc.
+
 By default, a hypertext S-expression is interpreted as SXML.
+This can be overridden, and in general the processing and presentation of the hypertext
+will depend on the user interface (for example, it could be rendered directly as HTML,
+flattened into plain text, partitioned among various ID'd elements on a webpage, etc.)
 
 
 (c) Actions.
