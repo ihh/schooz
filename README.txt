@@ -15,7 +15,7 @@ Files:
 
 Introduction.
 
-Schooz (pronounced "skews", "shoes" or "skooz" - you choose)
+Schooz (pronounced "skews", "shews" or "skooz" - you choose)
 is a Scheme-based engine for interactive hypertext.
 The framework is minimal, and based on a few key concepts:
 
