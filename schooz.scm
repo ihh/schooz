@@ -86,7 +86,14 @@
 (define (schooz:append-as-lists lst1 lst2)
   (append (schooz:as-list lst1) (schooz:as-list lst2)))
 
+
 ;; API functions.
+;; (schooz:machine-names)  ... returns the list of names of all state-machine objects
+(define (schooz:machine-names) (hashtable-keys schooz:desc))
+
+;; (schooz:machine-states X)  ... returns the possible states of the object named X
+(define (schooz:machine-states X) (hashtable-keys (hash-ref schooz:desc X)))
+
 ;; (schooz:now X STATE)  ... places object X in state STATE
 (define
   (schooz:now X STATE)

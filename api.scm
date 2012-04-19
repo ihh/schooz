@@ -1,4 +1,14 @@
 
+;; (machine-names)  ... returns the list of names of all state-machine objects
+(define
+  (machine-names)
+  (schooz:machine-names))
+
+;; (machine-states X)  ... returns the possible states of the object named X
+(define
+  (machine-states X)
+  (schooz:machine-states X))
+
 ;; (now X STATE)  ... places object X in state STATE
 (define
   (now X STATE)
