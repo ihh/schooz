@@ -63,6 +63,10 @@ embedded within a text that (semantically) describes the immediate consequences 
 
 Actions need not be "pure" functions; in fact, they will generally have side-effects that advance the story.
 
+Technically, actions are all that is needed to implement a CYOA.
+However, at a bare minimum, it is also useful to have some tools for designing state-machines
+(and hierarchical state-machines).
+
 
 (d) Pushdown automata.
 As a convenience for world-building, the library implements named state-machines with stacks (pushdown automata).

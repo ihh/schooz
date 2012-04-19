@@ -260,6 +260,10 @@
 (define (schooz:look-after-every-action)
   (schooz:after-every-action schooz:look))
 
+;; newline after every action
+(define (schooz:newline-after-every-action)
+  (schooz:after-every-action (lambda () "\n")))
+
 ;; application of transform-action to list of the form ((ACTIONTEXT1 FUNC1) (ACTIONTEXT2 FUNC2)...)
 (define (schooz:transform-action-list lst)
   (if

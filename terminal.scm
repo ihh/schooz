@@ -56,7 +56,6 @@
 (define (schooz:action-loop action-func)
   (schooz:reset-action-list)
   (display (schooz:fold-strings (action-func)))
-  (display "\n")
   (if (schooz:game-over?)
       (display "GAME OVER\n")
       (schooz:action-loop (schooz:action-chosen-from-list))))
