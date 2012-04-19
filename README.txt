@@ -60,6 +60,8 @@ The hypertext returned by an action may contain hyperlinks (and menus) offering 
 Thus, an action function dynamically constructs its possible successor actions,
 embedded within a text that (semantically) describes the immediate consequences of the action.
 
+Actions need not be "pure" functions; in fact, they will generally have side-effects that advance the story.
+
 
 (d) Pushdown automata.
 As a convenience for world-building, the library implements named state-machines with stacks (pushdown automata).
@@ -67,16 +69,16 @@ These are useful for implementing constructs like rooms, scenes, side-quests, si
 
 (e) Descriptors.
 Each named state machine has a mapping from states to associated descriptor functions.
-A descriptor function generates hypertexts or fragments of hypertext.
-(Thus, a descriptor is essentially an action, or a part of an action.)
+A descriptor function generates hypertexts or fragments of hypertext, describing the current state of the machine.
+(Note that a descriptor is technically an action and can, in principle, have side-effects.)
 
 (f) The story graph.
 The state machine named "narrative" is distinguished, in that the library offers syntactic shortcuts,
 such as (look) to call the current descriptor, (goto...) to change the state, etc.
 
 (g) Automatic actions.
-The (link...) and (menu...) macros can be configured to automatically append or prepend automatic actions,
-such as executing (look) after every action.
+The (link...) and (menu...) macros can be configured to automatically append or prepend actions,
+such as executing (look) after every move.
 
 (h) Syntactic sugar for stories.
 Shortcuts such as (link-goto...) and (choice-goto...) allow rapid construction of story graphs.
