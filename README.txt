@@ -53,7 +53,8 @@ By default, a hypertext S-expression is interpreted as SXML.
 An action is a function, taking no arguments, that returns a hypertext.
 Action functions are typically defined anonymously via (link...) or (choice...) macros,
 although they can also be defined separately using (define (action) ...)
-or (define action (lambda () ...)) etc.
+or (define action (lambda () ...)) etc., then referenced using the alternate forms
+of the link & choice macros, (link*...) and (choice*...).
 
 The hypertext returned by an action may contain hyperlinks (and menus) offering more actions.
 (If it doesn't contain any such links, the action is terminal: the game is over.)
