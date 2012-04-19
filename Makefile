@@ -7,4 +7,4 @@ node:
 	node server.js
 
 rock:
-	guile --debug -s rock.scm
+	guile --debug -s guile-1.8-rock.scm

@@ -1,6 +1,3 @@
-;; (load "./schooz.scm")
-(load "./guile-1.8-schooz.scm")
-
 ;; Basic terminal interface
 ;; Defines a (schooz:main-loop) function that should be called to start the game.
 

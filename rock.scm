@@ -1,13 +1,5 @@
-#!/usr/local/bin/guile
--s
-!#
-
 ;; An ultra-simple (3-room) test adventure. (Now with four rooms, plus an interactive object!)
 ;; Illustrates various ways of forming simple (goto...) and (gosub...) links.
-
-;; Load the interface
-(load "./terminal.scm")
-(load "./api.scm")
 
 ;; Uncomment to disable SXML, rendering everything as plain text
 ;; (schooz:output-plain)
