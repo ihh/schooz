@@ -118,5 +118,5 @@ append or prepend actions, such as executing (look) after every move.
 
 (h) Syntactic sugar for stories.
 
-Shortcuts such as (link-goto...) and (choice-goto...) allow rapid
-construction of story graphs.
+Shortcuts such as (link-goto...) and (choice-goto...) allow compact
+representation of story graphs.
