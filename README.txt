@@ -62,7 +62,7 @@ embedded within a text that (semantically) describes the immediate consequences 
 
 
 (d) Pushdown automata.
-As a convenience for world-building, the library implements named state machines with stacks (pushdown automata).
+As a convenience for world-building, the library implements named state-machines with stacks (pushdown automata).
 These are useful for implementing constructs like rooms, scenes, side-quests, simple conversations, puzzles, etc.
 
 (e) Descriptors.
