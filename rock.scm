@@ -65,6 +65,3 @@
  `("A "
    ,(link-gosub "mattress" "sleep" "Time for a little nap!" "Place, hard; mattress, soft. You quickly drift off.")
    " lies invitingly on the floor."))
-
-;; And.... run.
-(main-loop)
