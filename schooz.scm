@@ -177,7 +177,9 @@
 
 ;; (schooz:link* TEXT ACTION-TEXT FUNC-BODY)
 (define (schooz:link* link-text action-text action-func)
-  (schooz:impl-link* link-text action-text (schooz:transform-action action-func)))
+  (let ((transformed-action-func (schooz:transform-action action-func)))
+    (schooz:register-action action-text transformed-action-func)
+    (schooz:impl-link* link-text action-text transformed-action-func)))
 
 ;; (schooz:link TEXT ACTION-TEXT FUNC-BODY)
 (define-macro (schooz:link LINK ACTION FUNC-BODY)
@@ -197,7 +199,9 @@
 
 ;; (schooz:menu* TEXT ACTION-LIST)
 (define (schooz:menu* link-text action-list)
-  (schooz:impl-menu* link-text (schooz:transform-action-list action-list)))
+  (let ((transformed-action-list (schooz:transform-action-list action-list)))
+    (schooz:register-action-list transformed-action-list)
+    (schooz:impl-menu* link-text transformed-action-list)))
 
 ;; (schooz:menu TEXT ACTION-LIST)
 (define-macro
@@ -206,7 +210,9 @@
 
 ;; (schooz:explicit-menu* ACTION-LIST)
 (define (schooz:explicit-menu* action-list)
-  (schooz:impl-explicit-menu* (schooz:transform-action-list action-list)))
+  (let ((transformed-action-list (schooz:transform-action-list action-list)))
+    (schooz:register-action-list transformed-action-list)
+    (schooz:impl-explicit-menu* transformed-action-list)))
 
 ;; (schooz:explicit-menu ACTION-LIST)
 (define-macro
@@ -239,28 +245,65 @@
   (schooz:now X (read)))
 
 
-;; UI implementation should call this procedure to fire the initial action
+;; We keep track of (link,menu,explicit-menu) actions during calls to descriptors.
+(define schooz:action-text-list '())
+(define schooz:action-func-list '())
+
+(define (schooz:get-action-text n)
+  (list-ref schooz:action-text-list (- (schooz:number-of-actions) n)))
+
+(define (schooz:get-action-func n)
+  (list-ref schooz:action-func-list (- (schooz:number-of-actions) n)))
+
+(define (schooz:reset-action-list)
+  (set! schooz:action-text-list '())
+  (set! schooz:action-func-list '()))
+
+(define (schooz:register-action action-text action-func)
+  (set! schooz:action-text-list (cons action-text schooz:action-text-list))
+  (set! schooz:action-func-list (cons action-func schooz:action-func-list)))
+
+(define (schooz:register-action-list action-list)
+  (if (not (null? action-list))
+      (let* ((text-func (car action-list))
+	     (text (car text-func))
+	     (func (cadr text-func))
+	     (rest (cdr action-list)))
+      (begin (schooz:register-action text func)
+	     (schooz:register-action-list rest)))))
+
+(define (schooz:number-of-actions)
+  (length schooz:action-func-list))
+
+;; UI implementation should call (schooz:initial-action) to fire the initial action
 (define (schooz:dummy-action) '())
-(define schooz:initial-action* schooz:dummy-action)  ;; untransformed
-(define (schooz:initial-action) (schooz:transform-action schooz:initial-action*))  ;; transformed
+(define schooz:initial-action-untransformed schooz:dummy-action)  ;; untransformed
+(define (schooz:initial-action) (schooz:transform-action schooz:initial-action-untransformed))  ;; transformed
 
 ;; Action transformations, applied automatically by (link...), (menu...), (explicit-menu...), (fire-action...)
+;; Before any part of the action, we reset action-text-list and action-func-list,
+;; so we can track links to the next action.
+(define (schooz:transform-action action-func)
+  (lambda ()
+    (schooz:reset-action-list)
+    ((schooz:action-transformation action-func))))
+
 ;; Default action transformation just ensures that all actions are functions
-(define schooz:transform-action schooz:as-function)
+(define schooz:action-transformation schooz:as-function)
 
 ;; method to compose a new action transformation
-(define (schooz:compose-transform-action new-transform)
-  (let ((old-transform schooz:transform-action))
-    (set! schooz:transform-action (lambda (f) (new-transform (old-transform f))))))
+(define (schooz:compose-action-transformation new-transform)
+  (let ((old-transform schooz:action-transformation))
+    (set! schooz:action-transformation (lambda (f) (new-transform (old-transform f))))))
 
 ;; action transformation: do something after every action
 (define (schooz:after-every-action g)
-  (schooz:compose-transform-action
+  (schooz:compose-action-transformation
    (lambda (f) (lambda () (schooz:append-as-lists (f) (g))))))
 
 ;; action transformation: do something before every action
 (define (schooz:before-every-action g)
-  (schooz:compose-transform-action
+  (schooz:compose-action-transformation
    (lambda (f) (lambda () (schooz:append-as-lists (g) (f))))))
 
 ;; look after every action
