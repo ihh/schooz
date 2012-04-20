@@ -41,9 +41,14 @@
 	 (let ((tag (car lst))
 	       (rest (cdr lst)))
 	   (if (string? tag)
-	       (if (null? rest)
-		   (string-append str "<" tag "/>")
-		   (string-append str "<" tag ">" (schooz:fold-sxml-inner "" rest) "</" tag ">"))
+	       (string-append
+		str "<" tag
+		(if (null? rest)
+		    "/>"
+		    (let ((fold-rest (lambda (r) (string-append ">" (schooz:fold-sxml-inner "" r) "</" tag ">"))))
+		      (if (and (not (null? rest)) (= (car rest) "@"))  ;; SXML attribute list?
+			  (string-append (schooz:fold-sxml-attrs "" (cdar rest)) (fold-rest (cdr rest)))
+			  (fold-rest rest)))))
 	       (schooz:fold-sxml-inner str lst))))
 	(else str)))
 
@@ -55,6 +60,16 @@
 	       (rest (cdr lst)))
 	   (schooz:fold-sxml-inner (schooz:fold-sxml-outer str elem) rest)))
 	(else str)))
+
+(define (schooz:fold-sxml-attrs str attr-list)
+  (if (null? attr-list) str
+      (let* ((attr (car attr-list))
+	     (name (car attr))
+	     (value (cadr attr))
+	     (rest (cdr attr-list)))
+	(schooz:fold-sxml-attrs
+	 (string-append str " " name "=\"" value "\"")
+	 rest))))
 
 (define (schooz:fold-strings-sxml lst)
   (schooz:fold-sxml-inner "" lst))
@@ -177,9 +192,10 @@
 
 ;; (schooz:link* TEXT ACTION-TEXT FUNC-BODY)
 (define (schooz:link* link-text action-text action-func)
-  (let ((transformed-action-func (schooz:transform-action action-func)))
+  (let* ((transformed-action-func (schooz:transform-action action-func))
+	 (return-value (schooz:impl-link* link-text action-text transformed-action-func)))
     (schooz:register-action action-text transformed-action-func)
-    (schooz:impl-link* link-text action-text transformed-action-func)))
+    return-value))
 
 ;; (schooz:link TEXT ACTION-TEXT FUNC-BODY)
 (define-macro (schooz:link LINK ACTION FUNC-BODY)
@@ -199,9 +215,10 @@
 
 ;; (schooz:menu* TEXT ACTION-LIST)
 (define (schooz:menu* link-text action-list)
-  (let ((transformed-action-list (schooz:transform-action-list action-list)))
+  (let* ((transformed-action-list (schooz:transform-action-list action-list))
+	 (return-value (schooz:impl-menu* link-text transformed-action-list)))
     (schooz:register-action-list transformed-action-list)
-    (schooz:impl-menu* link-text transformed-action-list)))
+    return-value))
 
 ;; (schooz:menu TEXT ACTION-LIST)
 (define-macro
@@ -210,9 +227,10 @@
 
 ;; (schooz:explicit-menu* ACTION-LIST)
 (define (schooz:explicit-menu* action-list)
-  (let ((transformed-action-list (schooz:transform-action-list action-list)))
+  (let* ((transformed-action-list (schooz:transform-action-list action-list))
+	 (return-value (schooz:impl-explicit-menu* transformed-action-list)))
     (schooz:register-action-list transformed-action-list)
-    (schooz:impl-explicit-menu* transformed-action-list)))
+    return-value))
 
 ;; (schooz:explicit-menu ACTION-LIST)
 (define-macro
@@ -274,6 +292,9 @@
 
 (define (schooz:number-of-actions)
   (length schooz:action-func-list))
+
+(define (schooz:no-actions?)
+  (= (schooz:number-of-actions) 0))
 
 ;; UI implementation should call (schooz:initial-action) to fire the initial action
 (define (schooz:dummy-action) '())

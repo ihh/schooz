@@ -7,7 +7,7 @@
   (string-append
    (string (integer->char 27)) "[1m" text (string (integer->char 27)) "[0m"))
 
-;; Interface methods
+;; Interface implementation of hyperlinks & menus
 (define (schooz:impl-link* link-text action-text action-func)
   (schooz:highlight link-text))
 
@@ -27,9 +27,9 @@
 
 (define (schooz:action-loop action-func)
   (display (schooz:fold-strings (action-func)))
-  (if (schooz:game-over?)
-      (display "GAME OVER\n")
-      (schooz:action-loop (schooz:action-chosen-from-list))))
+  (cond ((schooz:game-over?) (display "GAME OVER\n"))
+	((schooz:no-actions?) (display "THE END\n"))
+	(else (schooz:action-loop (schooz:action-chosen-from-list)))))
 
 ;; Menu
 (define

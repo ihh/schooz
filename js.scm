@@ -1,37 +1,44 @@
-(define schooz:js-notify-function-name "schoozNotify")  ;; schoozNotify(xml) { ... stash xml in page somewhere ... }
+(define schooz:element-id-prefix "schoozLink")  ;; <a id="schoozLink1" href="#">...</a>
+(define schooz:js-stash-function-name "schoozStash")  ;; schoozNotify(xml) { ... stash xml in page somewhere ... }
 (define schooz:js-bind-function-name "schoozBind") ;; schoozBind(id,f) { document.getElementById(id) = f }
+(define schooz:js-reveal-function-name "schoozReveal") ;; schoozReveal() { ... make xml visible ... }
 
-(define (schooz:js-notify action-result)
-  (js-call (js-eval schooz:js-notify-function-name) action-result))
+(define (schooz:js-stash action-result)
+  (js-call (js-eval schooz:js-stash-function-name) action-result))
+
+(define (schooz:js-reveal)
+  (js-call (js-eval schooz:js-reveal-function-name)))
 
 (define (schooz:js-wrap-action action-func)
   (js-closure
    (lambda ()
-     (schooz:js-notify (action-func))
-     (schooz:js-bind-functions))))
+     (schooz:js-stash (action-func))
+     (schooz:js-bind-funcs)
+     (schooz:js-reveal))))
 
-(define schooz:dom-element-id-prefix "schoozLink")
+(define (schooz:element-id n)
+  (string-append schooz:element-id-prefix (number->string n)))
 
-(define (schooz:dom-element-id n)
-  (string-append schooz:dom-element-id-prefix (number->string n)))
+(define (schooz:current-link-element-id)
+  (schooz:js-element-id (+ (schooz:number-of-actions) 1)))
 
-(define (schooz:current-dom-element-id)
-  (schooz:js-dom-element-id (schooz:number-of-actions)))
+(define (schooz:current-menu-element-id menu-pos)
+  (schooz:js-element-id (+ (schooz:number-of-actions) menu-pos 1)))
 
-(define (schooz:js-bind-functions)
-  (schooz:js-bind-function 1))
-(define (schooz:js-bind-function n)
+(define (schooz:js-bind-funcs)
+  (schooz:js-bind-func 1))
+(define (schooz:js-bind-func n)
   (if (<= n (schooz:number-of-actions))
       (begin
 	(js-call
 	 (js-eval schooz:js-bind-function-name)
-	 (schooz:dom-element-id n)
+	 (schooz:element-id n)
 	 (schooz:js-wrap-action (schooz:get-action-func n)))
-	(schooz:js-bind-function (+ n 1)))))
+	(schooz:js-bind-func (+ n 1)))))
 
-;; Interface methods
+;; Interface implementation of hyperlinks & menus
 (define (schooz:impl-link* link-text action-text action-func)
-  `(a (@ ("id" ,(schooz:current-dom-element-id))) ,action-text))
+  `(a (@ ("id" ,(schooz:current-link-element-id)) ("href" "#")) ,action-text))
 
 (define (schooz:impl-menu* link-text action-list)
 ;; write me
@@ -40,3 +47,7 @@
 (define (schooz:impl-explicit-menu* action-list)
 ;; write me
 )
+
+;; Initial action
+(define (schooz:js-call-initial-action)
+  (js-call (schooz:js-wrap-action (schooz:initial-action))))
