@@ -12,7 +12,7 @@
 (define (schooz:js-wrap-action action-func)
   (js-closure
    (lambda ()
-     (schooz:js-stash (action-func))
+     (schooz:js-stash (schooz:fold-strings (action-func)))
      (schooz:js-bind-funcs)
      (schooz:js-reveal))))
 

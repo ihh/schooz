@@ -11,6 +11,10 @@ Scheme console:
 <div id="bs-console"></div>
 
 <p/>
+Schooz div:
+<div id="schoozMain"></div>
+
+<p/>
 Script tag with Scheme inside:
 <script src="biwascheme/biwascheme.js">
 (display "hello, world! Scheme is working, up in this piece\n")
@@ -19,6 +23,12 @@ Script tag with Scheme inside:
 <p/>
 Script tag that loads Scheme from URL:
 <script>
+// first define schooz JS functions
+var schoozStash = function(xml) { document.getElementById("schoozMain").innerHTML = xml; };
+var schoozBind = function(id,func) { document.getElementById(id).onclick = func; };
+var schoozReveal = function() { };
+
+// now do tests
   var console_log = function(e) { puts(e); };
   var dummy_log = function(e) { };
   console_log ("hi there, logging function seems to be working ");
