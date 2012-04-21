@@ -16,10 +16,9 @@
 (define (schooz:js-wrap-action action-func label)
   (js-closure
    (lambda ()
-     (display (string-append "In wrapped action: " label "\n"))
+     (display (string-append "Action: " label "\n"))
      (schooz:reset-onclick-bindings)
      (let ((action-result (action-func)))
-       (display "action-result: ") (write action-result) (display "\n")
        (schooz:js-set-view action-result)
        (schooz:js-bind-funcs)
        (schooz:js-notify)))))
@@ -29,7 +28,6 @@
 
 (define (schooz:js-set-element-property id property value)
   (let ((js-expr (string-append "document.getElementById(\"" id "\")")))
-;    (display (string-append js-expr "." property "=\"" (if (string? value) value "<value>") "\";\n"))
     (js-set!
      (js-eval js-expr)
      property
@@ -49,12 +47,9 @@
     (schooz:js-bind-func-ids ids)))
 
 (define (schooz:js-bind-func-ids ids)
-;  (write ids)
-;  (display "(list? ids)=") (display (list? ids)) (display "\n")
   (if (pair? ids)
       (let ((id (car ids))
 	    (rest (cdr ids)))
-;	(display (string-append "Binding " id "\n"))
 	(schooz:js-set-onclick
 	 id
 	 (hashtable-ref schooz:onclick-binding id #f))
@@ -63,7 +58,6 @@
 ;; Interface implementation of hyperlinks & menus
 (define (schooz:anchor link-text mouseover-text func)
   (let ((id (schooz:bound-id (schooz:js-wrap-action func mouseover-text))))
-    (display (string-append "Creating anchor " id " for \"" link-text "\" ... \"" mouseover-text "\"\n"))
     `("a" ("@"
 	   ("id" ,id)
 	   ("href" "#")
@@ -89,4 +83,4 @@
 
 ;; Initial action
 (define (schooz:js-call-initial-action)
-  (js-call (schooz:js-wrap-action (schooz:initial-action) "initial")))
+  (js-call (schooz:js-wrap-action (schooz:initial-action) "(schooz:initial-action)")))

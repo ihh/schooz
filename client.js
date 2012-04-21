@@ -11,8 +11,8 @@ var intp = new BiwaScheme.Interpreter (console_log);
 
 // function to run first action
 var runFirstAction = function() {
-    console_log ("Running first action");
-    intp.evaluate ("(schooz:js-call-initial-action)", console_log);
+//    console_log ("Running first action");
+    intp.evaluate ("(schooz:js-call-initial-action)", dummy_log);
 };
 
 // load Scheme files
