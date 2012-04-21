@@ -2,10 +2,22 @@
 (define schooz:view-element-id "schoozView")
 (define schooz:js-notify-function "schoozNotify")
 
+(define schooz:onclick-binding (make-eq-hashtable))
+
+(define (schooz:reset-onclick-bindings)
+  (hashtable-clear! schooz:onclick-binding))
+
+(define (schooz:bound-id func)
+  (let* ((n (+ (hashtable-size schooz:onclick-binding) 1))
+	 (name (schooz:onclick-element-id n)))
+    (hashtable-set! schooz:onclick-binding name func)
+    name))
+
 (define (schooz:js-wrap-action action-func)
   (js-closure
    (lambda ()
      (display "In wrapped action\n")
+     (schooz:reset-onclick-bindings)
      (let ((action-result (action-func)))
        (display "action-result: ") (write action-result) (display "\n")
        (schooz:js-set-view action-result)
@@ -17,7 +29,7 @@
 
 (define (schooz:js-set-element-property id property value)
   (let ((js-expr (string-append "document.getElementById(\"" id "\")")))
-    (display (string-append js-expr "." property "=\"" value "\";\n"))
+    (display (string-append js-expr "." property "=\"" (if (string? value) value "<value>") "\";\n"))
     (js-set!
      (js-eval js-expr)
      property
@@ -26,31 +38,36 @@
 (define (schooz:js-set-view data)
   (schooz:js-set-element-property schooz:view-element-id "innerHTML" (schooz:fold-strings data)))
 
-(define (schooz:js-set-onclick n func)
-  (schooz:js-set-element-property (schooz:onclick-element-id n) "onclick" func))
+(define (schooz:js-set-onclick id func)
+  (schooz:js-set-element-property id "onclick" func))
 
 (define (schooz:onclick-element-id n)
   (string-append schooz:onclick-element-id-prefix (number->string n)))
 
-(define (schooz:current-link-element-id)
-  (schooz:onclick-element-id (+ (schooz:number-of-actions) 1)))
-
-(define (schooz:current-menu-element-id menu-pos)
-  (schooz:onclick-element-id (+ (schooz:number-of-actions) menu-pos 1)))
-
 (define (schooz:js-bind-funcs)
-  (schooz:js-bind-func 1))
+  (let ((ids (vector->list (hashtable-keys schooz:onclick-binding))))
+    (schooz:js-bind-func-ids ids)))
 
-(define (schooz:js-bind-func n)
-  (if (<= n (schooz:number-of-actions))
-      (begin
-	(schooz:js-set-onclick n (schooz:js-wrap-action (schooz:get-action-func n)))
-	(schooz:js-bind-func (+ n 1)))))
+(define (schooz:js-bind-func-ids ids)
+;  (write ids)
+;  (display "(list? ids)=") (display (list? ids)) (display "\n")
+  (if (pair? ids)
+      (let ((id (car ids))
+	    (rest (cdr ids)))
+	(display (string-append "Binding " id "\n"))
+	(schooz:js-set-onclick id (hashtable-ref schooz:onclick-binding id #f))
+	(schooz:js-bind-func-ids rest))))
 
 ;; Interface implementation of hyperlinks & menus
+(define (schooz:anchor link-text mouseover-text func)
+  `("a" ("@"
+	 ("id" ,(schooz:bound-id func))
+	 ("href" "#")
+	 ("title" ,mouseover-text))
+    ,link-text))
+
 (define (schooz:impl-link* link-text action-text action-func)
-;  (display "action-text: ") (display action-text) (display "\n")
-  `("a" ("@" ("id" ,(schooz:current-link-element-id)) ("href" "#") ("onmouseover" ,action-text)) ,link-text))
+  (schooz:anchor link-text action-text action-func))
 
 (define (schooz:impl-menu* link-text action-list)
   `("div"
@@ -59,11 +76,12 @@
 
 (define (schooz:impl-explicit-menu* action-list)
   `("ul" ,(schooz:map
-	   (lambda (action)
-	     (let ((text (car action))
-		   (func (cadr action)))
-	       `("li" ,(schooz:impl-link* text text func))))
-	   action-list)))
+	   (lambda (n)
+	     (let* ((action (list-ref action-list n))
+		    (text (car action))
+		    (func (cadr action)))
+	       `("li" ,(schooz:anchor text text func))))
+	   (iota (length action-list)))))
 
 ;; Initial action
 (define (schooz:js-call-initial-action)

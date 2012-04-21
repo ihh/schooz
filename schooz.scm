@@ -355,19 +355,3 @@
 	  (action-text (car action))
 	  (action-func (cadr action)))
      (cons (list action-text (schooz:transform-action action-func)) (schooz:transform-action-list rest)))))
-
-;; Interface implementation-dependent methods.
-;; The following functions must return a string, list, or nested list
-;; (schooz:impl-link* TEXT ACTIONTEXT FUNC)  ... returns hyperlinked text TEXT that calls FUNC with mouseover text ACTIONTEXT
-;; (schooz:impl-menu* TEXT ((ACTIONTEXT1 FUNC1) (ACTIONTEXT2 FUNC2) ...))  ... returns text hyperlinked to a popup menu
-;; (schooz:impl-explicit-menu* ((ACTIONTEXT1 FUNC1) (ACTIONTEXT2 FUNC2) ...))  ... returns a menu (rendered as a list)
-
-;; The following functions do I/O in an implementation-dependent manner.
-;; (schooz:impl-ask X PROMPT)  ... outputs PROMPT; blocks until user responds; sets state of X directly.
-
-;; The interface must also implement the logic of the main loop.
-;; Roughly speaking, this is as follows:
-;; Loop:
-;;  Evaluate and display results of current action (starting with (schooz:initial-action))
-;;  If not (game-over?):
-;;   Acquire next action; continue to Loop.
