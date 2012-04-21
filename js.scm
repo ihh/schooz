@@ -1,6 +1,6 @@
 (define schooz:onclick-element-id-prefix "schoozLink")
-(define schooz:view-element-id "schoozView")
-(define schooz:js-notify-function "schoozNotify")
+(define schooz:view-element-id "schoozText")
+(define schooz:js-notify-function "schoozUpdate")
 
 (define schooz:onclick-binding (make-eq-hashtable))
 
@@ -13,10 +13,10 @@
     (hashtable-set! schooz:onclick-binding name func)
     name))
 
-(define (schooz:js-wrap-action action-func)
+(define (schooz:js-wrap-action action-func label)
   (js-closure
    (lambda ()
-     (display "In wrapped action\n")
+     (display (string-append "In wrapped action: " label "\n"))
      (schooz:reset-onclick-bindings)
      (let ((action-result (action-func)))
        (display "action-result: ") (write action-result) (display "\n")
@@ -29,7 +29,7 @@
 
 (define (schooz:js-set-element-property id property value)
   (let ((js-expr (string-append "document.getElementById(\"" id "\")")))
-    (display (string-append js-expr "." property "=\"" (if (string? value) value "<value>") "\";\n"))
+;    (display (string-append js-expr "." property "=\"" (if (string? value) value "<value>") "\";\n"))
     (js-set!
      (js-eval js-expr)
      property
@@ -54,17 +54,21 @@
   (if (pair? ids)
       (let ((id (car ids))
 	    (rest (cdr ids)))
-	(display (string-append "Binding " id "\n"))
-	(schooz:js-set-onclick id (hashtable-ref schooz:onclick-binding id #f))
+;	(display (string-append "Binding " id "\n"))
+	(schooz:js-set-onclick
+	 id
+	 (hashtable-ref schooz:onclick-binding id #f))
 	(schooz:js-bind-func-ids rest))))
 
 ;; Interface implementation of hyperlinks & menus
 (define (schooz:anchor link-text mouseover-text func)
-  `("a" ("@"
-	 ("id" ,(schooz:bound-id func))
-	 ("href" "#")
-	 ("title" ,mouseover-text))
-    ,link-text))
+  (let ((id (schooz:bound-id (schooz:js-wrap-action func mouseover-text))))
+    (display (string-append "Creating anchor " id " for \"" link-text "\" ... \"" mouseover-text "\"\n"))
+    `("a" ("@"
+	   ("id" ,id)
+	   ("href" "#")
+	   ("title" ,mouseover-text))
+      ,link-text)))
 
 (define (schooz:impl-link* link-text action-text action-func)
   (schooz:anchor link-text action-text action-func))
@@ -85,4 +89,4 @@
 
 ;; Initial action
 (define (schooz:js-call-initial-action)
-  (js-call (schooz:js-wrap-action (schooz:initial-action))))
+  (js-call (schooz:js-wrap-action (schooz:initial-action) "initial")))

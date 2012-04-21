@@ -1,5 +1,5 @@
 // first define schoozNotify function
-var schoozNotify = function() { };
+var schoozUpdate = function() { };
 
 // now do tests
 var console_log = function(e) { puts(e); };
@@ -26,8 +26,7 @@ schemeFiles.reverse().forEach (function (theUrl) {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
 	if (xhr.readyState == 4) {
-	    console_log ("Loaded " + xhr.responseText.length + " bytes from " + theUrlLocal);
-//	    intp.evaluate (xhr.responseText, function(e) { console_log("evaluated Scheme: " + e); } );
+//	    console_log ("Loaded " + xhr.responseText.length + " bytes from " + theUrlLocal);
 	    intp.evaluate (xhr.responseText, dummy_log);
 	    lastFunctionLocal();
 	}

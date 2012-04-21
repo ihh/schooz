@@ -149,8 +149,6 @@
 (define
   (schooz:describe X)
   (let ((desc (hashtable-ref (hashtable-ref schooz:desc X #f) (schooz:state X) #f)))
-    ;; Uncomment to debug
-    ;; (display "(describe ") (display X) (display ") -> ") (display (schooz:state X)) (display " -> ") (display desc) (display "\n")
     (schooz:eval-or-return desc)))
 
 ;; (schooz:push X STATE)  ... pushes STATE onto X's stack
@@ -330,12 +328,12 @@
 ;; action transformation: do something after every action
 (define (schooz:after-every-action g)
   (schooz:compose-action-transformation
-   (lambda (f) (lambda () (schooz:append-as-lists (f) (g))))))
+   (lambda (f) (lambda () (let* ((fres (f)) (gres (g))) (schooz:append-as-lists fres gres))))))
 
 ;; action transformation: do something before every action
 (define (schooz:before-every-action g)
   (schooz:compose-action-transformation
-   (lambda (f) (lambda () (schooz:append-as-lists (g) (f))))))
+   (lambda (f) (lambda () (let* ((gres (g)) (fres (f))) (schooz:append-as-lists gres fres))))))
 
 ;; look after every action
 (define (schooz:look-after-every-action)
