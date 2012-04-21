@@ -10,15 +10,21 @@
 (define schooz:stack (make-eq-hashtable))
 
 ;; Internal functions.
+;; Simple map
+(define (schooz:map f lst)
+  (if (null? lst)
+      '()
+      (cons (f (car lst)) (schooz:map f (cdr lst)))))
+
 ;; (schooz:ensure-object X)  ... ensures that X has valid entries in hashtables
 (define
   (schooz:ensure-object X STATE)
   (if
-   (not (hash-ref schooz:desc X))
-   (hash-set! schooz:desc X (make-eq-hashtable)))
+   (not (hashtable-ref schooz:desc X #f))
+   (hashtable-set! schooz:desc X (make-eq-hashtable)))
   (if
-   (not (hash-ref schooz:stack X))
-   (hash-set! schooz:stack X (list STATE))))
+   (not (hashtable-ref schooz:stack X #f))
+   (hashtable-set! schooz:stack X (list STATE))))
 
 ;; (schooz:eval-or-return f)  ... if f is a function, evaluate; otherwise, return
 (define (schooz:eval-or-return f)
@@ -30,7 +36,7 @@
 
 ;; clear stack of object X
 (define (schooz:clear-stack X)
-  (hash-set! schooz:stack X '()))
+  (hashtable-set! schooz:stack X '()))
 
 ;; convert an SXML S-expression to an XML string
 ;; Can't yet handle attributes...
@@ -46,7 +52,11 @@
 		(if (null? rest)
 		    "/>"
 		    (let ((fold-rest (lambda (r) (string-append ">" (schooz:fold-sxml-inner "" r) "</" tag ">"))))
-		      (if (and (not (null? rest)) (= (car rest) "@"))  ;; SXML attribute list?
+		      (if (and
+			   (pair? rest)
+			   (pair? (car rest))
+			   (string? (caar rest))
+			   (string=? (caar rest) "@"))  ;; SXML attribute list?
 			  (string-append (schooz:fold-sxml-attrs "" (cdar rest)) (fold-rest (cdr rest)))
 			  (fold-rest rest)))))
 	       (schooz:fold-sxml-inner str lst))))
@@ -107,13 +117,13 @@
 (define (schooz:machine-names) (hashtable-keys schooz:desc))
 
 ;; (schooz:machine-states X)  ... returns the possible states of the object named X
-(define (schooz:machine-states X) (hashtable-keys (hash-ref schooz:desc X)))
+(define (schooz:machine-states X) (hashtable-keys (hashtable-ref schooz:desc X #f)))
 
 ;; (schooz:now X STATE)  ... places object X in state STATE
 (define
   (schooz:now X STATE)
-  (let ((old-stack (hash-ref schooz:stack X)))
-    (hash-set! schooz:stack X
+  (let ((old-stack (hashtable-ref schooz:stack X '())))
+    (hashtable-set! schooz:stack X
 	       (if (null? old-stack)
 		   (list STATE)
 		   (cons STATE (cdr old-stack))))))
@@ -121,14 +131,14 @@
 ;; (schooz:state X)  ... returns the current state (typically a string) of object named X, where X is an atom
 (define
   (schooz:state X)
-  (let ((stack (hash-ref schooz:stack X)))
+  (let ((stack (hashtable-ref schooz:stack X '())))
     (if (null? stack) #f (car stack))))
 
 ;; (schooz:description* X STATE FUNC)  ... set object X's descriptor function for state STATE to FUNC
 (define
   (schooz:description* X STATE FUNC)
   (schooz:ensure-object X STATE)
-  (hash-set! (hash-ref schooz:desc X) STATE FUNC))
+  (hashtable-set! (hashtable-ref schooz:desc X #f) STATE FUNC))
 
 ;; (schooz:description X STATE FUNC-BODY)  ... macro to avoid writing (lambda () ...)
 (define-macro
@@ -138,7 +148,7 @@
 ;; (schooz:describe X)  ... looks up the descriptor function for current state of object X, calls it
 (define
   (schooz:describe X)
-  (let ((desc (hash-ref (hash-ref schooz:desc X) (schooz:state X))))
+  (let ((desc (hashtable-ref (hashtable-ref schooz:desc X #f) (schooz:state X) #f)))
     ;; Uncomment to debug
     ;; (display "(describe ") (display X) (display ") -> ") (display (schooz:state X)) (display " -> ") (display desc) (display "\n")
     (schooz:eval-or-return desc)))
@@ -146,16 +156,16 @@
 ;; (schooz:push X STATE)  ... pushes STATE onto X's stack
 (define
   (schooz:push X STATE)
-  (hash-set! schooz:stack X (cons STATE (hash-ref schooz:stack X))))
+  (hashtable-set! schooz:stack X (cons STATE (hashtable-ref schooz:stack X '()))))
 
 ;; (schooz:pop X)  ... pops state off X's stack
 (define
   (schooz:pop X)
-  (let ((stack (hash-ref schooz:stack X)))
+  (let ((stack (hashtable-ref schooz:stack X '())))
     (if (null? stack)
 	#f
 	(begin
-	  (hash-set! schooz:stack X (cdr stack))
+	  (hashtable-set! schooz:stack X (cdr stack))
 	  (car stack)))))
 
 ;; (schooz:finish X)  ... clears X's stack

@@ -5,7 +5,9 @@
 (define (schooz:js-wrap-action action-func)
   (js-closure
    (lambda ()
+     (display "In wrapped action\n")
      (let ((action-result (action-func)))
+       (display "action-result: ") (write action-result) (display "\n")
        (schooz:js-set-view action-result)
        (schooz:js-bind-funcs)
        (schooz:js-notify)))))
@@ -14,10 +16,12 @@
   (js-call (js-eval schooz:js-notify-function)))
 
 (define (schooz:js-set-element-property id property value)
-  (js-set!
-   (js-call (js-eval (string-append "document.getElementById(\"" id "\")")))
-   property
-   value))
+  (let ((js-expr (string-append "document.getElementById(\"" id "\")")))
+    (display (string-append js-expr "." property "=\"" value "\";\n"))
+    (js-set!
+     (js-eval js-expr)
+     property
+     value)))
 
 (define (schooz:js-set-view data)
   (schooz:js-set-element-property schooz:view-element-id "innerHTML" (schooz:fold-strings data)))
@@ -45,15 +49,21 @@
 
 ;; Interface implementation of hyperlinks & menus
 (define (schooz:impl-link* link-text action-text action-func)
-  `(a (@ ("id" ,(schooz:current-link-element-id)) ("href" "#")) ,action-text))
+;  (display "action-text: ") (display action-text) (display "\n")
+  `("a" ("@" ("id" ,(schooz:current-link-element-id)) ("href" "#") ("onmouseover" ,action-text)) ,link-text))
 
 (define (schooz:impl-menu* link-text action-list)
-;; write me
-)
+  `("div"
+    ,link-text
+    ,(schooz:impl-explicit-menu* action-list)))
 
 (define (schooz:impl-explicit-menu* action-list)
-;; write me
-)
+  `("ul" ,(schooz:map
+	   (lambda (action)
+	     (let ((text (car action))
+		   (func (cadr action)))
+	       `("li" ,(schooz:impl-link* text text func))))
+	   action-list)))
 
 ;; Initial action
 (define (schooz:js-call-initial-action)
