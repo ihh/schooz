@@ -79,6 +79,32 @@
 ;; (schooz:finished? X)  ... test to see if X's stack is empty
 (define (schooz:finished? X) (equal? (schooz:state X) #f))
 
+
+;; (schooz:link-goto LINK-TEXT STATE ACTION-TEXT RESULT-TEXT)
+(define (schooz:link-goto LINK STATE ACTION RESULT)
+  (schooz:link* LINK ACTION (lambda () (begin (goto STATE) RESULT))))
+
+;; (schooz:link-gosub LINK-TEXT STATE ACTION-TEXT RESULT-TEXT)
+(define (schooz:link-gosub LINK STATE ACTION RESULT)
+  (schooz:link* LINK ACTION (lambda () (begin (gosub STATE) RESULT))))
+
+;; (schooz:link-return LINK-TEXT ACTION-TEXT RESULT-TEXT)
+(define (schooz:link-return LINK ACTION RESULT)
+  (schooz:link* LINK ACTION (lambda () (begin (return) RESULT))))
+
+;; (schooz:choice-goto STATE ACTION-TEXT RESULT-TEXT)
+(define (schooz:choice-goto STATE ACTION RESULT)
+  (schooz:choice* ACTION (lambda () (begin (goto STATE) RESULT))))
+
+;; (schooz:choice-gosub STATE ACTION-TEXT RESULT-TEXT)
+(define (schooz:choice-gosub STATE ACTION RESULT)
+  (schooz:choice* ACTION (lambda () (begin (gosub STATE) RESULT))))
+
+;; (schooz:choice-return ACTION-TEXT RESULT-TEXT)
+(define (schooz:choice-return ACTION RESULT)
+  (schooz:choice* ACTION (lambda () (begin (return) RESULT))))
+
+
 ;; Main story object
 (define schooz:narrative "narrative")
 

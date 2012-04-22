@@ -9,6 +9,37 @@
   (machine-states X)
   (schooz:machine-states X))
 
+
+;; (link-goto LINK-TEXT STATE ACTION-TEXT RESULT-TEXT)
+(define
+  (link-goto LINK STATE ACTION RESULT)
+  (schooz:link-goto LINK STATE ACTION RESULT))
+
+;; (link-gosub LINK-TEXT STATE ACTION-TEXT RESULT-TEXT)
+(define
+  (link-gosub LINK STATE ACTION RESULT)
+  (schooz:link-gosub LINK STATE ACTION RESULT))
+
+;; (link-return LINK-TEXT ACTION-TEXT RESULT-TEXT)
+(define
+  (link-return LINK ACTION RESULT)
+  (schooz:link-return LINK ACTION RESULT))
+
+;; (schooz:choice-goto STATE ACTION-TEXT RESULT-TEXT)
+(define
+  (choice-goto STATE ACTION RESULT)
+  (schooz:choice-goto STATE ACTION RESULT))
+
+;; (schooz:choice-gosub STATE ACTION-TEXT RESULT-TEXT)
+(define
+  (choice-gosub STATE ACTION RESULT)
+  (schooz:choice-gosub STATE ACTION RESULT))
+
+;; (schooz:choice-return ACTION-TEXT RESULT-TEXT)
+(define
+  (choice-return ACTION RESULT)
+  (schooz:choice-return ACTION RESULT))
+
 ;; (now X STATE)  ... places object X in state STATE
 (define
   (now X STATE)

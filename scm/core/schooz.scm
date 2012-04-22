@@ -104,18 +104,6 @@
 (define-macro (schooz:link LINK ACTION FUNC-BODY)
   `(schooz:link* ,LINK ,ACTION (lambda () ,FUNC-BODY)))
 
-;; (schooz:link-goto LINK-TEXT STATE ACTION-TEXT RESULT-TEXT)
-(define (schooz:link-goto LINK STATE ACTION RESULT)
-  (schooz:link* LINK ACTION (lambda () (begin (goto STATE) RESULT))))
-
-;; (schooz:link-gosub LINK-TEXT STATE ACTION-TEXT RESULT-TEXT)
-(define (schooz:link-gosub LINK STATE ACTION RESULT)
-  (schooz:link* LINK ACTION (lambda () (begin (gosub STATE) RESULT))))
-
-;; (schooz:link-return LINK-TEXT ACTION-TEXT RESULT-TEXT)
-(define (schooz:link-return LINK ACTION RESULT)
-  (schooz:link* LINK ACTION (lambda () (begin (return) RESULT))))
-
 ;; (schooz:menu* TEXT ACTION-LIST)
 (define (schooz:menu* link-text action-list)
   (let* ((transformed-action-list (schooz:transform-action-list action-list))
@@ -147,18 +135,6 @@
 (define-macro
   (schooz:choice ACTIONTEXT FUNC-BODY)
   `(schooz:choice* ,ACTIONTEXT (lambda () ,FUNC-BODY)))
-
-;; (schooz:choice-goto STATE ACTION-TEXT RESULT-TEXT)
-(define (schooz:choice-goto STATE ACTION RESULT)
-  (schooz:choice* ACTION (lambda () (begin (goto STATE) RESULT))))
-
-;; (schooz:choice-gosub STATE ACTION-TEXT RESULT-TEXT)
-(define (schooz:choice-gosub STATE ACTION RESULT)
-  (schooz:choice* ACTION (lambda () (begin (gosub STATE) RESULT))))
-
-;; (schooz:choice-return ACTION-TEXT RESULT-TEXT)
-(define (schooz:choice-return ACTION RESULT)
-  (schooz:choice* ACTION (lambda () (begin (return) RESULT))))
 
 ;; (schooz:ask X PROMPT)
 (define (schooz:ask X PROMPT)
