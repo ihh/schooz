@@ -16,7 +16,12 @@ var runFirstAction = function() {
 };
 
 // load Scheme files
-var schemeFiles = ["schooz.scm", "js.scm", "api.scm", "rock.scm"];
+var schemeFiles = ["scm/core/schooz.scm",
+		   "scm/core/machines.scm",
+		   "scm/ui/js.scm",
+		   "scm/api/schooz.scm",
+		   "scm/api/machines.scm",
+		   "scm/demo/rock.scm"];
 var lastFunction = runFirstAction;
 schemeFiles.reverse().forEach (function (theUrl) {
     // create local copies of variables, to force closures

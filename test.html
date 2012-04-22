@@ -34,7 +34,7 @@ var schoozReveal = function() { };
   console_log ("hi there, logging function seems to be working ");
   dummy_log ("you schmuck ");  // shouldn't appear
   var intp = new BiwaScheme.Interpreter (dummy_log);
-  var the_url = "schooz.scm";
+  var the_url = "scm/core/schooz.scm";
   var xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function() {
     if (xhr.readyState == 4) {
