@@ -19,8 +19,6 @@ var runFirstAction = function() {
 var schemeFiles = ["scm/core/schooz.scm",
 		   "scm/core/machines.scm",
 		   "scm/ui/js.scm",
-		   "scm/api/schooz.scm",
-		   "scm/api/machines.scm",
 		   "scm/demo/rock.scm"];
 var lastFunction = runFirstAction;
 schemeFiles.reverse().forEach (function (theUrl) {

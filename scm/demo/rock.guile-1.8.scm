@@ -8,8 +8,6 @@
 (load "../core/schooz.scm")
 (load "../core/machines.scm")
 (load "../ui/terminal.scm")
-(load "../api/schooz.scm")
-(load "../api/machines.scm")
 
 (load "rock.scm")
 
