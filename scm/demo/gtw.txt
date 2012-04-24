@@ -1,0 +1,75 @@
+Global Thermonuclear War
+
+Characters.
+Player character (m or f), a suburban misfit
+
+Companion hackers:
+Hacker Zachariah (m), black teen from Bed Stuy NY
+Gina Mackintyre (f), stoner, UK hacker in search of UFOs
+Adie Lamer (m), Lisp programmer, serial turncoat
+Jules de Bourcier (m), activist, transparency advocate, philanderer
+
+Main antagonists:
+Dianne Kill (f), tech-savvy FBI agent in a world of dinosaurs
+Hiroshi Miyamura (m), Japanese-American physicist, biologist, roller-skater, hacker-hunter
+Stephen Eagle-Hawke (m), British computer scientist, classified, faked own death
+
+Minor characters:
+Norbert Cuthridge (m), autistic savant, university lab technician, hacker sympathizer
+Sarah Dale (f), game developer, hacker sympathizer
+School receptionist, minor antagonist
+
+
+Vignettes.
+
+Hack into school computer, (nearly) get caught
+Write a computer game. Forget the subroutine for the final explosion
+Have an incredibly elaborate homemade computer in your bedroom that is Rube Goldberg-examinable
+ (you can pick one piece to take with you; each one unlocks a route into a minigame)
+
+Wardial ActorVizion trying to get games
+Call Kingston polytechnic pursuing an illicit money transfer
+Make reservations for Paris with a travel agent
+
+Las Vegas casino, DefCon. Bouncer catches you eyeing slot machine
+Piles of coke in a hotel room with hacks scrawled over the wallpaper
+A whistle in a cereal packet that triggers nuclear war
+Go on the run, chased by the FBI, get busted
+Smoking weed on the road with Mitnick and Lamo
+Hotel room, dropped cellphone calls, Shimomura uses that to trace you
+Trying to sell secrets to the Stasi
+
+Stay up all night with a bunch of nerdy teen hackers on caffeine pills. Hack PBX's, join party lines.
+Go dumpster diving. Nearly get caught by police. Then get savage beating from local casuals
+
+Use an experimental new glasses interface that feels like something from Neuromancer, hack in 3D VR, Lawnmower man, etc
+ (turns out to be a way to sell advertising)
+
+"Take the red pill or the blue pill" but they both turn out to be duds - $20 ripoff
+
+Prevent a thermonuclear war by hacking into Dr Strangelove's PC
+Eavesdropping on conversations between heads of state
+The computer that thinks, and can be reasoned into knowledge of futility (and Marvin-the-paranoid-android depression)
+Stumbling on the lab where they made Stuxnet - "Holy crap, is that a Kray Twin?" (c.f. Cray 2 in WG)
+Escaping from the medical lab by tricking the electronic door lock
+Pretending to be part of a tour group
+
+Hack into a DNA synthesizer, poison a corporate defector (New Rose Hotel)
+Hack into a hotel fax machine (Johnny Mnemonic)
+Masquerade as a corporate email (Neuromancer)
+Deal with shadowy godlike AIs on the internet (Neuromancer sequels)
+
+Write a virus for the Russian mob
+Blow up a Soviet oil pipeline with a logic bomb
+Reverse engineer Stuxnet, get kidnapped by the CIA, MEK, Mossad
+Hack the Pentagon, find out that there really are UFOs
+Write the first ever internet worm. Set the parameters way too high (not very interactive...)
+Dial it in on a payphone like Shockwave Rider?
+
+
+Side vignettes.
+Comedy hookups
+Comedy fights
+Hacks, exploits of various kinds
+Pranks
+Drug deals, transexual nightclubs, raves, general underworld vibes

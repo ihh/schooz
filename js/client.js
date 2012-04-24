@@ -20,6 +20,7 @@ var schemeFiles = ["scm/core/schooz.scm",
 		   "scm/core/machines.scm",
 		   "scm/ui/js.scm",
 		   "scm/demo/rock.scm"];
+//		   "scm/demo/redpill.scm"];
 var lastFunction = runFirstAction;
 schemeFiles.reverse().forEach (function (theUrl) {
     // create local copies of variables, to force closures
