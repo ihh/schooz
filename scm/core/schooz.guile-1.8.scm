@@ -2,3 +2,5 @@
 (define (make-eq-hashtable) (make-hash-table))
 (define (hashtable-ref tab key default) (hash-ref tab key))
 (define (hashtable-set! tab key val) (hash-set! tab key val))
+
+(define (random-integer n) (random n))

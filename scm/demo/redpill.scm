@@ -4,6 +4,21 @@
 (schooz:look-after-every-action)
 (schooz:p-element-after-every-action)
 
+(define map schooz:map)
+(define grep schooz:grep)
+
+;; grep -v
+(define (grep-not-equal x list)
+ (grep (lambda (y) (not (equal? x y)) list)))
+
+;; Extract random element from list
+(define (random-element list)
+  (let ((len (length list)))
+    (list-ref list (random-integer len))))
+
+;; Emily Short-style "One of..." alias for random-element
+(define one-of random-element)
+
 ;; HTML helpers
 (define p `("p"))
 (define (h1 text) `("h1" ,text))
@@ -12,21 +27,64 @@
 (define morpheus "Morphetikus")
 
 ;; Helper functions (move these to core libraries?)
-(define (expandable-object name link-text action-text expanded-description)
+;; Expandable objects
+(define (expandable-machine name link-text action-text expanded-description)
   (description
    name
-   "hidden"
-   `(,(link link-text action-text (now name "shown"))))
+   #f
+   `(,(link link-text action-text (now name #t))))
 
   (description
    name
-   "shown"
+   #t
    `(,link-text ,expanded-description)))
 
+;; Simple one-way switches
+(define (one-way-switch name link-text action-text)
+  (expandable-machine name link-text action-text ""))
+
+;; Consistent "Next" links
 (define
   (next state)
   `(,p ,(link-goto "Next" state "Next..." "")))
 
+;; Self-propelled state machines (generic)
+(define (auto-machine name next-state-function descriptor-list)
+  (let ((states (length descriptor-list)))
+    (map
+     (lambda (s)
+       (let ((descriptor (list-ref descriptor-list s))
+	     (next-state (next-state-function s)))
+	 (description*
+	  name
+	  s
+	  (lambda ()
+	    (now name next-state)
+	    ((schooz:as-function descriptor))))))
+     (iota states))))
+
+;; Cyclic increment function
+(define (inc-modulo modulus)
+  (lambda (x) (% (+ x 1) modulus)))
+
+;; Cycler
+(define (cyclic-machine name descriptor-list)
+  (auto-machine name (inc-modulo (length descriptor-list)) descriptor-list))
+
+;; Random cycler (never repeats)
+(define (random-machine name descriptor-list)
+  (let* ((states (length descriptor-list))
+	 (mutator-function
+	  (lambda (x)
+	    (let ((other-states (grep-not-equal x (iota states))))
+	      (random-element other-states)))))
+    (auto-machine name mutator-function descriptor-list)))
+
+;; Timer (delay fuse)
+(define (fuse-machine name descriptor-list)
+  (let* ((states (length descriptor-list))
+	 (inc-function (lambda (x) (if (< x (- states 1)) (+ x 1) x))))
+  (auto-machine name inc-function descriptor-list)))
 
 ;; Synopsis: Morpheus offers you a choice of pills.
 ;; Outcomes:
@@ -53,21 +111,33 @@
 (story
  "meet-morpheus"
  `(,h1-club
-   "In an armchair sits an obvious bigshot of this scene. Catwoman gave him the faintest bow when you arrived (almost imperceptible, but you could tell) and Punk Dwarf snarls at everyone BUT him."
-   ,p
-   "The guy in the chair is more than a little intimidating. It doesn't hurt that he's physically domineering, and looks intelligent (you can't see his eyes behind those mirrorshades, but he's got poise)."
-   ,p
-   "Still, you wonder how leather jackets that heavy survived the heyday of " ,@(describe "The Who")
+   "In an armchair sits an obvious " ,@(describe "bigshot") " of this scene. Catwoman gave him the faintest bow when you arrived (almost imperceptible, but you could tell) and Punk Dwarf snarls at everyone BUT him."
+   ,(if (state "bigshot")
+	`(,p
+	  "The guy in the chair is more than a little intimidating. It doesn't hurt that he's physically domineering, and looks intelligent (you can't see his eyes behind those mirrorshades, but he's got poise)."
+	  ,p
+	  "Still, you wonder how leather jackets that heavy survived the heyday of " ,@(describe "The Who")))
    ,p
    ,@(first
-      `("The man introduces himself as " ("b" ,morpheus) " - a name he clearly expected you to know already, and now expects you to remember how to spell." ,p "He")
+      `("The man introduces himself as " ("b" ,morpheus) " - a name he clearly thought you knew already, and probably expects you to remember how to spell." ,p "He")
       `(,morpheus))
-   " "
-   ,(link-goto "gazes" "choice" "Fine, you want to stare?"
-	       `("You stare at each other for a while. Then " ,morpheus " clears his throat."))
-   " at you, "
-   ,(link-goto "calmly." "choice" "This guy is extremely irritating."
-	       `("'Speak up, then,' you say, pointedly. 'You asked me here, after all.'" ,p ,morpheus " grins."))))
+   ,@(describe "morpheus-intro-gaze")))
+
+(define (morpheus-intro-choice pre-text stare-text intervening-text speak-text post-text)
+  `(,pre-text " "
+    ,(link-goto stare-text "choice" "Fine, you want to stare?"
+		`("You stare at each other for a while. Then " ,morpheus " clears his throat."))
+    " " ,intervening-text " "
+    ,(link-goto speak-text "choice" "This guy is extremely irritating."
+		`("'Speak up, then,' you say, irritated. 'You asked me here, after all.'" ,p ,morpheus " grins."))
+    " " ,post-text))
+
+(fuse-machine
+ "morpheus-intro-gaze"
+ (list
+  (lambda () (morpheus-intro-choice "" "gazes" "at you" "calmly." ""))
+  (lambda () (morpheus-intro-choice "" "gazes" "at you, his fingers" "drumming" "on the armrest."))
+  (lambda () (morpheus-intro-choice ", now visibly impatient, is still" "waiting" "for you to speak, his fingers" "tapping" "like crazy."))))
 
 ;; Instead of going directly to "choice", there should be a whole conversation with Morpheus here.
 ;; Morpheus begins by making some pompous reference to Alice in Wonderland, which you can't help but destroy.
@@ -96,12 +166,18 @@
 
 ;; During the conversation there will be options to examine Morpheus.
 ;; Some of them are simple switches that can be flipped to reveal background info, e.g.:
-(expandable-object
+(expandable-machine
    "The Who"
    "The Who."
    "The Who?"
    `(,p "(The Who were a British rock band of the 60's and 70's. Their followers - 'mods' - did often wear long leather coats. Probably to stash big bags of pills in, now you come to think of it.)"))
 ;; Note that flipping the switch will use up a "turn".
+
+;; Even simpler switch, for when the in-text consequences are away from the switch link
+(one-way-switch
+   "bigshot"
+   "bigshot"
+   "Bigshot? Why call him that?")
 
 ;; Other options in the conversation can include a gosub to a "Checking out Morpheus" scene
 ;; that branches a bit, describing him, but with an increasing awareness that you are eyeing him up and down

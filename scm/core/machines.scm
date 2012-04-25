@@ -144,9 +144,9 @@
   (schooz:now X STATE)
   (let ((old-stack (hashtable-ref schooz:stack X '())))
     (hashtable-set! schooz:stack X
-	       (if (null? old-stack)
-		   (list STATE)
-		   (cons STATE (cdr old-stack))))))
+		    (if (null? old-stack)
+			(list STATE)
+			(cons STATE (cdr old-stack))))))
 
 ;; (schooz:state X)  ... returns the current state (typically a string) of object named X, where X is an atom
 (define

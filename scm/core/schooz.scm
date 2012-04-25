@@ -57,7 +57,12 @@
 (define (schooz:map f lst)
   (if (null? lst)
       '()
-      (cons (f (car lst)) (schooz:map f (cdr lst)))))
+      (let ((fcar (f (car lst))))  ;; force this first
+	(cons fcar (schooz:map f (cdr lst))))))
+
+;; Simple grep
+(define (schooz:grep predicate lst)
+  (list-append (schooz:map (lambda (x) (if (predicate x) (list x) '())))))
 
 ;; (schooz:eval-or-return f)  ... if f is a function, evaluate; otherwise, return
 (define (schooz:eval-or-return f)
