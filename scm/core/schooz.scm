@@ -264,7 +264,7 @@
 
 ;; new paragraph after every action
 (define (schooz:p-element-after-every-action)
-  (schooz:after-every-action (lambda () '("p"))))
+  (schooz:after-every-action (lambda () '(("p")))))
 
 ;; application of transform-action to list of the form ((ACTIONTEXT1 FUNC1) (ACTIONTEXT2 FUNC2)...)
 (define (schooz:transform-action-list lst)

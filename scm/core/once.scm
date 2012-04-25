@@ -1,11 +1,17 @@
 (define schooz:once-cache (make-eq-hashtable))
 
-;; (once sxml)
+;; (first first-sxml subsequent-sxml)
+(define
+  (first first-sxml subsequent-sxml)
+  (let* ((tag (schooz:fold-strings first-sxml))
+	 (val (hashtable-ref schooz:once-cache tag #f)))
+    (if
+     val
+     subsequent-sxml
+     (begin
+       (hashtable-set! schooz:once-cache tag 1)
+       first-sxml))))
+
 (define
   (once sxml)
-  (if
-   (hashtable-ref schooz:once-cache sxml)
-   #f
-   (begin
-     (hashtable-set! schooz:once-cache sxml 1)
-     sxml)))
+  (first sxml ""))
