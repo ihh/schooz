@@ -14,4 +14,4 @@
 
 (define
   (once sxml)
-  (first sxml ""))
+  (first sxml '()))
