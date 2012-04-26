@@ -144,6 +144,7 @@
   (schooz:now X STATE)
   (let ((old-stack (hashtable-ref schooz:stack X '())))
     (hashtable-set! schooz:stack X
+;		    (if (or (null? old-stack) (not (pair? old-stack)))
 		    (if (null? old-stack)
 			(list STATE)
 			(cons STATE (cdr old-stack))))))
