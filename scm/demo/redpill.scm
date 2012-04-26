@@ -88,11 +88,14 @@
 	 (inc-function (lambda (x) (if (< x (- states 1)) (+ x 1) x))))
   (auto-machine name inc-function descriptor-list)))
 
+
+
+;; The main narrative
+
 ;; Synopsis: Morpheus offers you a choice of pills.
 ;; Outcomes:
 ;; (1) You escape without taking the pills.
 ;; (2) You take the red or the blue pill.
-
 
 ;; Club music
 (random-machine
