@@ -5,7 +5,7 @@
 ;; (schooz:output-plain)
 
 ;; Comment out to disable automatic "\n" (look) "\n" at start of game & after every choice
-(schooz:interpret-string-actions-as-functions)
+(schooz:interpret-actions-as-functions)
 (schooz:newline-after-every-action)
 (schooz:look-after-every-action)
 (schooz:newline-after-every-action)

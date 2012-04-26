@@ -1,8 +1,6 @@
 ;; This is a simple story machine-driven vignette
-(schooz:interpret-string-actions-as-functions)
-(schooz:p-element-after-every-action)
-(schooz:look-after-every-action)
-(schooz:p-element-after-every-action)
+(schooz:interpret-actions-as-functions)
+(schooz:after-every-terminal-action (lambda () `(,p ,(look))))  ;; by default, if no other actions, do a "look"
 
 (define map schooz:map)
 (define grep schooz:grep)
@@ -10,8 +8,6 @@
 ;; grep -v
 (define (grep-not-equal x list)
   (grep (lambda (y) (not (equal? x y))) list))
-
-;  (grep (lambda (y) (not (equal? x y))) list)
 
 ;; Extract random element from list
 (define (random-element list)

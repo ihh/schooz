@@ -260,8 +260,15 @@
   (let ((old-transform schooz:action-transformation))
     (set! schooz:action-transformation (lambda (f) (new-transform (old-transform f))))))
 
-(define (schooz:interpret-string-actions-as-functions)
+(define (schooz:interpret-actions-as-functions)
   (schooz:compose-action-transformation schooz:as-function))
+
+(define (schooz:after-every-terminal-action g)
+  (schooz:compose-action-transformation
+   (lambda (action)
+     (lambda ()
+       (let ((evaluated-action (action)))
+	 (if (> (schooz:number-of-actions) 0) evaluated-action `(,evaluated-action ,(g))))))))
 
 ;; action transformation: do something after every action
 (define (schooz:after-every-action g)
