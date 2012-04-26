@@ -53,16 +53,26 @@
 
 
 ;; Internal functions.
+;; Simple fold
+(define (schooz:fold-right binary-func init lst)
+  (cond
+   ((null? lst) init)
+   ((pair? lst) (let ((fcar (binary-func init (car lst))))  ;; force this first
+		  (schooz:fold-right binary-func fcar (cdr lst))))
+   (else init)))
+
 ;; Simple map
-(define (schooz:map f lst)
-  (if (null? lst)
-      '()
-      (let ((fcar (f (car lst))))  ;; force this first
-	(cons fcar (schooz:map f (cdr lst))))))
+(define (schooz:map unary-func lst)
+  (schooz:fold-right (lambda (x y) (append x (list (unary-func y)))) '() lst))
+
+;; Spliced map
+(define (schooz:map-spliced unary-func lst)
+  (schooz:fold-right (lambda (x y) (append x (unary-func y))) '() lst))
 
 ;; Simple grep
 (define (schooz:grep predicate lst)
-  (list-append (schooz:map (lambda (x) (if (predicate x) (list x) '())))))
+  (let* ((map-function (lambda (x) (if (predicate x) (list x) '()))))
+    (schooz:map-spliced map-function lst)))
 
 ;; (schooz:eval-or-return f)  ... if f is a function, evaluate; otherwise, return
 (define (schooz:eval-or-return f)

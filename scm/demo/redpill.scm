@@ -9,7 +9,9 @@
 
 ;; grep -v
 (define (grep-not-equal x list)
- (grep (lambda (y) (not (equal? x y)) list)))
+  (grep (lambda (y) (not (equal? x y))) list))
+
+;  (grep (lambda (y) (not (equal? x y))) list)
 
 ;; Extract random element from list
 (define (random-element list)
@@ -28,20 +30,20 @@
 
 ;; Helper functions (move these to core libraries?)
 ;; Expandable objects
-(define (expandable-machine name link-text action-text expanded-description)
+(define (expandable-machine name link-text post-link-text action-text expanded-description)
   (description
    name
    #f
-   `(,(link link-text action-text (now name #t))))
+   `(,(link link-text action-text (now name #t)) ,post-link-text))
 
   (description
    name
    #t
-   `(,link-text ,expanded-description)))
+   `(,link-text ,post-link-text ,expanded-description)))
 
 ;; Simple one-way switches
 (define (one-way-switch name link-text action-text)
-  (expandable-machine name link-text action-text ""))
+  (expandable-machine name link-text "" action-text ""))
 
 ;; Consistent "Next" links
 (define
@@ -53,14 +55,14 @@
   (let ((states (length descriptor-list)))
     (map
      (lambda (s)
-       (let ((descriptor (list-ref descriptor-list s))
-	     (next-state (next-state-function s)))
+       (let ((descriptor (list-ref descriptor-list s)))
 	 (description*
 	  name
 	  s
 	  (lambda ()
-	    (now name next-state)
-	    ((schooz:as-function descriptor))))))
+	    (let ((next-state (next-state-function s)))
+	      (now name next-state)
+	      ((schooz:as-function descriptor)))))))
      (iota states))))
 
 ;; Cyclic increment function
@@ -91,14 +93,33 @@
 ;; (1) You escape without taking the pills.
 ;; (2) You take the red or the blue pill.
 
+
+;; Club music
+(random-machine
+ "club-music"
+ `("A distorted 909 kick-drum pounds."
+   "A military snare-drum rattle."
+   "A sampled vocal shrieks: \"My twisted love affair, m-my twisted love affair...\""
+   "Strobe lights flicker over sweaty faces."
+   "This is actually a classic acid house track the DJ put on just now. And you are a trainspotter for noticing."
+   "Phuture, Acid Trax: a classic tune."
+   "A tortured techno riff pounds from the speaker stacks."
+   "On the dancefloor, you can glimpse gurning faces, grinding teeth."
+   "Sweat and dry ice. And a stifling humidity."
+   "A deep dubstep bass rattles glasses on tables."))
+
+;; Club ambience
+(define (h1-club-front) `(,(h1 "Nightclub") ,p ("i" ,(describe "club-music")) ,p))
+(define (h1-club) `(,(h1 "Back of the club") ,p ("i" ,(describe "club-music")) ,p))
+
 ;; Opening scene
 (story
  "nightclub"
- `(,(h1 "Nightclub")
+ `(,(h1-club-front)
    "In the front area of the club, you are accosted by two of the strangest-looking ravers you have seen. Goth Catwoman and Punk Dwarf, you mentally categorize them as."
    ,p
    "The tall one invites you to "
-   ,(link-goto "meet her colleague" "meet-morpheus" "OK, let's meet this mysterious 'colleague'." "The tall catlady ushers you to the back of the club, while her darker half growls at bad dancers.")
+   ,(link-goto "meet her colleague" "meet-morpheus" "OK, let's meet this mysterious 'colleague'." "The tall catlady ushers you to the back of the club, while her grumpier half growls at bad dancers.")
    " in a back room of the nightclub."))
 
 ;; Should be able to examine your assailants in this scene
@@ -106,17 +127,17 @@
 ;; Should be an option to avoid this entirely and either back out of the club,
 ;; or hang out on the dancefloor while these two pester you, then leave.
 
-(define h1-club (h1 "Back of the club"))
-
 (story
  "meet-morpheus"
- `(,h1-club
-   "In an armchair sits an obvious " ,@(describe "bigshot") " of this scene. Catwoman gave him the faintest bow when you arrived (almost imperceptible, but you could tell) and Punk Dwarf snarls at everyone BUT him."
+ `(,(h1-club)
+   "In an armchair sits "
+   ,@(first '() `(,morpheus ", "))
+   "an obvious " ,@(describe "bigshot") " of this scene. Catwoman gave him the faintest bow when you arrived (almost imperceptible, but you could tell) and Punk Dwarf snarls at everyone BUT him."
    ,(if (state "bigshot")
 	`(,p
-	  "The guy in the chair is more than a little intimidating. It doesn't hurt that he's physically domineering, and looks intelligent (you can't see his eyes behind those mirrorshades, but he's got poise)."
+	  "Even sitting in a big comfy chair, he is more than a little intimidating. It doesn't hurt that he's physically domineering, and looks intelligent (you can't see his eyes behind those mirrorshades, but he's got poise)."
 	  ,p
-	  "Still, you wonder how leather jackets that heavy survived the heyday of " ,@(describe "The Who")))
+	  "Still, you wonder how leather jackets that heavy survived the heyday of " ,@(describe "the-who")))
    ,p
    ,@(first
       `("The man introduces himself as " ("b" ,morpheus) " - a name he clearly thought you knew already, and probably expects you to remember how to spell." ,p "He")
@@ -130,14 +151,14 @@
     " " ,intervening-text " "
     ,(link-goto speak-text "choice" "This guy is extremely irritating."
 		`("'Speak up, then,' you say, irritated. 'You asked me here, after all.'" ,p ,morpheus " grins."))
-    " " ,post-text))
+    ,post-text))
 
 (fuse-machine
  "morpheus-intro-gaze"
  (list
-  (lambda () (morpheus-intro-choice "" "gazes" "at you" "calmly." ""))
-  (lambda () (morpheus-intro-choice "" "gazes" "at you, his fingers" "drumming" "on the armrest."))
-  (lambda () (morpheus-intro-choice ", now visibly impatient, is still" "waiting" "for you to speak, his fingers" "tapping" "like crazy."))))
+  (lambda () (morpheus-intro-choice "" "gazes" "at you" "calmly" "."))
+  (lambda () (morpheus-intro-choice "" "gazes" "at you, his fingers" "drumming" " on the armrest."))
+  (lambda () (morpheus-intro-choice ", now visibly impatient, is still" "waiting" "for you to speak, his fingers" "tapping" " like crazy."))))
 
 ;; Instead of going directly to "choice", there should be a whole conversation with Morpheus here.
 ;; Morpheus begins by making some pompous reference to Alice in Wonderland, which you can't help but destroy.
@@ -167,13 +188,13 @@
 ;; During the conversation there will be options to examine Morpheus.
 ;; Some of them are simple switches that can be flipped to reveal background info, e.g.:
 (expandable-machine
-   "The Who"
-   "The Who."
+   "the-who"
+   "The Who" "."
    "The Who?"
    `(,p "(The Who were a British rock band of the 60's and 70's. Their followers - 'mods' - did often wear long leather coats. Probably to stash big bags of pills in, now you come to think of it.)"))
 ;; Note that flipping the switch will use up a "turn".
 
-;; Even simpler switch, for when the in-text consequences are away from the switch link
+;; Even simpler expandable switch, for when the expanded text is somewhere other than the switch link
 (one-way-switch
    "bigshot"
    "bigshot"
@@ -185,7 +206,7 @@
 ;; Eventually, if Morpheus doesn't tire of you, the conversation brings you here
 (story
  "choice"
- `(,h1-club
+ `(,(h1-club)
    ;; This could be a separately-defined function; it will probably be offered as an exit-point from several chapters
    ,morpheus " offers you a choice between a "
    ,(link-goto "red pill" "pill" "Take the red pill."
@@ -201,7 +222,7 @@
 (story
  "pill"
  `(,p
-   "You crunch the pill between your teeth. Bitter. Good sign."
+   "You crunch the pill between your teeth. Bitter."
    ,p
    ,morpheus " nods approvingly. 'You will soon see the truth,' he says. 'And now, if you wouldn't mind, that will be "
    ,(link-goto "twenty dollars" "payment"
@@ -214,14 +235,14 @@
 
 (story
  "payment"
- `("You feel strongly motivated to debate this topic further, but are now keenly aware that the attentions of Punk Dwarf are sharply focused upon you, along with several other members of the coterie."
+ `("You feel strongly motivated to debate this topic further, but are now keenly aware that the attentions of Punk Dwarf are sharply focused upon you, along with several other members of the crew."
    ,p
    "The bottom line, and you now kick yourself for realizing this, is that you have eaten a pill that an unknown stranger has given you, in a nightclub, under an implied contract of payment which - while unstated - is hardly unusual."
    ,(next "payment2")))
 
 (story
  "payment2"
- `("True, you could argue that you were intimidated into going along with it. Perhaps you can find a law enforcement official to help you out... heh."
+ `("True, you could argue that you were intimidated into going along with it. Perhaps you can find a law enforcement official to help you out... meh."
    ,p
    "Until then, the etiquette of this particular mugging appears pretty clear."
    ,p
@@ -231,6 +252,9 @@
 ;; For added lulz, make occasional later references, wondering if it worked.
 ;; Maybe you can dance a bit, hopefully. When you look over again, the crew has disappeared.
 ;; Then cut to the next vignette.
+;; Or, have a couple of different exit options, e.g.
+;; - attempt to chat-up other clubgoers (epic fail)
+;; - talk shop with an old hacker friend
 
 ;; Possibly the choice of pill has some effect, but it's a mostly irrelevant side-effect
 ;; (e.g. red gives you nausea, blue gives you a headache).
