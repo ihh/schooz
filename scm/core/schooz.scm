@@ -242,6 +242,7 @@
 ;; UI implementation should call (schooz:initial-action) to fire the initial action
 (define (schooz:dummy-action) '())
 (define schooz:initial-action-untransformed schooz:dummy-action)  ;; untransformed
+(define (schooz:set-initial-action a) (set! schooz:initial-action-untransformed a))
 (define (schooz:initial-action) (schooz:transform-action schooz:initial-action-untransformed))  ;; transformed
 
 ;; Action transformations, applied automatically by (link...), (menu...), (explicit-menu...), (fire-action...)
@@ -268,7 +269,9 @@
    (lambda (action)
      (lambda ()
        (let ((evaluated-action (action)))
-	 (if (> (schooz:number-of-actions) 0) evaluated-action `(,evaluated-action ,(g))))))))
+	 (if (> (schooz:number-of-actions) 0)
+	     evaluated-action
+	     (append (schooz:as-list evaluated-action) (g))))))))
 
 ;; action transformation: do something after every action
 (define (schooz:after-every-action g)
