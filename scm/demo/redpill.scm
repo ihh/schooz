@@ -100,16 +100,16 @@
 ;; Club music
 (random-machine
  "club-music"
- `("A distorted 909 kick-drum pounds."
-   "A military snare-drum rattle."
+ `("A distorted kick-drum pounds a disrupted rhythm."
+   "A snare-drum and hi-hat rap out a martial duet."
    "A sampled vocal shrieks: \"My twisted love affair, m-my twisted love affair...\""
-   "Strobe lights flicker over sweaty faces."
+   "Over on the dancefloor strobe lights flicker over vacant faces, jumbled arms and legs."
    "This is actually a classic acid house track the DJ put on just now. And you are a trainspotter for noticing."
    "Phuture, Acid Trax: a classic tune."
    "A tortured techno riff pounds from the speaker stacks."
    "On the dancefloor, you can glimpse gurning faces, grinding teeth."
    "Sweat and dry ice. And a stifling humidity."
-   "A deep dubstep bass rattles glasses on tables."))
+   "A swooping dubstep bass rattles glasses on the tables."))
 
 ;; Club ambience
 (define (h1-club-front) `(,(h1 "Nightclub") ,p ("i" ,(describe "club-music")) ,p))
@@ -119,7 +119,13 @@
 (story
  "nightclub"
  `(,(h1-club-front)
-   "In the front area of the club, you are accosted by two of the strangest-looking ravers you have seen. Goth Catwoman and Punk Dwarf, you mentally categorize them as."
+   "In the front area of the club, you are "
+   ,(link-goto "accosted" "meet-morpheus" "I object to being hustled like this!" "The more strenuously you object, the more attention you seem to draw from other clubgoers; until without quite realizing how, you are surrounded by four or five people, walking you irresistibly towards the back of the club.")
+   " by two of the strangest-looking ravers you have seen. "
+   ,(link-goto "Goth Catwoman" "meet-morpheus" "Examine Goth Catwoman" "You stare at Goth Catwoman. She smiles, then pushes you in the chest hard. You fall back a step, then all of a sudden she and her friend are hustling you gently, but irresistibly, to the back part of the club.")
+   " and "
+   ,(link-goto "Punk Dwarf" "meet-morpheus" "Examine Punk Dwarf" "The punk catches you staring, saunters over and spits at your feet. Catwoman grabs your arm and hauls you to the back.")
+   ", you mentally categorize them as."
    ,p
    "The tall one invites you to "
    ,(link-goto "meet her colleague" "meet-morpheus" "OK, let's meet this mysterious 'colleague'." "The tall catlady ushers you to the back of the club, while her grumpier half growls at bad dancers.")
@@ -132,10 +138,11 @@
 
 (story
  "meet-morpheus"
- `(,(h1-club)
-   "In an armchair sits "
-   ,@(first '() `(,morpheus ", "))
-   "an obvious " ,@(describe "bigshot") " of this scene. Catwoman gave him the faintest bow when you arrived (almost imperceptible, but you could tell) and Punk Dwarf snarls at everyone BUT him."
+ `(,@(once `("A velvet curtain parts at your approach..." ,p))
+   ,(h1-club)
+   "In an armchair"
+   ,@(first '(", orbited by various flavors of weirdo, sits") `(" sits " ,morpheus ", orbited by weirdos,"))
+   " an obvious " ,@(describe "bigshot") " of this scene. Catwoman gave him the faintest bow when you arrived" ,(once " (almost imperceptible, but you could tell) and Punk Dwarf snarls at everyone BUT him") "."
    ,(if (state "bigshot")
 	`(,p
 	  "Even sitting in a big comfy chair, he is more than a little intimidating. It doesn't hurt that he's physically domineering, and looks intelligent (you can't see his eyes behind those mirrorshades, but he's got poise)."
@@ -182,6 +189,12 @@
 ;; along with a fair bit of bull.
 ;; At some point, buried deep in the conversation graph, he may acknowledge that he possibly made it all up,
 ;; after JR Bob Dobbs appeared to him in a vision one time while he was playing a Jeff Minter light synth.
+
+
+;; General format of minigame:
+;; Morpheus makes a philosophical proposition or allusion.
+;; You can treat it as a conversational gambit, and respond politely.
+;; Or you can respond by 
 
 ;; Maybe Morpheus' mirrorshades are actually Google Goggles, and he will let you try them.
 ;; On looking through them, you see haloes of information around everyone, annoyingly peppered with product placement.

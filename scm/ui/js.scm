@@ -83,4 +83,4 @@
 
 ;; Initial action
 (define (schooz:js-call-initial-action)
-  (js-call (schooz:js-wrap-action (schooz:initial-action) "(schooz:initial-action)")))
+  (js-call (schooz:js-wrap-action (schooz:initial-action) "Let's get this started")))

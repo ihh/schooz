@@ -3,6 +3,10 @@
 <head>
   <meta charset="utf-8" /> 
   <title>Schooz in BiwaScheme</title>
+  <style type="text/css">
+    a:link { color:blue; }
+    a:visited { color:blue; }
+  </STYLE>
 </head>
 <body>
 
@@ -11,14 +15,25 @@
 
 <hr/>
 <p/>
-<div id="bs-console"></div>
+<button type="button" id="buttonText" onclick="bsConsoleToggle();">Debug</button>
+<div id="bs-console" style="display: none"></div>
 
-<script src="biwascheme/biwascheme.js">
+<script src="lib/biwascheme/biwascheme.js"></script>
+<script src="js/client.js"></script>
+
+<script language="javascript"> 
+  function bsConsoleToggle() {
+    var ele = document.getElementById("bs-console");
+    var text = document.getElementById("buttonText");
+    if(ele.style.display == "block") {
+      ele.style.display = "none";
+      text.innerHTML = "Debug";
+    } else {
+      ele.style.display = "block";
+      text.innerHTML = "Hide";
+    }
+  }
 </script>
-
-<script src="js/client.js">
-</script>
-
 
 </body>
 </html>
