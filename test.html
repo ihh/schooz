@@ -34,7 +34,7 @@ function findPos(obj) {
 <p/>
 Here is some text.
 Here is a <a href="#" onclick='foo=document.getElementById("foo");var pos=findPos(this);foo.parentNode.removeChild(foo);document.body.appendChild(foo);foo.style.left=pos[0];foo.style.top=pos[1];foo.style.display="block";'>link</a>.
-<div class="popup" id="foo" style="display:none;">Here is a list of buttons: <ul> <li><button type="button">Button 1</button></li> <li><button type="button">Button 2</button></li> </div>
+<div class="popup" id="foo" style="display:none;">Here is a list of buttons: <ul> <li><button type="button">Button 1</button></li> <li><button type="button">Button 2</button></li> </ul> <button type="button" onclick='this.parentNode.style.display="none";'>Hide</button> </div>
 And here is some more text.
 
 </body>
