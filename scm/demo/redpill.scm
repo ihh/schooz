@@ -1,8 +1,8 @@
 ;; This is a simple story machine-driven vignette
-(schooz:interpret-string-actions-as-functions)
-(schooz:p-element-after-every-action)
-(schooz:look-after-every-action)
-(schooz:p-element-after-every-action)
+(schooz:interpret-actions-as-functions)
+(schooz:after-every-terminal-action
+ (lambda () `(,p ,(next-look))))  ;; by default, if no other actions, do a "next-look"
+(schooz:set-initial-action look)
 
 (define map schooz:map)
 (define grep schooz:grep)
@@ -10,8 +10,6 @@
 ;; grep -v
 (define (grep-not-equal x list)
   (grep (lambda (y) (not (equal? x y))) list))
-
-;  (grep (lambda (y) (not (equal? x y))) list)
 
 ;; Extract random element from list
 (define (random-element list)
@@ -47,8 +45,12 @@
 
 ;; Consistent "Next" links
 (define
-  (next state)
+  (next-goto state)
   `(,p ,(link-goto "Next" state "Next..." "")))
+
+(define
+  (next-look)
+  `(,p ,(link* "Next" "Next..." look)))
 
 ;; Self-propelled state machines (generic)
 (define (auto-machine name next-state-function descriptor-list)
@@ -254,7 +256,7 @@
  `("You feel strongly motivated to debate this topic further, but are now keenly aware that the attentions of Punk Dwarf are sharply focused upon you, along with several other members of the crew."
    ,p
    "The bottom line, and you now kick yourself for realizing this, is that you have eaten a pill that an unknown stranger has given you, in a nightclub, under an implied contract of payment which - while unstated - is hardly unusual."
-   ,(next "payment2")))
+   ,(goto "payment2")))
 
 (story
  "payment2"
