@@ -1,7 +1,62 @@
+// global declarations
+var ie = (document.all) ? true : false;
+
+// UI functions
+function findPos(obj) {
+    var curLeft = curTop = 0;
+    if (obj.offsetParent) {
+	do {
+	    curLeft += obj.offsetLeft;
+	    curTop += obj.offsetTop;
+	} while (obj = obj.offsetParent);
+    }
+    return [curLeft,curTop];
+}
+
+function centerObj(obj) {
+    var curLeft = parseInt(obj.style.left);
+    var width = parseInt(obj.offsetWidth);
+    curLeft -= width / 2;
+    if (curLeft < 0) { curLeft = 0; }
+    obj.style.left = curLeft + "px";
+}
+
+function hidePopups(e) {
+    e = e || event;
+    var target = e.target || e.srcElement;
+    do {
+	if (target.className == "popup") {
+	    // Click occured inside the box, do nothing.
+	    return;
+	}
+	target = target.parentNode;
+    } while (target);
+    // Click was outside the popup, hide it.
+    var elements = (ie) ? document.all : document.getElementsByTagName('*');
+    for (i=0; i<elements.length; i++) {
+	if (elements[i].className == "popup"){
+	    elements[i].style.display = "none";
+	}
+    }
+    document.onclick = null;
+};
+
+function makePopup (popupId, anchorElement) {
+    var popupElement = document.getElementById (popupId);
+    var anchorPos = findPos (anchorElement);
+    popupElement.parentNode.removeChild(popupElement);
+    document.body.appendChild(popupElement);
+    popupElement.style.left = anchorPos[0] + "px";
+    popupElement.style.top = anchorPos[1] + "px";
+    popupElement.style.display = "block";
+    centerObj(popupElement);
+    document.onclick = function() { document.onclick = hidePopups; };
+}
+
 // first define schoozNotify function
 var schoozUpdate = function() { };
 
-// now do tests
+// now console loggers
 var console_log = function(e) { puts(e); };
 var dummy_log = function(e) { };
 // console_log ("hi there, logging function seems to be working ");
