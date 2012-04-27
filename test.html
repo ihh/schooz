@@ -18,10 +18,23 @@
 </head>
 <body>
 
+
+<script language="javascript"> 
+function findPos(obj) {
+  var curleft = curtop = 0;
+  if (obj.offsetParent) {
+    do {
+      curleft += obj.offsetLeft;
+      curtop += obj.offsetTop;
+    } while (obj = obj.offsetParent);
+  }
+  return [curleft,curtop];
+}
+</script>
 <p/>
 Here is some text.
-Here is a <a href="#" onclick='foo=document.getElementById("foo");foo.style.display="block";foo.parentNode.removeChild(foo);document.body.appendChild(foo);'>link</a>.
-<div class="popup" id="foo" style="display:none">Here is a list of buttons: <ul> <li><button type="button">Button 1</button></li> <li><button type="button">Button 2</button></li> </div>
+Here is a <a href="#" onclick='foo=document.getElementById("foo");var pos=findPos(this);foo.parentNode.removeChild(foo);document.body.appendChild(foo);foo.style.left=pos[0];foo.style.top=pos[1];foo.style.display="block";'>link</a>.
+<div class="popup" id="foo" style="display:none;">Here is a list of buttons: <ul> <li><button type="button">Button 1</button></li> <li><button type="button">Button 2</button></li> </div>
 And here is some more text.
 
 </body>
