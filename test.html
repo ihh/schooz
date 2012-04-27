@@ -3,53 +3,26 @@
 <head>
   <meta charset="utf-8" /> 
   <title>Schooz in BiwaScheme</title>
+  <style type="text/css">
+    a:link { color:blue; }
+    a:visited { color:blue; }
+.popup
+{
+	position: absolute;
+	text-align: center;
+	padding: 5px;
+	border: 1px solid black;
+	background: white;
+}
+  </STYLE>
 </head>
 <body>
 
 <p/>
-Scheme console:
-<div id="bs-console"></div>
-
-<p/>
-Schooz div:
-<div id="schoozMain"></div>
-
-<p/>
-Script tag with Scheme inside:
-<script src="biwascheme/biwascheme.js">
-(display "hello, world! Scheme is working, up in this piece\n")
-</script>
-
-<p/>
-Script tag that loads Scheme from URL:
-<script>
-// first define schooz JS functions
-var schoozStash = function(xml) { document.getElementById("schoozMain").innerHTML = xml; };
-var schoozBind = function(id,func) { document.getElementById(id).onclick = func; };
-var schoozReveal = function() { };
-
-// now do tests
-  var console_log = function(e) { puts(e); };
-  var dummy_log = function(e) { };
-  console_log ("hi there, logging function seems to be working ");
-  dummy_log ("you schmuck ");  // shouldn't appear
-  var intp = new BiwaScheme.Interpreter (dummy_log);
-  var the_url = "scm/core/schooz.scm";
-  var xhr = new XMLHttpRequest();
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState == 4) {
-      console_log ("loaded Scheme (" + xhr.responseText.length + " bytes)");
-      intp.evaluate (xhr.responseText, function(e) { console_log("evaluated Scheme: " + e); } );
-      intp.evaluate ("schooz:version", function(e) { console_log("evaluated schooz:version = " + e); } );
-      intp.evaluate ("(js-call (js-closure (lambda () \"crazy\")))", function(e) { console_log("crazy function-wrapping is working if the word 'crazy' appears here: " + e); } );
-      console_log ("Now going to try a popup window...")
-      intp.evaluate ("(js-call (js-eval \"( function() { alert('hello, this is a popup window from BiwaScheme'); } )\"))", dummy_log);
-      console_log ("...OK, hopefully you got that")
-    }
-  };
-  xhr.open("GET", the_url, true);
-  xhr.send(null);
-</script>
+Here is some text.
+Here is a <a href="#" onclick='foo=document.getElementById("foo");foo.style.display="block";foo.parentNode.removeChild(foo);document.body.appendChild(foo);'>link</a>.
+<div class="popup" id="foo" style="display:none">Here is a list of buttons: <ul> <li><button type="button">Button 1</button></li> <li><button type="button">Button 2</button></li> </div>
+And here is some more text.
 
 </body>
 </html>
