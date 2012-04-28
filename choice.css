@@ -1,0 +1,26 @@
+a:link { color:blue; }
+a:visited { color:blue; }
+
+.paragraph
+{
+    display: inline;
+}
+
+.popup
+{
+    position: fixed;
+    text-align: center;
+    padding: 5px;
+    border: 1px solid black;
+    background: white;
+    width: auto;
+    height: auto;
+    display: none;
+}
+
+.choice-list
+{
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+}

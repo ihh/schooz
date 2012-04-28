@@ -13,12 +13,17 @@ function findPos(obj) {
     return [curLeft,curTop];
 }
 
-function centerObj(obj) {
+function centerObj(obj,nbr) {
     var curLeft = parseInt(obj.style.left);
     var width = parseInt(obj.offsetWidth);
     curLeft -= width / 2;
     if (curLeft < 0) { curLeft = 0; }
     obj.style.left = curLeft + "px";
+
+    var curTop = parseInt(obj.style.top);
+    var nbrHeight = parseInt(nbr.offsetHeight);
+    curTop += nbrHeight;
+    obj.style.top = curTop + "px";
 }
 
 function hidePopups(e) {
@@ -49,7 +54,7 @@ function makePopup (popupId, anchorElement) {
     popupElement.style.left = anchorPos[0] + "px";
     popupElement.style.top = anchorPos[1] + "px";
     popupElement.style.display = "block";
-    centerObj(popupElement);
+    centerObj(popupElement,anchorElement);
     document.onclick = function() { document.onclick = hidePopups; };
 }
 
