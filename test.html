@@ -7,6 +7,11 @@
 a:link { color:blue; }
 a:visited { color:blue; }
 
+.paragraph
+{
+    display: inline;
+}
+
 .popup
 {
     position: fixed;
@@ -33,7 +38,7 @@ a:visited { color:blue; }
 <script src="lib/biwascheme/biwascheme.js"></script>
 <script src="js/client.js"></script>
 
-<p/>
+<p class="paragraph">
 <!-- the following (commented-out) line prevents the "foo" div from starting a newline; still seeking a better solution that is local to the div or adjacent anchor element -->
 <!-- p style="display:inline;"/ -->
 Here is some text.
@@ -48,15 +53,14 @@ Here is a
     </ul>
     <button type="button" onclick='this.parentNode.style.display="none";'>Hide</button>
   </div>
-<p style="display:inline;"/>
 And here is some more text.
 
 And some more.
+</p>
 
-<p/>
-<p style="display:inline;"/>
+<p class="paragraph">
 Here is another paragraph.
-
+</p>
 
 </body>
 </html>
