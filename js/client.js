@@ -15,8 +15,9 @@ function findPos(obj) {
 
 function centerObj(obj,nbr) {
     var curLeft = parseInt(obj.style.left);
-    var width = parseInt(obj.offsetWidth);
-    curLeft -= width / 2;
+    var objWidth = parseInt(obj.offsetWidth);
+    var nbrWidth = parseInt(nbr.offsetWidth);
+    curLeft += (nbrWidth - objWidth) / 2;
     if (curLeft < 0) { curLeft = 0; }
     obj.style.left = curLeft + "px";
 
@@ -51,6 +52,7 @@ function hideAllPopups() {
 };
 
 function deleteAllPopups() {
+    hideAllPopups();
     var elements = (ie) ? document.all : document.getElementsByTagName('*');
     for (i=0; i<elements.length; i++) {
 	if (elements[i].className == "popup"){
