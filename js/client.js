@@ -26,17 +26,21 @@ function centerObj(obj,nbr) {
     obj.style.top = curTop + "px";
 }
 
-function hidePopups(e) {
+function clickOutsidePopupToHide(e) {
     e = e || event;
     var target = e.target || e.srcElement;
     do {
 	if (target.className == "popup") {
-	    // Click occured inside the box, do nothing.
+	    // Click occured inside the popup, do nothing.
 	    return;
 	}
 	target = target.parentNode;
     } while (target);
     // Click was outside the popup, hide it.
+    hideAllPopups();
+}
+
+function hideAllPopups() {
     var elements = (ie) ? document.all : document.getElementsByTagName('*');
     for (i=0; i<elements.length; i++) {
 	if (elements[i].className == "popup"){
@@ -46,7 +50,18 @@ function hidePopups(e) {
     document.onclick = null;
 };
 
+function deleteAllPopups() {
+    var elements = (ie) ? document.all : document.getElementsByTagName('*');
+    for (i=0; i<elements.length; i++) {
+	if (elements[i].className == "popup"){
+	    elements[i].parentNode.removeChild(elements[i]);
+	}
+    }
+    document.onclick = null;
+};
+
 function makePopup (popupId, anchorElement) {
+    hideAllPopups();
     var popupElement = document.getElementById (popupId);
     var anchorPos = findPos (anchorElement);
     popupElement.parentNode.removeChild(popupElement);
@@ -55,7 +70,7 @@ function makePopup (popupId, anchorElement) {
     popupElement.style.top = anchorPos[1] + "px";
     popupElement.style.display = "block";
     centerObj(popupElement,anchorElement);
-    document.onclick = function() { document.onclick = hidePopups; };
+    document.onclick = function() { document.onclick = clickOutsidePopupToHide; };
 }
 
 // first define schoozNotify function

@@ -1,39 +1,36 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8" /> 
-  <title>Schooz</title>
-  <link rel="stylesheet" type="text/css" href="choice.css" />
-</head>
-<body>
+  <head>
+    <meta charset="utf-8" /> 
+    <title>Schooz</title>
+    <link rel="stylesheet" type="text/css" href="choice.css" />
+  </head>
+  <body>
 
+    <script src="lib/biwascheme/biwascheme.js"></script>
+    <script src="js/client.js"></script>
 
-<script src="lib/biwascheme/biwascheme.js"></script>
-<script src="js/client.js"></script>
+    <p class="paragraph">
+      Here is some text.
+      Here is a
+      <a href="#" onclick='makePopup("foo",this);'>
+	link</a>.
+      <div class="popup" id="foo">
+	Here is a list of buttons:
+	<ul class="choice-list">
+	  <li><button type="button">Button 1</button></li>
+	  <li><button type="button">Button 2</button></li>
+	</ul>
+	<button type="button" onclick='this.parentNode.style.display="none";'>Hide</button>
+      </div>
+      And here is some more text.
 
-<p class="paragraph">
-<!-- the following (commented-out) line prevents the "foo" div from starting a newline; still seeking a better solution that is local to the div or adjacent anchor element -->
-<!-- p style="display:inline;"/ -->
-Here is some text.
-Here is a
-<a href="#" onclick='makePopup("foo",this);'>
-  link</a>.
-  <div class="popup" id="foo">
-    Here is a list of buttons:
-    <ul class="choice-list">
-      <li><button type="button">Button 1</button></li>
-      <li><button type="button">Button 2</button></li>
-    </ul>
-    <button type="button" onclick='this.parentNode.style.display="none";'>Hide</button>
-  </div>
-And here is some more text.
+      And some more.
+    </p>
 
-And some more.
-</p>
+    <p class="paragraph">
+      Here is another paragraph.
+    </p>
 
-<p class="paragraph">
-Here is another paragraph.
-</p>
-
-</body>
+  </body>
 </html>

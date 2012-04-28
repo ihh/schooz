@@ -2,20 +2,25 @@
 <html>
 <head>
   <meta charset="utf-8" /> 
-  <title>Schooz in BiwaScheme</title>
-  <style type="text/css">
-    a:link { color:blue; }
-    a:visited { color:blue; }
-  </STYLE>
+  <title>Schooz</title>
+  <link rel="stylesheet" type="text/css" href="choice.css" />
 </head>
 <body>
 
-<p/>
 <div id="schoozText"></div>
 
+<!-- needing all these br's is a layout hack -->
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
 <hr/>
-<p/>
-<button type="button" id="buttonText" onclick="bsConsoleToggle();">Debug</button>
+<div style="float:left">
+  <p class="paragraph"><button type="button" id="buttonText" onclick="bsConsoleToggle();">Debug</button></p>
+</div>
+
 <div id="bs-console" style="display:none"></div>
 
 <script src="lib/biwascheme/biwascheme.js"></script>

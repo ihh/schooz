@@ -1,9 +1,18 @@
 ;; This is a simple story machine-driven vignette
-(schooz:interpret-actions-as-functions)
+;; First, wrap string actions with <p class="paragraph">...</p>
+(define (p-wrap x)
+  (cond ((string? x) (list (p x)))
+	(else x)))
+(schooz:wrap-string-actions p-wrap)
+
+;; by default, if no other actions, followup with a "next-look"
 (schooz:after-every-terminal-action
- (lambda () `(,(p (next-look)))))  ;; by default, if no other actions, do a "next-look"
+ (lambda () `(,(p (next-look)))))
+
+;; first action is "look"
 (schooz:set-initial-action look)
 
+;; shortcuts
 (define map schooz:map)
 (define grep schooz:grep)
 
@@ -20,8 +29,7 @@
 (define one-of random-element)
 
 ;; HTML helpers
-(define p (lambda args (apply list (cons "p" args))))
-(define h1 (lambda args (apply list (cons "h1" args))))
+(define h1 (lambda args `("h1" ,@args)))
 
 ;; Strings
 (define morpheus "Morphetikus")
@@ -143,9 +151,11 @@
  "meet-morpheus"
  `(,@(once `("A velvet curtain parts at your approach..." ,(p)))
    ,(h1-club)
-   "In an armchair"
-   ,@(first '(", orbited by various flavors of weirdo, sits") `(" sits " ,morpheus ", orbited by weirdos,"))
-   " an obvious " ,@(describe "bigshot") " of this scene. Catwoman gave him the faintest bow when you arrived" ,(once " (almost imperceptible, but you could tell) and Punk Dwarf snarls at everyone BUT him") "."
+   ,(p
+     "In an armchair"
+     (first ", orbited by various flavors of weirdo, sits" (string-append " sits " morpheus ", orbited by weirdos,"))
+     " an obvious " (describe "bigshot") " of this scene. Catwoman gave him the faintest bow when you arrived"
+     (once " (almost imperceptible, but you could tell) and Punk Dwarf snarls at everyone BUT him") ".")
    ,(if (state "bigshot")
 	`(,(p
 	  "Even sitting in a big comfy chair, he is more than a little intimidating. It doesn't hurt that he's physically domineering, and looks intelligent (you can't see his eyes behind those mirrorshades, but he's got poise).")

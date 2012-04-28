@@ -261,6 +261,13 @@
   (let ((old-transform schooz:action-transformation))
     (set! schooz:action-transformation (lambda (f) (new-transform (old-transform f))))))
 
+(define (schooz:wrap-string-actions wrap-func)
+  (schooz:compose-action-transformation
+   (lambda (a)
+     (if (procedure? a)
+	 (lambda () (wrap-func (a)))
+	 (schooz:as-function (wrap-func a))))))
+
 (define (schooz:interpret-actions-as-functions)
   (schooz:compose-action-transformation schooz:as-function))
 
