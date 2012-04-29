@@ -78,7 +78,6 @@ function centerAllPopups() {
 	    centerObj (elements[i]);
 	}
     }
-    document.onclick = null;
 };
 window.onscroll = window.onresize = centerAllPopups;
 
