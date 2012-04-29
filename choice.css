@@ -7,7 +7,7 @@ a:visited { color:blue; }
 
 .popup
 {
-    position: fixed;
+    position: absolute;
     text-align: center;
     padding: 5px;
     border: 1px solid black;

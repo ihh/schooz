@@ -126,34 +126,41 @@
     `(("a" ("@" ("href" "#") ("onclick" ,(string-append schooz:js-popup-function "('" popup-id "',this);")))
        ,link-text))))
 
-(define (schooz:choice-list container-id action-list)
+(define (schooz:choice-list-wrapper choice-list)
   `("ul" ("@" ("class" ,schooz:choice-list-css-class))
     ,(schooz:map
-      (lambda (action)
-	(let ((action-text (car action))
-	      (action-func (cadr action)))
-	  `("li" ,(schooz:button action-text action-func))))
-      action-list)
-    ("li" ,(schooz:hide-button schooz:cancel-text container-id))))
+      (lambda (choice)
+	`("li" ,choice))
+      choice-list)))
+
+(define (schooz:choice-list action-list)
+  (schooz:choice-list-wrapper (schooz:action-choices action-list)))
+
+(define (schooz:choice-list-with-cancel container-id action-list)
+  (schooz:choice-list-wrapper (append (schooz:action-choices action-list) (list (schooz:cancel-choice)))))
+
+(define (schooz:action-choices action-list)
+  (schooz:map
+   (lambda (action)
+     (let ((action-text (car action))
+	   (action-func (cadr action)))
+       (schooz:button action-text action-func)))
+   action-list))
+
+(define (schooz:cancel-choice container-id)
+  (schooz:hide-button schooz:cancel-text container-id))
 
 (define (schooz:impl-link* link-text action-text action-func)
 ;  (schooz:anchor link-text action-text action-func))
   (let ((popup-id (schooz:next-popup-id)))
-    (schooz:popup link-text popup-id (schooz:choice-list popup-id (list (list action-text action-func))))))
+    (schooz:popup link-text popup-id (schooz:choice-list-with-cancel popup-id `((,action-text ,action-func))))))
 
 (define (schooz:impl-menu* link-text action-list)
-  `("div"
-    ,link-text
-    ,(schooz:impl-explicit-menu* action-list)))
+  (let ((popup-id (schooz:next-popup-id)))
+    (schooz:popup link-text popup-id (schooz:choice-list-with-cancel popup-id action-list))))
 
 (define (schooz:impl-explicit-menu* action-list)
-  `("ul" ,(schooz:map
-	   (lambda (n)
-	     (let* ((action (list-ref action-list n))
-		    (text (car action))
-		    (func (cadr action)))
-	       `("li" ,(schooz:anchor text text func))))
-	   (iota (length action-list)))))
+  (schooz:choice-list action-list))
 
 ;; Initial action
 (define (schooz:js-call-initial-action)

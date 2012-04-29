@@ -40,7 +40,7 @@
   (description
    name
    #f
-   `(,(link link-text action-text (now name #t)) ,post-link-text))
+   `(,(link link-text action-text (begin (now name #t) (look))) ,post-link-text))
 
   (description
    name
@@ -54,11 +54,11 @@
 ;; Consistent "Next" links
 (define
   (next-goto state)
-  `(,(p (link-goto "Next" state "Next..." ""))))
+  `(,(p (explicit-menu ((choice-goto state "Next" ""))))))
 
 (define
   (next-look)
-  `(,(p (link* "Next" "Next..." look))))
+  `(,(p (explicit-menu ((choice* "Next" look))))))
 
 ;; Self-propelled state machines (generic)
 (define (auto-machine name next-state-function descriptor-list)
