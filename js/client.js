@@ -66,8 +66,6 @@ function makePopup (popupId, anchorElement) {
     hideAllPopups();
     var popupElement = document.getElementById (popupId);
     var anchorPos = findPos (anchorElement);
-    popupElement.parentNode.removeChild(popupElement);
-    document.body.appendChild(popupElement);
     popupElement.style.left = anchorPos[0] + "px";
     popupElement.style.top = anchorPos[1] + "px";
     popupElement.style.display = "block";

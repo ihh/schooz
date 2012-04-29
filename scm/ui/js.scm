@@ -16,7 +16,7 @@
 (define schooz:cancel-text "Cancel")  ;; text to cancel a menu choice
 
 ;; HTML
-(define p (lambda args `("div" ("@" ("style" "float:left")) ("p" ("@" ("class" ,schooz:paragraph-css-class)) ,@args))))
+(define p (lambda args `("p" ("@" ("class" ,schooz:paragraph-css-class)) ,@args)))
 
 ;; Functions
 (define schooz:onclick-binding (make-eq-hashtable))
@@ -118,10 +118,13 @@
     ,button-text))
 
 (define (schooz:popup link-text popup-id popup-content)
-  `(("a" ("@" ("href" "#") ("onclick" ,(string-append schooz:js-popup-function "('" popup-id "',this);")))
-     ,link-text)
-    ("div" ("@" ("class" ,schooz:popup-css-class) ("id" ,popup-id))
-     ,popup-content)))
+  (let ((elt (js-eval "document.createElement('div');")))
+    (js-invoke elt "setAttribute" "class" schooz:popup-css-class)
+    (js-set! elt "id" popup-id)
+    (js-set! elt "innerHTML" (schooz:fold-strings (list popup-content)))
+    (js-invoke (js-eval "document.body") "appendChild" elt)
+    `(("a" ("@" ("href" "#") ("onclick" ,(string-append schooz:js-popup-function "('" popup-id "',this);")))
+       ,link-text))))
 
 (define (schooz:choice-list container-id action-list)
   `("ul" ("@" ("class" ,schooz:choice-list-css-class))
