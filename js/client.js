@@ -91,6 +91,7 @@ function makePopup (popupId, anchorElement) {
     popupElement.onclick = function (e) { e.stopPropagation(); };
     centerObj (popupElement);
     document.onclick = function() { document.onclick = clickOutsidePopupToHide; };
+    anchorElement.removeAttribute ("title");  // prevent mouseover text appearing after link already clicked, obscuring popup buttons
 }
 
 // first define schoozNotify function

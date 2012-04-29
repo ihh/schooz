@@ -16,7 +16,7 @@
 (define schooz:cancel-text "Cancel")  ;; text to cancel a menu choice
 (define schooz:popup-mouseover-hint "Click for options")  ;; mouseover text for popup menu links
 (define schooz:button-mouseover-hint "Click to select")  ;; mouseover text for choice buttons
-(define schooz:cancel-mouseover-hint "Click to hide this menu")  ;; mouseover text for Cancel buttons
+(define schooz:cancel-mouseover-hint "Click to hide")  ;; mouseover text for Cancel buttons
 
 ;; HTML
 (define p (lambda args `("p" ("@" ("class" ,schooz:paragraph-css-class)) ,@args)))
