@@ -265,7 +265,7 @@
  "payment"
  `(,(p "You feel strongly motivated to debate this topic further, but are now keenly aware that the attentions of Punk Dwarf are sharply focused upon you, along with several other members of the crew.")
    ,(p
-   "The bottom line, and you now kick yourself for realizing this, is that you have eaten a pill that an unknown stranger has given you, in a nightclub, under an implied contract of payment which - while unstated - is hardly unusual.")
+   "The bottom line, and you now kick yourself for realizing this, is that you have eaten a pill that an unknown stranger has given you, in a nightclub, under an implied contract of payment which - while unstated - is hardly unusual either.")
    ,(goto "payment2")))
 
 (story
