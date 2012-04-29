@@ -30,17 +30,21 @@
     (hashtable-set! schooz:onclick-binding name wrapped-func)
     name))
 
+(define schooz:popup-count 0)
 (define (schooz:next-popup-id)
- (schooz:popup-element-id (+ (hashtable-size schooz:onclick-binding) 1)))
-
-(define (schooz:next-onclick-id)
- (schooz:onclick-element-id (+ (hashtable-size schooz:onclick-binding) 1)))
-
-(define (schooz:onclick-element-id n)
-  (string-append schooz:onclick-element-id-prefix (number->string n)))
+  (set! schooz:popup-count (+ schooz:popup-count 1))
+  (schooz:popup-element-id schooz:popup-count))
 
 (define (schooz:popup-element-id n)
   (string-append schooz:popup-element-id-prefix (number->string n)))
+
+(define schooz:onclick-count 0)
+(define (schooz:next-onclick-id)
+  (set! schooz:onclick-count (+ schooz:onclick-count 1))
+  (schooz:onclick-element-id schooz:onclick-count))
+
+(define (schooz:onclick-element-id n)
+  (string-append schooz:onclick-element-id-prefix (number->string n)))
 
 (define (schooz:js-wrap-action action-func label)
   (js-closure
