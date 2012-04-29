@@ -12,8 +12,11 @@
 (define schooz:js-hide-popups-function "hideAllPopups")
 (define schooz:js-delete-popups-function "deleteAllPopups")
 
-;; Constants visible to player
+;; String constants shown to player
 (define schooz:cancel-text "Cancel")  ;; text to cancel a menu choice
+(define schooz:popup-mouseover-hint "Click for options")  ;; mouseover text for popup menu links
+(define schooz:button-mouseover-hint "Click to select")  ;; mouseover text for choice buttons
+(define schooz:cancel-mouseover-hint "Click to hide this menu")  ;; mouseover text for Cancel buttons
 
 ;; HTML
 (define p (lambda args `("p" ("@" ("class" ,schooz:paragraph-css-class)) ,@args)))
@@ -111,12 +114,14 @@
   (let ((id (schooz:bound-id func button-text)))
     `("button" ("@"
 		("type" "button")
+		("title" ,schooz:button-mouseover-hint)
 		("id" ,id))
       ,button-text)))
 
 (define (schooz:hide-button button-text container-id)
   `("button" ("@"
 	      ("type" "button")
+	      ("title" ,schooz:cancel-mouseover-hint)
 	      ("onclick" ,(string-append schooz:js-hide-popups-function "()")))
     ,button-text))
 
@@ -126,7 +131,7 @@
     (js-set! elt "id" popup-id)
     (js-set! elt "innerHTML" (schooz:fold-strings (list popup-content)))
     (js-invoke (js-eval "document.body") "appendChild" elt)
-    `(("a" ("@" ("href" "#") ("onclick" ,(string-append schooz:js-popup-function "('" popup-id "',this);")))
+    `(("a" ("@" ("href" "#") ("title" ,schooz:popup-mouseover-hint) ("onclick" ,(string-append schooz:js-popup-function "('" popup-id "',this);")))
        ,link-text))))
 
 (define (schooz:choice-list-wrapper choice-list)
