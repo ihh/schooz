@@ -45,7 +45,7 @@
   (description
    name
    #t
-   `(,link-text ,post-link-text ,expanded-description)))
+   `("span" ,link-text ,post-link-text ,expanded-description)))
 
 ;; Simple one-way switches
 (define (one-way-switch name link-text action-text)

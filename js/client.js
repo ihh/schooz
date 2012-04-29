@@ -13,12 +13,21 @@ function findPos(obj) {
     return [curLeft,curTop];
 }
 
-function centerObj(obj,nbr) {
+function centerObj(obj) {
+
+    var nbr = obj.parentNode;
+
+    var nbrPos = findPos (nbr);
+    obj.style.left = nbrPos[0] + "px";
+    obj.style.top = nbrPos[1] + "px";
+
     var curLeft = parseInt(obj.style.left);
     var objWidth = parseInt(obj.offsetWidth);
     var nbrWidth = parseInt(nbr.offsetWidth);
+    var winWidth = document.body.clientWidth;
     curLeft += (nbrWidth - objWidth) / 2;
     if (curLeft < 0) { curLeft = 0; }
+    if (curLeft > winWidth - objWidth) { curLeft = winWidth - objWidth; }
     obj.style.left = curLeft + "px";
 
     var curTop = parseInt(obj.style.top);
@@ -62,14 +71,25 @@ function deleteAllPopups() {
     document.onclick = null;
 };
 
+function centerAllPopups() {
+    var elements = (ie) ? document.all : document.getElementsByTagName('*');
+    for (i=0; i<elements.length; i++) {
+	if (elements[i].className == "popup"){
+	    centerObj (elements[i]);
+	}
+    }
+    document.onclick = null;
+};
+window.onscroll = window.onresize = centerAllPopups;
+
 function makePopup (popupId, anchorElement) {
     hideAllPopups();
     var popupElement = document.getElementById (popupId);
-    var anchorPos = findPos (anchorElement);
-    popupElement.style.left = anchorPos[0] + "px";
-    popupElement.style.top = anchorPos[1] + "px";
+    popupElement.parentNode.removeChild (popupElement);
+    anchorElement.appendChild (popupElement);
     popupElement.style.display = "block";
-    centerObj(popupElement,anchorElement);
+    popupElement.onclick = function (e) { e.stopPropagation(); };
+    centerObj (popupElement);
     document.onclick = function() { document.onclick = clickOutsidePopupToHide; };
 }
 
