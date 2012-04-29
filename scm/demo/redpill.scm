@@ -149,8 +149,7 @@
 
 (story
  "meet-morpheus"
- `(,@(once `("A velvet curtain parts at your approach..." ,(p)))
-   ,(h1-club)
+ `(,(h1-club)
    ,(p
      "In an armchair"
      (first ", orbited by various flavors of weirdo, sits" (string-append " sits " morpheus ", orbited by weirdos,"))
@@ -158,7 +157,7 @@
      (once " (almost imperceptible, but you could tell) and Punk Dwarf snarls at everyone BUT him") ".")
    ,(if (state "bigshot")
 	`(,(p
-	  "Even sitting in a big comfy chair, he is more than a little intimidating. It doesn't hurt that he's physically domineering, and looks intelligent (you can't see his eyes behind those mirrorshades, but he's got poise).")
+	  "Why 'bigshot'? Well, even loafing in a big comfy chair, he is more than a little intimidating. It doesn't hurt that he's physically domineering, and looks intelligent (you can't see his eyes behind those mirrorshades, but he's got poise).")
 	  ,(p
 	  "Still, you wonder how leather jackets that heavy survived the heyday of " (describe "the-who"))))
    ,(once
