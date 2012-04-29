@@ -63,18 +63,21 @@
 (define (schooz:js-delete-popups)
   (js-call (js-eval schooz:js-delete-popups-function)))
 
-(define (schooz:js-document-getElementById id)
+(define (schooz:js-element-by-id id)
   (string-append "document.getElementById('" id "')"))
 
 (define (schooz:js-set-element-property id property value)
-  (let ((js-expr (schooz:js-document-getElementById id)))
+  (let ((js-expr (schooz:js-element-by-id id)))
     (js-set!
      (js-eval js-expr)
      property
      value)))
 
+(define (schooz:js-set-element-content id data)
+  (schooz:js-set-element-property id "innerHTML" (schooz:fold-strings data)))
+
 (define (schooz:js-set-view data)
-  (schooz:js-set-element-property schooz:view-element-id "innerHTML" (schooz:fold-strings data)))
+  (schooz:js-set-element-content schooz:view-element-id data))
 
 (define (schooz:js-set-onclick id func)
   (schooz:js-set-element-property id "onclick" func))

@@ -161,9 +161,8 @@
 	  "Even sitting in a big comfy chair, he is more than a little intimidating. It doesn't hurt that he's physically domineering, and looks intelligent (you can't see his eyes behind those mirrorshades, but he's got poise).")
 	  ,(p
 	  "Still, you wonder how leather jackets that heavy survived the heyday of " (describe "the-who"))))
-   ,(p
-     (once
-      `("The man introduces himself as " ("b" ,morpheus) " - a name he clearly thought you knew already, and probably expects you to remember how to spell.")))
+   ,(once
+     (p "The man introduces himself as " `("b" ,morpheus) " - a name he clearly thought you knew already, and probably expects you to remember how to spell."))
    ,(apply p (cons (first "He" morpheus)
 		   (describe "morpheus-intro-gaze")))))
 
