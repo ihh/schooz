@@ -54,11 +54,11 @@
 ;; Consistent "Next" links
 (define
   (next-goto state)
-  `(,(p (explicit-menu ((choice-goto state "Next" ""))))))
+  `(,(p (explicit-menu (choice-goto state "Next" "")))))
 
 (define
   (next-look)
-  `(,(p (explicit-menu ((choice* "Next" look))))))
+  `(,(p (explicit-menu (choice* "Next" look)))))
 
 ;; Self-propelled state machines (generic)
 (define (auto-machine name next-state-function descriptor-list)

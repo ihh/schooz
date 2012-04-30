@@ -26,25 +26,11 @@
   (choice action-text func-body)
   `(schooz:choice ,action-text ,func-body))
 
-;; (menu* text action-list)
-(define
-  (menu* text action-list)
-  (schooz:menu* text action-list))
-
 ;; (menu text action-list)
-(define-macro
-  (menu text action-list)
-  `(schooz:menu ,text ,action-list))
-
-;; (explicit-menu* text action-list)
-(define
-  (explicit-menu* text action-list)
-  (schooz:explicit-menu* text action-list))
+(define menu (lambda args (apply schooz:menu args)))
 
 ;; (explicit-menu action-list)
-(define-macro
-  (explicit-menu action-list)
-  `(schooz:explicit-menu ,action-list))
+(define explicit-menu (lambda args (apply schooz:explicit-menu args)))
 
 ;; (ask X PROMPT)
 (define (ask X PROMPT)
@@ -173,29 +159,23 @@
 (define-macro (schooz:link LINK action func-body)
   `(schooz:link* ,LINK ,action (lambda () ,func-body)))
 
-;; (schooz:menu* text action-list)
-(define (schooz:menu* link-text action-list)
-  (let* ((transformed-action-list (schooz:transform-action-list action-list))
-	 (return-value (schooz:impl-menu* link-text transformed-action-list)))
+;; (schooz:menu link-text (text1 action1) (text2 action2) ...)
+(define schooz:menu
+  (lambda args
+    (let* ((link-text (car args))
+	   (action-list (cdr args))
+	   (transformed-action-list (schooz:transform-action-list action-list))
+	   (return-value (schooz:impl-menu* link-text transformed-action-list)))
     (schooz:register-action-list transformed-action-list)
-    return-value))
+    return-value)))
 
-;; (schooz:menu text action-list)
-(define-macro
-  (schooz:menu text action-list)
-  `(schooz:menu* ,text (list ,@action-list)))
-
-;; (schooz:explicit-menu* action-list)
-(define (schooz:explicit-menu* action-list)
-  (let* ((transformed-action-list (schooz:transform-action-list action-list))
-	 (return-value (schooz:impl-explicit-menu* transformed-action-list)))
-    (schooz:register-action-list transformed-action-list)
-    return-value))
-
-;; (schooz:explicit-menu action-list)
-(define-macro
-  (schooz:explicit-menu action-list)
-  `(schooz:explicit-menu* (list ,@action-list)))
+;; (schooz:explicit-menu (text1 action1) (text2 action2) ...)
+(define schooz:explicit-menu
+  (lambda action-list
+    (let* ((transformed-action-list (schooz:transform-action-list action-list))
+	   (return-value (schooz:impl-explicit-menu* transformed-action-list)))
+      (schooz:register-action-list transformed-action-list)
+      return-value)))
 
 ;; (schooz:choice* action-text func)  ... simple helper/wrapper
 (define (schooz:choice* action-text func) (list action-text func))
