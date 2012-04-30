@@ -67,7 +67,6 @@ function attachPopups() {
 	if (elements[i].className == "popup") {
 	    var popupElement = elements[i];
 	    var anchorElement = document.getElementById (popupElement.id + "Link");
-	    console.log("name="+popupElement.name+" anchor="+anchorElement);
 	    elements[i].parentNode.removeChild (popupElement);
 	    if (anchorElement) {
 		anchorElement.appendChild (popupElement);

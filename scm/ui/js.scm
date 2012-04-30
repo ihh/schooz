@@ -6,6 +6,7 @@
 (define schooz:js-notify-function "schoozUpdate")
 
 (define schooz:paragraph-css-class "paragraph")
+(define schooz:span-css-class "span")
 (define schooz:popup-css-class "popup")
 (define schooz:js-popup-function "makePopup")
 (define schooz:choice-list-css-class "choice-list")
@@ -21,6 +22,7 @@
 
 ;; HTML
 (define p (lambda args `("p" ("@" ("class" ,schooz:paragraph-css-class)) ,@args)))
+(define span (lambda args `("span" ("@" ("class" ,schooz:span-css-class)) ,@args)))
 
 ;; Functions
 (define schooz:onclick-binding (make-eq-hashtable))

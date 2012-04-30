@@ -21,9 +21,10 @@
   (grep (lambda (y) (not (equal? x y))) list))
 
 ;; Extract random element from list
-(define (random-element list)
-  (let ((len (length list)))
-    (list-ref list (random-integer len))))
+(define random-element
+  (lambda list
+    (let ((len (length list)))
+      (list-ref list (random-integer len)))))
 
 ;; Emily Short-style "One of..." alias for random-element
 (define one-of random-element)
@@ -45,7 +46,7 @@
   (description
    name
    #t
-   `("span" ,link-text ,post-link-text ,expanded-description)))
+   `(,(span link-text post-link-text expanded-description))))
 
 ;; Simple one-way switches
 (define (one-way-switch name link-text action-text)
@@ -57,8 +58,12 @@
   `(,(p (explicit-menu (choice-goto state "Next" "")))))
 
 (define
+  (next-action action)
+  `(,(p (explicit-menu (choice* "Next" action)))))
+
+(define
   (next-look)
-  `(,(p (explicit-menu (choice* "Next" look)))))
+  (next-action look))
 
 ;; Self-propelled state machines (generic)
 (define (auto-machine name next-state-function descriptor-list)
@@ -89,7 +94,7 @@
 	 (mutator-function
 	  (lambda (x)
 	    (let ((other-states (grep-not-equal x (iota states))))
-	      (random-element other-states)))))
+	      (apply random-element other-states)))))
     (auto-machine name mutator-function descriptor-list)))
 
 ;; Timer (delay fuse)
@@ -125,7 +130,7 @@
 (define (h1-club-front) `(,(h1 "Nightclub") ,(p `("i" ,(describe "club-music"))) ,(p)))
 (define (h1-club) `(,(h1 "Back of the club") ,(p `("i" ,(describe "club-music"))) ,(p)))
 
-;; Opening scene
+;; Opening scene (prelude)
 (story
  "nightclub"
  `(,(h1-club-front)
@@ -142,11 +147,7 @@
      (link-goto "meet her colleague" "meet-morpheus" "OK, let's meet this mysterious 'colleague'." "The tall catlady ushers you to the back of the club, while her grumpier half growls at bad dancers.")
      " in a back room of the nightclub.")))
 
-;; Should be able to examine your assailants in this scene
-
-;; Should be an option to avoid this entirely and either back out of the club,
-;; or hang out on the dancefloor while these two pester you, then leave.
-
+;; Start of main scene
 (story
  "meet-morpheus"
  `(,(h1-club)
@@ -164,13 +165,24 @@
      (p "The man introduces himself as " `("b" ,morpheus) " - a name he clearly thought you knew already, and probably expects you to remember how to spell."))
    ,(apply p (cons (first "He" morpheus)
 		   (describe "morpheus-intro-gaze")))))
+(expandable-machine
+   "the-who"
+   "The Who" "."
+   "The Who?"
+   (p "(The Who were a British rock band of the 60's and 70's. Their followers - 'mods' - did often wear long leather coats. Probably to stash big bags of pills in, now you come to think of it.)"))
+;; Note that flipping the switch will use up a "turn".
+
+(one-way-switch
+   "bigshot"
+   "bigshot"
+   "Bigshot? Why call him that?")
 
 (define (morpheus-intro-choice pre-text stare-text intervening-text speak-text post-text)
   `(,pre-text " "
-    ,(link-goto stare-text "choice" "Fine, you want to stare?"
+    ,(link-goto stare-text "conversation" "Fine, you want to stare?"
 		`("You stare at each other for a while. Then " ,morpheus " clears his throat."))
     " " ,intervening-text " "
-    ,(link-goto speak-text "choice" "This guy is extremely irritating."
+    ,(link-goto speak-text "conversation" "This guy is extremely irritating."
 		`("'Speak up, then,' you say, irritated. 'You asked me here, after all.'" ,(p morpheus " grins.")))
     ,post-text))
 
@@ -202,33 +214,74 @@
 ;; after JR Bob Dobbs appeared to him in a vision one time while he was playing a Jeff Minter light synth.
 
 
-;; General format of minigame:
-;; Morpheus makes a philosophical proposition or allusion.
+;; Morpheus conversation minigame:
+;; Morpheus makes a pseudo-philosophically mathematicaly proposition or allusion
+;; (Alice, Subgenius, Matrix, the continuum, the nature of reality, etc)
 ;; You can treat it as a conversational gambit, and respond politely.
-;; Or you can respond by 
+;; Or you can respond by disputing it, increasing Morpheus' annoyance level.
 
+(define morpheus-annoyance 0)
+(define morpheus-annoyed-text  ;; give feedback on his escalating annoyance level
+  (list
+   (p morpheus " blinks slightly.")
+   (p morpheus " frowns slightly.")
+   (p morpheus " glares at you, angrily.")))
+(define (annoy-morpheus)
+  (display "In annoy-morpheus\n")
+  (let ((text (list-ref morpheus-annoyed-text morpheus-annoyance)))
+    (set! morpheus-annoyance (+ morpheus-annoyance 1))
+    (display "annoy-morpheus:") (write text) (display "\n")
+    (list text)))
+
+(define (morpheus-minigame proposition agree dispute next)
+  `(,(p proposition
+	(explicit-menu
+	 (choice agree `(,(p "'" agree "', you say.")
+			 ,(p (one-of
+			      (span morpheus " nods, smiling.")
+			      (span morpheus " claps his hands.")
+			      (span "'Exactly!' says " morpheus "."))
+			     (next-action next))))
+	 (choice dispute `(,(p "'" dispute "', you say.") ,(annoy-morpheus) ,(next-action next)))))))
+
+(define (morpheus-alice-gambit)
+  (morpheus-minigame
+   (p "'I bet you feel like the White Rabbit right now,' says " morpheus ".")
+   "I suppose so."
+   "Not really. The White Rabbit knew where he was going. Maybe you meant Alice?"
+   morpheus-reality-gambit))
+
+(define (morpheus-reality-gambit)
+  (morpheus-minigame
+   (p "'Have you ever wondered about the nature of reality?'")
+   "I suppose so."
+   "No. That's a dumb question."
+   morpheus-exploits-gambit))
+
+(define (morpheus-exploits-gambit)
+  (morpheus-minigame
+   (p "'You are an impressive hacker. Your exploits have come to our attention.'")
+   "I'm flattered."
+   "You haven't heard the least of my exploits."
+   morpheus-own-exploits-gambit))
+
+(define (morpheus-own-exploits-gambit)
+  (morpheus-minigame
+   (p "'Yes. Well, naturally you have heard of my own modest achievments.'")
+   "Are you kidding? You're a hacking legend!"
+   "Nope. Never heard of you."
+   (lambda () (goto "choice"))))
+
+(story*
+ "conversation"
+ morpheus-alice-gambit)
+
+;; Other ideas:
 ;; Maybe Morpheus' mirrorshades are actually Google Goggles, and he will let you try them.
 ;; On looking through them, you see haloes of information around everyone, annoyingly peppered with product placement.
 ;; Returning the glasses to Morpheus, you notice that his eyes are somewhat bloodshot.
 ;; One way to escape the club (i.e. get thrown out) is to repeatedly insult these glasses.
 
-;; During the conversation there will be options to examine Morpheus.
-;; Some of them are simple switches that can be flipped to reveal background info, e.g.:
-(expandable-machine
-   "the-who"
-   "The Who" "."
-   "The Who?"
-   (p "(The Who were a British rock band of the 60's and 70's. Their followers - 'mods' - did often wear long leather coats. Probably to stash big bags of pills in, now you come to think of it.)"))
-;; Note that flipping the switch will use up a "turn".
-
-;; Even simpler expandable switch, for when the expanded text is somewhere other than the switch link
-(one-way-switch
-   "bigshot"
-   "bigshot"
-   "Bigshot? Why call him that?")
-
-;; Other options in the conversation can include a gosub to a "Checking out Morpheus" scene
-;; that branches a bit, describing him, but with an increasing awareness that you are eyeing him up and down
 
 ;; Eventually, if Morpheus doesn't tire of you, the conversation brings you here
 (story
