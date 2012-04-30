@@ -4,99 +4,99 @@
   (machine-names)
   (schooz:machine-names))
 
-;; (machine-states X)  ... returns the possible states of the object named X
+;; (machine-states x)  ... returns the possible states of the object named x
 (define
-  (machine-states X)
-  (schooz:machine-states X))
+  (machine-states x)
+  (schooz:machine-states x))
 
 
-;; (link-goto LINK-TEXT STATE ACTION-TEXT RESULT-TEXT)
+;; (link-goto link-text state action-text result-text)
 (define
-  (link-goto LINK STATE ACTION RESULT)
-  (schooz:link-goto LINK STATE ACTION RESULT))
+  (link-goto link state action result)
+  (schooz:link-goto link state action result))
 
-;; (link-gosub LINK-TEXT STATE ACTION-TEXT RESULT-TEXT)
+;; (link-gosub link-text state action-text result-text)
 (define
-  (link-gosub LINK STATE ACTION RESULT)
-  (schooz:link-gosub LINK STATE ACTION RESULT))
+  (link-gosub link state action result)
+  (schooz:link-gosub link state action result))
 
-;; (link-return LINK-TEXT ACTION-TEXT RESULT-TEXT)
+;; (link-return link-text action-text result-text)
 (define
-  (link-return LINK ACTION RESULT)
-  (schooz:link-return LINK ACTION RESULT))
+  (link-return link action result)
+  (schooz:link-return link action result))
 
-;; (schooz:choice-goto STATE ACTION-TEXT RESULT-TEXT)
+;; (schooz:choice-goto state action-text result-text)
 (define
-  (choice-goto STATE ACTION RESULT)
-  (schooz:choice-goto STATE ACTION RESULT))
+  (choice-goto state action result)
+  (schooz:choice-goto state action result))
 
-;; (schooz:choice-gosub STATE ACTION-TEXT RESULT-TEXT)
+;; (schooz:choice-gosub state action-text result-text)
 (define
-  (choice-gosub STATE ACTION RESULT)
-  (schooz:choice-gosub STATE ACTION RESULT))
+  (choice-gosub state action result)
+  (schooz:choice-gosub state action result))
 
-;; (schooz:choice-return ACTION-TEXT RESULT-TEXT)
+;; (schooz:choice-return action-text result-text)
 (define
-  (choice-return ACTION RESULT)
-  (schooz:choice-return ACTION RESULT))
+  (choice-return action result)
+  (schooz:choice-return action result))
 
-;; (now X STATE)  ... places object X in state STATE
+;; (now x state)  ... places object x in state state
 (define
-  (now X STATE)
-  (schooz:now X STATE))
+  (now x state)
+  (schooz:now x state))
 
-;; (state X)  ... returns the current state (typically a string) of object named X, where X is an atom
+;; (state x)  ... returns the current state (typically a string) of object named x, where x is an atom
 (define
-  (state X)
-  (schooz:state X))
+  (state x)
+  (schooz:state x))
 
-;; (description* X STATE FUNC)  ... set object X's descriptor function for state STATE to FUNC
+;; (description* x state func)  ... set object x's descriptor function for state state to func
 (define
-  (description* X STATE FUNC)
-  (schooz:description* X STATE FUNC))
+  (description* x state func)
+  (schooz:description* x state func))
 
-;; (description X STATE FUNC-BODY)  ... macro to avoid writing (lambda () ...)
+;; (description x state func-body)  ... macro to avoid writing (lambda () ...)
 (define-macro
-  (description X STATE FUNC-BODY)
-  `(schooz:description ,X ,STATE ,FUNC-BODY))
+  (description x state func-body)
+  `(schooz:description ,x ,state ,func-body))
 
-;; (describe X)  ... looks up the descriptor function for current state of object X, calls it
+;; (describe x)  ... looks up the descriptor function for current state of object x, calls it
 (define
-  (describe X)
-  (schooz:describe X))
+  (describe x)
+  (schooz:describe x))
 
-;; (push X STATE)  ... pushes STATE onto X's stack
+;; (push x state)  ... pushes state onto x's stack
 (define
-  (push X STATE)
-  (schooz:push X STATE))
+  (push x state)
+  (schooz:push x state))
 
-;; (pop X)  ... pops state off X's stack
+;; (pop x)  ... pops state off x's stack
 (define
-  (pop X)
-  (schooz:pop X))
+  (pop x)
+  (schooz:pop x))
 
-;; (finish X)  ... clears X's stack
-(define (finish X) (schooz:finish X))
+;; (finish x)  ... clears x's stack
+(define (finish x) (schooz:finish x))
 
-;; (finished? X)  ... test to see if X's stack is empty
-(define (finished? X) (schooz:finished? X))
+;; (finished? x)  ... test to see if x's stack is empty
+(define (finished? x) (schooz:finished? x))
 
-;; (story* STATE FUNC)
-(define (story* STATE FUNC) (schooz:story* STATE FUNC))
+;; (story* state func)
+(define (story* state func) (schooz:story* state func))
 
-;; (story STATE FUNC-BODY)
+;; (story state func-body)
 (define-macro
-  (story STATE FUNC-BODY)
-  `(schooz:story ,STATE ,FUNC-BODY))
+  (story state func-body)
+  `(schooz:story ,state ,func-body))
 
 ;; (look)
 (define (look) (schooz:look))
 
-;; (goto STATE)
-(define (goto STATE) (schooz:goto STATE))
+;; (goto state)
+(define (goto state) (schooz:goto state))
 
-;; (gosub STATE)
-(define (gosub STATE) (schooz:gosub STATE))
+;; (gosub state)
+(define (gosub state) (schooz:gosub state))
 
 ;; (return)
 (define (return) (schooz:return))
@@ -117,124 +117,124 @@
 ;; Object->stack hashtable
 (define schooz:stack (make-eq-hashtable))
 
-;; (schooz:ensure-object X)  ... ensures that X has valid entries in hashtables
+;; (schooz:ensure-object x)  ... ensures that x has valid entries in hashtables
 (define
-  (schooz:ensure-object X STATE)
+  (schooz:ensure-object x state)
   (if
-   (not (hashtable-ref schooz:desc X #f))
-   (hashtable-set! schooz:desc X (make-eq-hashtable)))
+   (not (hashtable-ref schooz:desc x #f))
+   (hashtable-set! schooz:desc x (make-eq-hashtable)))
   (if
-   (not (hashtable-ref schooz:stack X #f))
-   (hashtable-set! schooz:stack X (list STATE))))
+   (not (hashtable-ref schooz:stack x #f))
+   (hashtable-set! schooz:stack x (list state))))
 
-;; clear stack of object X
-(define (schooz:clear-stack X)
-  (hashtable-set! schooz:stack X '()))
+;; clear stack of object x
+(define (schooz:clear-stack x)
+  (hashtable-set! schooz:stack x '()))
 
 
 ;; API functions.
 ;; (schooz:machine-names)  ... returns the list of names of all state-machine objects
 (define (schooz:machine-names) (hashtable-keys schooz:desc))
 
-;; (schooz:machine-states X)  ... returns the possible states of the object named X
-(define (schooz:machine-states X) (hashtable-keys (hashtable-ref schooz:desc X #f)))
+;; (schooz:machine-states x)  ... returns the possible states of the object named x
+(define (schooz:machine-states x) (hashtable-keys (hashtable-ref schooz:desc x #f)))
 
-;; (schooz:now X STATE)  ... places object X in state STATE
+;; (schooz:now x state)  ... places object x in state state
 (define
-  (schooz:now X STATE)
-  (let ((old-stack (hashtable-ref schooz:stack X '())))
-    (hashtable-set! schooz:stack X
+  (schooz:now x state)
+  (let ((old-stack (hashtable-ref schooz:stack x '())))
+    (hashtable-set! schooz:stack x
 ;		    (if (or (null? old-stack) (not (pair? old-stack)))
 		    (if (null? old-stack)
-			(list STATE)
-			(cons STATE (cdr old-stack))))))
+			(list state)
+			(cons state (cdr old-stack))))))
 
-;; (schooz:state X)  ... returns the current state (typically a string) of object named X, where X is an atom
+;; (schooz:state x)  ... returns the current state (typically a string) of object named x, where x is an atom
 (define
-  (schooz:state X)
-  (let ((stack (hashtable-ref schooz:stack X '())))
+  (schooz:state x)
+  (let ((stack (hashtable-ref schooz:stack x '())))
     (if (null? stack) #f (car stack))))
 
-;; (schooz:description* X STATE FUNC)  ... set object X's descriptor function for state STATE to FUNC
+;; (schooz:description* x state func)  ... set object x's descriptor function for state state to func
 (define
-  (schooz:description* X STATE FUNC)
-  (schooz:ensure-object X STATE)
-  (hashtable-set! (hashtable-ref schooz:desc X #f) STATE FUNC))
+  (schooz:description* x state func)
+  (schooz:ensure-object x state)
+  (hashtable-set! (hashtable-ref schooz:desc x #f) state func))
 
-;; (schooz:description X STATE FUNC-BODY)  ... macro to avoid writing (lambda () ...)
+;; (schooz:description x state func-body)  ... macro to avoid writing (lambda () ...)
 (define-macro
-  (schooz:description X STATE FUNC-BODY)
-  `(schooz:description* ,X ,STATE (lambda () ,FUNC-BODY)))
+  (schooz:description x state func-body)
+  `(schooz:description* ,x ,state (lambda () ,func-body)))
 
-;; (schooz:describe X)  ... looks up the descriptor function for current state of object X, calls it
+;; (schooz:describe x)  ... looks up the descriptor function for current state of object x, calls it
 (define
-  (schooz:describe X)
-  (let ((desc (hashtable-ref (hashtable-ref schooz:desc X #f) (schooz:state X) #f)))
+  (schooz:describe x)
+  (let ((desc (hashtable-ref (hashtable-ref schooz:desc x #f) (schooz:state x) #f)))
     (schooz:eval-or-return desc)))
 
-;; (schooz:push X STATE)  ... pushes STATE onto X's stack
+;; (schooz:push x state)  ... pushes state onto x's stack
 (define
-  (schooz:push X STATE)
-  (hashtable-set! schooz:stack X (cons STATE (hashtable-ref schooz:stack X '()))))
+  (schooz:push x state)
+  (hashtable-set! schooz:stack x (cons state (hashtable-ref schooz:stack x '()))))
 
-;; (schooz:pop X)  ... pops state off X's stack
+;; (schooz:pop x)  ... pops state off x's stack
 (define
-  (schooz:pop X)
-  (let ((stack (hashtable-ref schooz:stack X '())))
+  (schooz:pop x)
+  (let ((stack (hashtable-ref schooz:stack x '())))
     (if (null? stack)
 	#f
 	(begin
-	  (hashtable-set! schooz:stack X (cdr stack))
+	  (hashtable-set! schooz:stack x (cdr stack))
 	  (car stack)))))
 
-;; (schooz:finish X)  ... clears X's stack
-(define (schooz:finish X) (schooz:clear-stack X))
+;; (schooz:finish x)  ... clears x's stack
+(define (schooz:finish x) (schooz:clear-stack x))
 
-;; (schooz:finished? X)  ... test to see if X's stack is empty
-(define (schooz:finished? X) (equal? (schooz:state X) #f))
+;; (schooz:finished? x)  ... test to see if x's stack is empty
+(define (schooz:finished? x) (equal? (schooz:state x) #f))
 
 
-;; (schooz:link-goto LINK-TEXT STATE ACTION-TEXT RESULT-TEXT)
-(define (schooz:link-goto LINK STATE ACTION RESULT)
-  (schooz:link* LINK ACTION (lambda () (begin (goto STATE) RESULT))))
+;; (schooz:link-goto link-text state action-text result-text)
+(define (schooz:link-goto link state action result)
+  (schooz:link* link action (lambda () (begin (goto state) result))))
 
-;; (schooz:link-gosub LINK-TEXT STATE ACTION-TEXT RESULT-TEXT)
-(define (schooz:link-gosub LINK STATE ACTION RESULT)
-  (schooz:link* LINK ACTION (lambda () (begin (gosub STATE) RESULT))))
+;; (schooz:link-gosub link-text state action-text result-text)
+(define (schooz:link-gosub link state action result)
+  (schooz:link* link action (lambda () (begin (gosub state) result))))
 
-;; (schooz:link-return LINK-TEXT ACTION-TEXT RESULT-TEXT)
-(define (schooz:link-return LINK ACTION RESULT)
-  (schooz:link* LINK ACTION (lambda () (begin (return) RESULT))))
+;; (schooz:link-return link-text action-text result-text)
+(define (schooz:link-return link action result)
+  (schooz:link* link action (lambda () (begin (return) result))))
 
-;; (schooz:choice-goto STATE ACTION-TEXT RESULT-TEXT)
-(define (schooz:choice-goto STATE ACTION RESULT)
-  (schooz:choice* ACTION (lambda () (begin (goto STATE) RESULT))))
+;; (schooz:choice-goto state action-text result-text)
+(define (schooz:choice-goto state action result)
+  (schooz:choice* action (lambda () (begin (goto state) result))))
 
-;; (schooz:choice-gosub STATE ACTION-TEXT RESULT-TEXT)
-(define (schooz:choice-gosub STATE ACTION RESULT)
-  (schooz:choice* ACTION (lambda () (begin (gosub STATE) RESULT))))
+;; (schooz:choice-gosub state action-text result-text)
+(define (schooz:choice-gosub state action result)
+  (schooz:choice* action (lambda () (begin (gosub state) result))))
 
-;; (schooz:choice-return ACTION-TEXT RESULT-TEXT)
-(define (schooz:choice-return ACTION RESULT)
-  (schooz:choice* ACTION (lambda () (begin (return) RESULT))))
+;; (schooz:choice-return action-text result-text)
+(define (schooz:choice-return action result)
+  (schooz:choice* action (lambda () (begin (return) result))))
 
 
 ;; Main story object
 (define schooz:narrative "narrative")
 
 ;; Syntactic-sugar shortcuts for working with the main story graph
-;; (schooz:story* STATE FUNC)
-(define (schooz:story* STATE FUNC) (schooz:description* schooz:narrative STATE FUNC))
-;; (schooz:story STATE FUNC-BODY)
+;; (schooz:story* state func)
+(define (schooz:story* state func) (schooz:description* schooz:narrative state func))
+;; (schooz:story state func-body)
 (define-macro
-  (schooz:story STATE FUNC-BODY)
-  `(schooz:story* ,STATE (lambda () ,FUNC-BODY)))
+  (schooz:story state func-body)
+  `(schooz:story* ,state (lambda () ,func-body)))
 ;; (schooz:look)
 (define (schooz:look) (schooz:describe schooz:narrative))
-;; (schooz:goto STATE)
-(define (schooz:goto STATE) (schooz:now schooz:narrative STATE))
-;; (schooz:gosub STATE)
-(define (schooz:gosub STATE) (schooz:push schooz:narrative STATE))
+;; (schooz:goto state)
+(define (schooz:goto state) (schooz:now schooz:narrative state))
+;; (schooz:gosub state)
+(define (schooz:gosub state) (schooz:push schooz:narrative state))
 ;; (schooz:return)
 (define (schooz:return) (schooz:pop schooz:narrative))
 ;; (schooz:chapter)

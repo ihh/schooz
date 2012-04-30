@@ -3,45 +3,45 @@
 
 (define schooz:version 1)
 
-;; (link* TEXT ACTION-TEXT FUNC)
+;; (link* text action-text func)
 (define
-  (link* LINK ACTION FUNC)
-  (schooz:link* LINK ACTION FUNC))
+  (link* LINK action func)
+  (schooz:link* LINK action func))
 
-;; (link TEXT ACTION-TEXT FUNC-BODY)
+;; (link text action-text func-body)
 (define-macro
-  (link LINK ACTION FUNC-BODY)
-  `(schooz:link ,LINK ,ACTION ,FUNC-BODY))
+  (link LINK action func-body)
+  `(schooz:link ,LINK ,action ,func-body))
 
-;; (schooz:choice* ACTIONTEXT FUNC)  ... simple helper/wrapper
+;; (schooz:choice* action-text func)  ... simple helper/wrapper
 (define
-  (choice* ACTIONTEXT FUNC)
-  (schooz:choice* ACTIONTEXT FUNC))
+  (choice* action-text func)
+  (schooz:choice* action-text func))
 
-;; (schooz:choice ACTIONTEXT FUNC-BODY)
+;; (schooz:choice action-text func-body)
 (define-macro
-  (choice ACTIONTEXT FUNC-BODY)
-  `(schooz:choice ,ACTIONTEXT ,FUNC-BODY))
+  (choice action-text func-body)
+  `(schooz:choice ,action-text ,func-body))
 
-;; (menu* TEXT ACTION-LIST)
+;; (menu* text action-list)
 (define
-  (menu* TEXT ACTION-LIST)
-  (schooz:menu* TEXT ACTION-LIST))
+  (menu* text action-list)
+  (schooz:menu* text action-list))
 
-;; (menu TEXT ACTION-LIST)
+;; (menu text action-list)
 (define-macro
-  (menu TEXT ACTION-LIST)
-  `(schooz:menu ,TEXT ,ACTION-LIST))
+  (menu text action-list)
+  `(schooz:menu ,text ,action-list))
 
-;; (explicit-menu* TEXT ACTION-LIST)
+;; (explicit-menu* text action-list)
 (define
-  (explicit-menu* TEXT ACTION-LIST)
-  (schooz:explicit-menu* TEXT ACTION-LIST))
+  (explicit-menu* text action-list)
+  (schooz:explicit-menu* text action-list))
 
-;; (explicit-menu ACTION-LIST)
+;; (explicit-menu action-list)
 (define-macro
-  (explicit-menu ACTION-LIST)
-  `(schooz:explicit-menu ,ACTION-LIST))
+  (explicit-menu action-list)
+  `(schooz:explicit-menu ,action-list))
 
 ;; (ask X PROMPT)
 (define (ask X PROMPT)
@@ -157,52 +157,52 @@
 
 
 
-;; (schooz:link* TEXT ACTION-TEXT FUNC-BODY)
+;; (schooz:link* text action-text func-body)
 (define (schooz:link* link-text action-text action-func)
   (let* ((transformed-action-func (schooz:transform-action action-func))
 	 (return-value (schooz:impl-link* link-text action-text transformed-action-func)))
     (schooz:register-action action-text transformed-action-func)
     return-value))
 
-;; (schooz:link TEXT ACTION-TEXT FUNC-BODY)
-(define-macro (schooz:link LINK ACTION FUNC-BODY)
-  `(schooz:link* ,LINK ,ACTION (lambda () ,FUNC-BODY)))
+;; (schooz:link text action-text func-body)
+(define-macro (schooz:link LINK action func-body)
+  `(schooz:link* ,LINK ,action (lambda () ,func-body)))
 
-;; (schooz:menu* TEXT ACTION-LIST)
+;; (schooz:menu* text action-list)
 (define (schooz:menu* link-text action-list)
   (let* ((transformed-action-list (schooz:transform-action-list action-list))
 	 (return-value (schooz:impl-menu* link-text transformed-action-list)))
     (schooz:register-action-list transformed-action-list)
     return-value))
 
-;; (schooz:menu TEXT ACTION-LIST)
+;; (schooz:menu text action-list)
 (define-macro
-  (schooz:menu TEXT ACTION-LIST)
-  `(schooz:menu* ,TEXT (list ,@ACTION-LIST)))
+  (schooz:menu text action-list)
+  `(schooz:menu* ,text (list ,@action-list)))
 
-;; (schooz:explicit-menu* ACTION-LIST)
+;; (schooz:explicit-menu* action-list)
 (define (schooz:explicit-menu* action-list)
   (let* ((transformed-action-list (schooz:transform-action-list action-list))
 	 (return-value (schooz:impl-explicit-menu* transformed-action-list)))
     (schooz:register-action-list transformed-action-list)
     return-value))
 
-;; (schooz:explicit-menu ACTION-LIST)
+;; (schooz:explicit-menu action-list)
 (define-macro
-  (schooz:explicit-menu ACTION-LIST)
-  `(schooz:explicit-menu* (list ,@ACTION-LIST)))
+  (schooz:explicit-menu action-list)
+  `(schooz:explicit-menu* (list ,@action-list)))
 
-;; (schooz:choice* ACTIONTEXT FUNC)  ... simple helper/wrapper
-(define (schooz:choice* ACTIONTEXT FUNC) (list ACTIONTEXT FUNC))
+;; (schooz:choice* action-text func)  ... simple helper/wrapper
+(define (schooz:choice* action-text func) (list action-text func))
 
-;; (schooz:choice ACTIONTEXT FUNC-BODY)
+;; (schooz:choice action-text func-body)
 (define-macro
-  (schooz:choice ACTIONTEXT FUNC-BODY)
-  `(schooz:choice* ,ACTIONTEXT (lambda () ,FUNC-BODY)))
+  (schooz:choice action-text func-body)
+  `(schooz:choice* ,action-text (lambda () ,func-body)))
 
-;; (schooz:ask X PROMPT)
-(define (schooz:ask X PROMPT)
-  (display PROMPT)
+;; (schooz:ask X prompt)
+(define (schooz:ask X prompt)
+  (display prompt)
   (schooz:now X (read)))
 
 
@@ -298,7 +298,7 @@
 (define (schooz:p-element-after-every-action)
   (schooz:after-every-action (lambda () '(("p")))))
 
-;; application of transform-action to list of the form ((ACTIONTEXT1 FUNC1) (ACTIONTEXT2 FUNC2)...)
+;; application of transform-action to list of the form ((action-text1 func1) (action-text2 func2)...)
 (define (schooz:transform-action-list lst)
   (if
    (null? lst)
