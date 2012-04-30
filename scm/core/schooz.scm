@@ -3,6 +3,9 @@
 
 (define schooz:version 1)
 
+;; The first part of this file just defines shortcuts for the most commonly-used functions,
+;; dropping the "schooz:" prefix; e.g. (link...) instead of (schooz:link...)
+
 ;; (link* text action-text func)
 (define
   (link* LINK action func)
@@ -51,6 +54,8 @@
 ;; (main-loop)  ... terminal only
 (define (main-loop) (schooz:main-loop))
 
+
+;; Now come the actual function definitions.
 
 ;; Internal functions.
 ;; Simple fold

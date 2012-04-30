@@ -1,4 +1,7 @@
 
+;; The first part of this file just defines shortcuts for the most commonly-used functions,
+;; dropping the "schooz:" prefix; e.g. (link...) instead of (schooz:link...)
+
 ;; (machine-names)  ... returns the list of names of all state-machine objects
 (define
   (machine-names)
@@ -110,6 +113,9 @@
 ;; (quit)
 (define (quit) (schooz:quit))
 
+
+
+;; Now come the actual data structures and function definitions.
 
 ;; Core data structures.
 ;; Object->state->descriptor hashtable
