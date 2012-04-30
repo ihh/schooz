@@ -1,6 +1,7 @@
 ;; Constants
 (define schooz:onclick-element-id-prefix "schoozLink")
 (define schooz:popup-element-id-prefix "schoozPopup")
+(define schooz:popup-parent-element-id-suffix "Link")
 (define schooz:view-element-id "schoozText")
 (define schooz:js-notify-function "schoozUpdate")
 
@@ -10,7 +11,7 @@
 (define schooz:choice-list-css-class "choice-list")
 
 (define schooz:js-hide-popups-function "hideAllPopups")
-(define schooz:js-delete-popups-function "deleteAllPopups")
+(define schooz:js-attach-popups-function "attachPopups")
 
 ;; String constants shown to player
 (define schooz:cancel-text "Cancel")  ;; text to cancel a menu choice
@@ -53,18 +54,18 @@
   (js-closure
    (lambda ()
      (display (string-append "Action: " label "\n"))
-     (schooz:js-delete-popups)
      (schooz:reset-onclick-bindings)
      (let ((action-result (action-func)))
        (schooz:js-set-view action-result)
        (schooz:js-bind-funcs)
-       (schooz:js-notify)))))
+       (schooz:js-notify)
+       (schooz:js-attach-popups)))))
 
 (define (schooz:js-notify)
   (js-call (js-eval schooz:js-notify-function)))
 
-(define (schooz:js-delete-popups)
-  (js-call (js-eval schooz:js-delete-popups-function)))
+(define (schooz:js-attach-popups)
+  (js-call (js-eval schooz:js-attach-popups-function)))
 
 (define (schooz:js-element-by-id id)
   (string-append "document.getElementById('" id "')"))
@@ -131,7 +132,11 @@
     (js-set! elt "id" popup-id)
     (js-set! elt "innerHTML" (schooz:fold-strings (list popup-content)))
     (js-invoke (js-eval "document.body") "appendChild" elt)
-    `(("a" ("@" ("href" "#") ("title" ,schooz:popup-mouseover-hint) ("onclick" ,(string-append schooz:js-popup-function "('" popup-id "',this);")))
+    `(("a" ("@"
+	    ("href" "#")
+	    ("title" ,schooz:popup-mouseover-hint)
+	    ("id" ,(string-append popup-id schooz:popup-parent-element-id-suffix))
+	    ("onclick" ,(string-append schooz:js-popup-function "('" popup-id "');")))
        ,link-text))))
 
 (define (schooz:choice-list-wrapper choice-list)

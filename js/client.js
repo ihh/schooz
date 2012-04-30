@@ -60,12 +60,18 @@ function hideAllPopups() {
     document.onclick = null;
 };
 
-function deleteAllPopups() {
+function attachPopups() {
     hideAllPopups();
     var elements = (ie) ? document.all : document.getElementsByTagName('*');
     for (i=0; i<elements.length; i++) {
-	if (elements[i].className == "popup"){
-	    elements[i].parentNode.removeChild(elements[i]);
+	if (elements[i].className == "popup") {
+	    var popupElement = elements[i];
+	    var anchorElement = document.getElementById (popupElement.id + "Link");
+	    console.log("name="+popupElement.name+" anchor="+anchorElement);
+	    elements[i].parentNode.removeChild (popupElement);
+	    if (anchorElement) {
+		anchorElement.appendChild (popupElement);
+	    }
 	}
     }
     document.onclick = null;
@@ -81,11 +87,10 @@ function centerAllPopups() {
 };
 window.onscroll = window.onresize = centerAllPopups;
 
-function makePopup (popupId, anchorElement) {
+function makePopup (popupId) {
     hideAllPopups();
     var popupElement = document.getElementById (popupId);
-    popupElement.parentNode.removeChild (popupElement);
-    anchorElement.appendChild (popupElement);
+    var anchorElement = popupElement.parentNode;
     popupElement.style.display = "block";
     popupElement.onclick = function (e) { e.stopPropagation(); };
     centerObj (popupElement);
