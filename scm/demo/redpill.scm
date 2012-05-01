@@ -227,10 +227,8 @@
    (p morpheus " frowns slightly.")
    (p morpheus " glares at you, angrily.")))
 (define (annoy-morpheus)
-  (display "In annoy-morpheus\n")
   (let ((text (list-ref morpheus-annoyed-text morpheus-annoyance)))
     (set! morpheus-annoyance (+ morpheus-annoyance 1))
-    (display "annoy-morpheus:") (write text) (display "\n")
     (list text)))
 
 (define (morpheus-minigame proposition agree dispute next)
@@ -270,7 +268,7 @@
    (p "'Yes. Well, naturally you have heard of my own modest achievments.'")
    "Are you kidding? You're a hacking legend!"
    "Nope. Never heard of you."
-   (lambda () (goto "choice"))))
+   (lambda () (goto "choice") (look))))
 
 (story*
  "conversation"
@@ -326,7 +324,9 @@
    ,(p
    "Until then, the etiquette of this particular mugging appears pretty clear.")
    ,(p
-   "Grudgingly, you fork over payment. You hope that whatever 'insight' this pill provides is worth it. Judging by the quality of dancing in the club, you are not optimistic.")))
+   "Grudgingly, you fork over payment. You hope that whatever 'insight' this pill provides is worth it. Judging by the quality of dancing in the club, you are not optimistic.")
+   ("h2" "The End")
+   ,(p "That's the end of this demo so far. You can stop politely suppressing a yawn, now.")))
 
 ;; Vignette ends here. Pill is a complete dud.
 ;; For added lulz, make occasional later references, wondering if it worked.
