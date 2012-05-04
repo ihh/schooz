@@ -293,7 +293,6 @@
 
 (define (show-choice) (goto "choice") (look))
 
-(now schooz:narrative "conversation")  ;; debug
 (story*
  "conversation"
  morpheus-alice-gambit)
