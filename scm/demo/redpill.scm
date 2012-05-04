@@ -105,6 +105,15 @@
 
 
 
+;; Wrapper for simple "Choose Your Own" scenes with some text and a menu
+;; (cyo text (text1 choice1) (text2 choice2) ...)
+(define cyo
+  (lambda args
+    (let ((text (car args))
+	  (choice-list (cdr args)))
+	  `(,text ,(apply explicit-menu choice-list)))))
+
+
 ;; The main narrative
 
 ;; Synopsis: Morpheus offers you a choice of pills.
@@ -222,54 +231,69 @@
 
 (define morpheus-annoyance 0)
 (define morpheus-annoyed-text  ;; give feedback on his escalating annoyance level
-  (list
-   (p morpheus " blinks slightly.")
-   (p morpheus " frowns slightly.")
-   (p morpheus " glares at you, angrily.")))
+  `((,morpheus " blinks slightly.")
+    (,morpheus " frowns slightly.")
+    (,morpheus " glares at you, angrily.")
+    (,morpheus " looks furious.")
+    (,morpheus " seethes with rage.")))
 (define (annoy-morpheus)
   (let ((text (list-ref morpheus-annoyed-text morpheus-annoyance)))
-    (set! morpheus-annoyance (+ morpheus-annoyance 1))
-    (list text)))
+    (if (< morpheus-annoyance (- (length morpheus-annoyed-text) 1))
+	(set! morpheus-annoyance (+ morpheus-annoyance 1)))
+    (append text (list " "))))
 
-(define (morpheus-minigame proposition agree dispute next)
-  `(,(p proposition
-	(explicit-menu
-	 (choice agree `(,(p "'" agree "', you say.")
-			 ,(p (one-of
-			      (span morpheus " nods, smiling.")
-			      (span morpheus " claps his hands.")
-			      (span "'Exactly!' says " morpheus "."))
-			     (next-action next))))
-	 (choice dispute `(,(p "'" dispute "', you say.") ,(annoy-morpheus) ,(next-action next)))))))
+(define (agree-choice statement result dest)
+  (choice statement `(,(p "'" statement "', you say.")
+		      ,(p (one-of
+			   (span morpheus " nods, smiling.")
+			   (span morpheus " claps his hands.")
+			   (span "'Exactly!' says " morpheus "."))
+			  result
+			  (next-action dest)))))
+
+(define (dispute-choice statement result dest)
+  (choice statement `(,(p "'" statement "', you say.")
+		      ,(apply p (append (annoy-morpheus) (list result)))
+		      ,(next-action dest))))
+
+(define (text-func t f) (lambda () `(,(if (string? t) (p t) (apply p t)) ,(f))))
 
 (define (morpheus-alice-gambit)
-  (morpheus-minigame
-   (p "'I bet you feel like the White Rabbit right now,' says " morpheus ".")
-   "I suppose so."
-   "Not really. The White Rabbit knew where he was going. Maybe you meant Alice?"
-   morpheus-reality-gambit))
+  (cyo
+   (p "'I bet you feel like the White Rabbit right now,' says " morpheus ". 'Running down a hole. Lost in time.'")
+   (agree-choice "I suppose so." ""
+		 morpheus-reality-gambit)
+   (dispute-choice "Not really. The White Rabbit knew where he was going. Maybe you meant Alice?"
+		   "'I meant following the rabbit, of course.'"
+		   morpheus-reality-gambit)))
 
 (define (morpheus-reality-gambit)
-  (morpheus-minigame
-   (p "'Have you ever wondered about the nature of reality?'")
-   "I suppose so."
-   "No. That's a dumb question."
-   morpheus-exploits-gambit))
+  (cyo
+   (p "'Have you ever wondered about the nature of reality?' " morpheus " asks.")
+   (agree-choice "I suppose so." ""
+		 morpheus-exploits-gambit)
+   (dispute-choice "No. That's a dumb question." ""
+		   morpheus-exploits-gambit)))
 
 (define (morpheus-exploits-gambit)
-  (morpheus-minigame
+  (cyo
    (p "'You are an impressive hacker. Your exploits have come to our attention.'")
-   "I'm flattered."
-   "You haven't heard the least of my exploits."
-   morpheus-own-exploits-gambit))
+   (agree-choice "I'm flattered." ""
+		 morpheus-own-exploits-gambit)
+   (dispute-choice "You haven't heard the least of my exploits." ""
+		   morpheus-own-exploits-gambit)))
 
 (define (morpheus-own-exploits-gambit)
-  (morpheus-minigame
+  (cyo
    (p "'Yes. Well, naturally you have heard of my own modest achievments.'")
-   "Are you kidding? You're a hacking legend!"
-   "Nope. Never heard of you."
-   (lambda () (goto "choice") (look))))
+   (agree-choice "Are you kidding? You're a hacking legend!" ""
+		 show-choice)
+   (dispute-choice "Nope. Never heard of you." ""
+		   show-choice)))
 
+(define (show-choice) (goto "choice") (look))
+
+(now schooz:narrative "conversation")  ;; debug
 (story*
  "conversation"
  morpheus-alice-gambit)

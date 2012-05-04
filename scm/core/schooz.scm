@@ -26,13 +26,15 @@
   (choice action-text func-body)
   `(schooz:choice ,action-text ,func-body))
 
-;; (menu text action-list)
+;; (menu link-text (text1 action1) (text2 action2) ...)
 (define menu (lambda args (apply schooz:menu args)))
 
-;; (explicit-menu action-list)
+;; (explicit-menu (text1 action1) (text2 action2) ...)
 (define explicit-menu (lambda args (apply schooz:explicit-menu args)))
 
+
 ;; (ask X PROMPT)
+;; currently unimplemented by JavaScript client
 (define (ask X PROMPT)
   (schooz:ask X PROMPT))
 
