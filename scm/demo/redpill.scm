@@ -104,15 +104,37 @@
   (auto-machine name inc-function descriptor-list)))
 
 
-
-;; Wrapper for simple "Choose Your Own" scenes with some text and a menu
-;; (cyo text (text1 choice1) (text2 choice2) ...)
-(define cyo
+;; Wrapper for simple "Choose Your Own" actions with some text and a menu
+;; (cyoa text (text1 choice1) (text2 choice2) ...)
+(define cyoa
   (lambda args
     (let ((text (car args))
 	  (choice-list (cdr args)))
-	  `(,text ,(apply explicit-menu choice-list)))))
+      `(,text ,(apply explicit-menu choice-list)))))
 
+;; Wrapper for simple "Choose Your Own" actions that uses the story-machine mechanism
+(define cyo
+  (lambda args
+    (let ((state (unique-narrative-state))
+	  (text (car args))
+	  (choice-list (cdr args)))
+      (story
+       state
+       `(,text ,(apply explicit-menu choice-list)))  ;; putting declaration inside action is a sucky hack, to prevent symbol binding errors by delaying evaluation of choice-list. Note this may give unexpected behavior if the state is re-entered (e.g. embedded initialization code will be re-run every time)
+      (goto state)
+      (look))))
+
+;; Helpers for the cyo storymachine wrapper
+(define (make-unique-id hash clue)
+  (if (eq? (hashtable-ref hash clue #f) #f)
+      clue
+      (make-unique-id hash (+ clue 1))))
+
+(define (unique-state machine)
+  (let ((desc (hashtable-ref schooz:desc machine #f)))
+    (number->string (make-unique-id desc (hashtable-size desc)))))
+
+(define (unique-narrative-state) (unique-state schooz:narrative))
 
 ;; The main narrative
 
@@ -251,7 +273,7 @@
 			  result
 			  (next-action dest)))))
 
-(define (dispute-choice statement result dest)
+(define (annoy-choice statement result dest)
   (choice statement `(,(p "'" statement "', you say.")
 		      ,(apply p (append (annoy-morpheus) (list result)))
 		      ,(next-action dest))))
@@ -262,37 +284,38 @@
   (cyo
    (p "'I bet you feel like the White Rabbit right now,' says " morpheus ". 'Running down a hole. Lost in time.'")
    (agree-choice "I suppose so." ""
-		 morpheus-reality-gambit)
-   (dispute-choice "Not really. The White Rabbit knew where he was going. Maybe you meant Alice?"
-		   "'I meant following the rabbit, of course.'"
-		   morpheus-reality-gambit)))
+		 morpheus-alice-gambit)
+   (annoy-choice "Not really. The White Rabbit knew where he was going. Maybe you meant Alice?"
+		 "'I meant... following the rabbit, of course.'"
+		 morpheus-reality-gambit)))
 
 (define (morpheus-reality-gambit)
   (cyo
    (p "'Have you ever wondered about the nature of reality?' " morpheus " asks.")
    (agree-choice "I suppose so." ""
 		 morpheus-exploits-gambit)
-   (dispute-choice "No. That's a dumb question." ""
-		   morpheus-exploits-gambit)))
+   (annoy-choice "No. That's a dumb question." ""
+		 morpheus-exploits-gambit)))
 
 (define (morpheus-exploits-gambit)
   (cyo
    (p "'You are an impressive hacker. Your exploits have come to our attention.'")
    (agree-choice "I'm flattered." ""
 		 morpheus-own-exploits-gambit)
-   (dispute-choice "You haven't heard the least of my exploits." ""
-		   morpheus-own-exploits-gambit)))
+   (annoy-choice "You haven't heard the least of my exploits." ""
+		 morpheus-own-exploits-gambit)))
 
 (define (morpheus-own-exploits-gambit)
   (cyo
    (p "'Yes. Well, naturally you have heard of my own modest achievments.'")
    (agree-choice "Are you kidding? You're a hacking legend!" ""
 		 show-choice)
-   (dispute-choice "Nope. Never heard of you." ""
-		   show-choice)))
+   (annoy-choice "Nope. Never heard of you." ""
+		 show-choice)))
 
 (define (show-choice) (goto "choice") (look))
 
+;(now schooz:narrative "conversation")  ;; debug
 (story*
  "conversation"
  morpheus-alice-gambit)

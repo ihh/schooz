@@ -8,20 +8,20 @@
 
 ;; (link* text action-text func)
 (define
-  (link* LINK action func)
-  (schooz:link* LINK action func))
+  (link* link-text action func)
+  (schooz:link* link-text action func))
 
 ;; (link text action-text func-body)
 (define-macro
-  (link LINK action func-body)
-  `(schooz:link ,LINK ,action ,func-body))
+  (link link-text action func-body)
+  `(schooz:link ,link-text ,action ,func-body))
 
-;; (schooz:choice* action-text func)  ... simple helper/wrapper
+;; (choice* action-text func)  ... simple helper/wrapper
 (define
   (choice* action-text func)
   (schooz:choice* action-text func))
 
-;; (schooz:choice action-text func-body)
+;; (choice action-text func-body)
 (define-macro
   (choice action-text func-body)
   `(schooz:choice ,action-text ,func-body))
@@ -158,8 +158,8 @@
     return-value))
 
 ;; (schooz:link text action-text func-body)
-(define-macro (schooz:link LINK action func-body)
-  `(schooz:link* ,LINK ,action (lambda () ,func-body)))
+(define-macro (schooz:link link-text action func-body)
+  `(schooz:link* ,link-text ,action (lambda () ,func-body)))
 
 ;; (schooz:menu link-text (text1 action1) (text2 action2) ...)
 (define schooz:menu
