@@ -163,7 +163,7 @@
    "A snare-drum and hi-hat rap out a martial duet."
    "A sampled vocal shrieks: \"My twisted love affair, m-my twisted love affair...\""
    "Over on the dancefloor strobe lights flicker over vacant faces, jumbled arms and legs."
-   "A synthesizer warbles a gut-wobbling bassline."
+   "A gut-wobbling bassline rolls in a maddening loop."
    "A tortured techno riff pounds from the speaker stacks."
    "On the dancefloor, you can glimpse gurning faces, grinding teeth."
    "Sweat and dry ice. And a stifling humidity."
@@ -197,18 +197,19 @@
    ,(p "This is a dynamic hypertext story.")
    ,(p "Move the mouse pointer over any of the "
        `("i" "pop-up links")
-       ", i.e. " (describe "grayed-out boxes")
+       ", i.e. " (describe "gray boxes")
        ", to see a choice (or a menu of choices) of action(s) that you can perform in the story.")
    ,(p "Click on any of the choice buttons to advance the story, or mouseover a different "
        (describe "pop-up link"))
-   ,(p "Hint: if you want the choice menu to stick around, rather than disappearing"
-       " when you move the mouse away from it, click on the pop-up link.")
-   ,(p "Click on the 'Next' button to go back to the story.")
+   ,(p "Hint: if you want the choice menu to stick around "
+       "(rather than disappearing when you move the mouse away from it),"
+       " click on the pop-up link.")
+   ,(p "You can also click on any buttons you see in the text. Click on this 'Next' button to go back to the story:")
    ,(next-return)))
  
 (expandable-machine
- "grayed-out boxes"
- "grayed-out boxes" ""
+ "gray boxes"
+ "gray boxes" ""
  "Click on this button!"
  `("b" " just like the one you just clicked on"))
 

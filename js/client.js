@@ -32,11 +32,12 @@ function centerObj(obj) {
 
     var curTop = parseInt(obj.style.top);
     var nbrHeight = parseInt(nbr.offsetHeight);
-    curTop += nbrHeight - 2;  // the -2 is so there's no clear space between popup and link
+    var nbrPadding = parseInt(window.getComputedStyle(nbr,null).getPropertyValue("padding"));
+    curTop += nbrHeight - nbrPadding - 1;  // ensure no space between elements
     obj.style.top = curTop + "px";
 }
 
-function clickOutsidePopupToHide(e) {
+function hideIfEventOutsidePopup(e) {
     e = e || event;
     var target = e.target || e.srcElement;
     do {
@@ -49,8 +50,8 @@ function clickOutsidePopupToHide(e) {
     // Click was outside the popup, hide it.
     hideAllPopups();
 }
-function delayedClickOutsidePopupToHide() { document.onclick = clickOutsidePopupToHide; }
-function delayedMouseOutsidePopupToHide() { document.onmouseover = clickOutsidePopupToHide; }
+function hideOnNextClickOutsidePopup() { document.onclick = hideIfEventOutsidePopup; }
+function hideOnNextMouseOutsidePopup() { document.onmouseover = hideIfEventOutsidePopup; }
 
 function hideAllPopups() {
     var elements = (ie) ? document.all : document.getElementsByTagName('*');
@@ -112,9 +113,9 @@ function makePopup (popupId, clicked) {
 	popupElement.onclick = function (e) { e.stopPropagation(); };
 	centerObj (popupElement);
 	
-	document.onclick = clicked ? delayedClickOutsidePopupToHide : clickOutsidePopupToHide;
+	document.onclick = clicked ? hideOnNextClickOutsidePopup : hideIfEventOutsidePopup;
 
-	document.onmouseover = clicked ? null : delayedMouseOutsidePopupToHide;
+	document.onmouseover = clicked ? null : hideOnNextMouseOutsidePopup;
 
 	popupAnchor.removeAttribute ("title");  // prevent mouseover hint appearing after link already clicked, obscuring popup buttons
     }

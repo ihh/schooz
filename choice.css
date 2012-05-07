@@ -2,9 +2,12 @@
 {
     color: black;
     background: Gainsboro;
+    white-space: nowrap;
     text-decoration: none;
     cursor: pointer;
     padding: 2px;
+    padding-left: 3px;
+    padding-right: 3px;
     border-radius: 3px;
 }
 
@@ -19,6 +22,7 @@
     height: auto;
     display: none;
     border-radius: 5px;
+    cursor: default;
 }
 
 .choice-button
