@@ -1,8 +1,8 @@
-a:link { color:blue; }
-a:visited { color:blue; }
-
-.paragraph
+a
 {
+    color: black;
+    background: Gainsboro;
+    text-decoration: none;
 }
 
 .popup

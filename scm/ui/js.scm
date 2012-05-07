@@ -55,7 +55,7 @@
 (define (schooz:js-wrap-action action-func label)
   (js-closure
    (lambda ()
-     (display (string-append "Action: " label "\n"))
+;     (display (string-append "Action: " label "\n"))
      (schooz:reset-onclick-bindings)
      (let ((action-result (action-func)))
        (schooz:js-set-view action-result)
@@ -138,7 +138,8 @@
 	    ("href" "#")
 	    ("title" ,schooz:popup-mouseover-hint)
 	    ("id" ,(string-append popup-id schooz:popup-parent-element-id-suffix))
-	    ("onclick" ,(string-append schooz:js-popup-function "('" popup-id "');")))
+	    ("onclick" ,(string-append schooz:js-popup-function "('" popup-id "',1);"))
+	    ("onmouseover" ,(string-append schooz:js-popup-function "('" popup-id "',0);")))
        ,link-text))))
 
 (define (schooz:choice-list-wrapper choice-list)
@@ -168,11 +169,11 @@
 (define (schooz:impl-link* link-text action-text action-func)
 ;  (schooz:anchor link-text action-text action-func))
   (let ((popup-id (schooz:next-popup-id)))
-    (schooz:popup link-text popup-id (schooz:choice-list-with-cancel popup-id `((,action-text ,action-func))))))
+    (schooz:popup link-text popup-id (schooz:choice-list `((,action-text ,action-func))))))
 
 (define (schooz:impl-menu* link-text action-list)
   (let ((popup-id (schooz:next-popup-id)))
-    (schooz:popup link-text popup-id (schooz:choice-list-with-cancel popup-id action-list))))
+    (schooz:popup link-text popup-id (schooz:choice-list action-list))))
 
 (define (schooz:impl-explicit-menu* action-list)
   (schooz:choice-list action-list))

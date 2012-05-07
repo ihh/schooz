@@ -32,7 +32,7 @@ function centerObj(obj) {
 
     var curTop = parseInt(obj.style.top);
     var nbrHeight = parseInt(nbr.offsetHeight);
-    curTop += nbrHeight;
+    curTop += nbrHeight - 1;
     obj.style.top = curTop + "px";
 }
 
@@ -58,6 +58,8 @@ function hideAllPopups() {
 	}
     }
     document.onclick = null;
+    document.onmouseover = null;
+    popupClicked = 0;
 };
 
 function attachPopups() {
@@ -74,6 +76,7 @@ function attachPopups() {
 	}
     }
     document.onclick = null;
+    document.onmouseover = null;
 };
 
 function centerAllPopups() {
@@ -86,15 +89,25 @@ function centerAllPopups() {
 };
 window.onscroll = window.onresize = centerAllPopups;
 
-function makePopup (popupId) {
-    hideAllPopups();
-    var popupElement = document.getElementById (popupId);
-    var anchorElement = popupElement.parentNode;
-    popupElement.style.display = "block";
-    popupElement.onclick = function (e) { e.stopPropagation(); };
-    centerObj (popupElement);
-    document.onclick = function() { document.onclick = clickOutsidePopupToHide; };
-    anchorElement.removeAttribute ("title");  // prevent mouseover text appearing after link already clicked, obscuring popup buttons
+var popupClicked = 0;
+function makePopup (popupId, clicked) {
+    if (clicked == 1 || popupClicked == 0) {
+	hideAllPopups();
+	popupClicked = clicked;
+	var popupElement = document.getElementById (popupId);
+	var anchorElement = popupElement.parentNode;
+	popupElement.style.display = "block";
+	popupElement.onclick = function (e) { e.stopPropagation(); };
+	centerObj (popupElement);
+	
+	var delayedClickOutsidePopupToHide = function() { document.onclick = clickOutsidePopupToHide; };
+	document.onclick = clicked ? delayedClickOutsidePopupToHide : clickOutsidePopupToHide;
+
+	var delayedMouseOutsidePopupToHide = function() { document.onmouseover = clickOutsidePopupToHide; };
+	document.onmouseover = clicked ? null : delayedMouseOutsidePopupToHide;
+
+	anchorElement.removeAttribute ("title");  // prevent mouseover hint appearing after link already clicked, obscuring popup buttons
+    }
 }
 
 // first define schoozNotify function

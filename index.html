@@ -10,26 +10,10 @@
 <div id="schoozText"></div>
 
 <hr/>
-<p class="paragraph"><button type="button" id="buttonText" onclick="bsConsoleToggle();">Debug</button></p>
-
-<div id="bs-console" style="display:none"></div>
+<div id="bs-console"></div>
 
 <script src="lib/biwascheme/biwascheme.js"></script>
 <script src="js/client.js"></script>
-
-<script language="javascript"> 
-  function bsConsoleToggle() {
-    var ele = document.getElementById("bs-console");
-    var text = document.getElementById("buttonText");
-    if(ele.style.display == "block") {
-      ele.style.display = "none";
-      text.innerHTML = "Debug";
-    } else {
-      ele.style.display = "block";
-      text.innerHTML = "Hide";
-    }
-  }
-</script>
 
 </body>
 </html>
