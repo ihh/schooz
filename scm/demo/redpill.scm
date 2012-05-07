@@ -31,9 +31,10 @@
 
 ;; HTML helpers
 (define h1 (lambda args `("h1" ,@args)))
+(define h2 (lambda args `("h2" ,@args)))
 
 ;; Strings
-(define morpheus "Morphetikus")
+(define morpheus "Morph33n")
 
 ;; Helper functions (move these to core libraries?)
 ;; Expandable objects
@@ -158,19 +159,20 @@
 
 ;; Club music
 (random-machine
- "club-music"
- `("A distorted kick-drum pounds a disrupted rhythm."
-   "A snare-drum and hi-hat rap out a martial duet."
+ "club-music"  ;; you are a geeky teenager, you hate this
+ `("The music is disco, or something, although the kick-drum sounds distorted and the rhythm disrupted. Pretty dull."
+   "A snare-drum and cymbal rap out a martial duet. How do people even think this is music? It does sound kind of digital, though, which is cool."
    "A sampled vocal shrieks: \"My twisted love affair, m-my twisted love affair...\""
    "Over on the dancefloor strobe lights flicker over vacant faces, jumbled arms and legs."
-   "A gut-wobbling bassline rolls a maddening loop."
-   "A tortured techno riff pounds from the speaker stacks."
+   "A gut-wobbling bassline rolls in a maddeningly repetitive loop."
+   "A tortured techno riff pounds from the speaker stacks, killing your ears."
    "On the dancefloor, you can glimpse gurning faces, grinding teeth."
    "Sweat and dry ice. And a stifling humidity."
-   "A spiralling bass whoop rattles glasses on the tables."))
+   "A spiralling bass whoop rattles glasses on the tables."
+   "The music is, like, really hypnotic American disco or something. Very repetitive vocals."))
 
 ;; Club ambience
-(define (h1-club-front) `(,(h1 "Nightclub") ,(p `("i" ,(describe "club-music"))) ,(p)))
+(define (h1-club-front) `(,(h1 "Nightclub") ,(h2 "London, 1985") ,(p `("i" ,(describe "club-music"))) ,(p)))
 (define (h1-club) `(,(h1 "Back of the club") ,(p `("i" ,(describe "club-music"))) ,(p)))
 
 ;; Opening scene (prelude)
@@ -178,23 +180,31 @@
  "nightclub"
  `(,(h1-club-front)
    ,(p
-     "In the front area of the club, you are "
-     (link-goto "accosted" "meet-morpheus" "I object to being hustled like this!" "The more strenuously you object, the more attention you seem to draw from other clubgoers; until without quite realizing how, you are surrounded by four or five people, walking you irresistibly towards the back of the club.")
-     " by two of the strangest-looking ravers you have seen. "
-     (link-goto "Goth Catwoman" "meet-morpheus" "Examine Goth Catwoman" "You stare at Goth Catwoman. She smiles, then pushes you in the chest hard. You fall back a step, then all of a sudden she and her friend are hustling you gently, but irresistibly, to the back part of the club.")
+     "Reason #4,096 to hate nightclubs: No sooner have you entered than you are "
+     (link-goto "accosted" "meet-morpheus" "I object to being hustled like this!" "Despite your weak objections, you are easily hustled to the back of the club.")
+     " by two punks.")
+   ,(p "Well, the girl is more Gothic, maybe. They look a bit like "
+     (link-goto "Siouxsie" "meet-morpheus" "Examine 'Siouxsie'" "You stare at 'Siouxsie'. She smiles, then pushes you in the chest hard. You fall back a step, then all of a sudden she and her friend are hustling you gently, but irresistibly, to the back part of the club.")
      " and "
-     (link-goto "Punk Dwarf" "meet-morpheus" "Examine Punk Dwarf" "The punk catches you staring, saunters over and spits at your feet. Catwoman grabs your arm and hauls you to the back.")
-   ", you mentally categorize them as.")
-   ,(p
-     "The tall one invites you to "
-     (link-goto "meet her colleague" "meet-morpheus" "OK, let's meet this mysterious 'colleague'." "The tall catlady ushers you to the back of the club, while her grumpier half growls at bad dancers.")
-     " in a back room of the nightclub.")
+     (link-goto "Billy Idol" "meet-morpheus" "Examine 'Billy Idol'" "The punk catches you staring, saunters over and begins preparing a mouthful of spit. Horrified, you turn and run in the direction they evidently want you to go.")
+   ", actually.")
+   ,(p "\"The computer hacker! "
+       (link-goto
+	"Anarchist computer hacker." "meet-morpheus" "Examine myself"
+	`(,(p "It's true what the lady said. You are a teenage hacker, 17 years old and beyond the law.")
+	  ,(p "It has to be said, clubs like this wouldn't normally let you in. But your chatline contact promised you'd be welcome, and here you are.")
+	  ,(p "Best do what the Goth asks, I suppose.")
+	  ,(p "You proceed to the back of the club, the aggressive punk unclipping a velvet rope for you. VIP treatment for the l33t hacker. Nice.")))
+       " We like anarchy, don't we?\" the one like Siouxsie says.")
+   ,(p "\"I have a "
+     (link-goto "colleague" "meet-morpheus" "OK, let's meet this mysterious 'colleague'." "You agree with a smile, as if you have any say in it. The tall gothic lady ushers you to the back of the club, while her other half growls at bad dancers.")
+     " in need of your talents,\" she continues, tilting her head towards a back room.")
    ,(simple-button* "First-time player? Click here!" (lambda () (gosub "tutorial") (look)))))
 
 (story
  "tutorial"
  `(,(h1 "Instructions")
-   ,(p "This is a dynamic hypertext story.")
+   ,(p "This is a dynamic hypertext story. Basically, just hypertext with menus.")
    ,(p "Move the mouse pointer over any of the "
        `("i" "pop-up links")
        ", i.e. " (describe "gray boxes")
@@ -226,15 +236,14 @@
    ,(p
      "In an armchair"
      (first ", orbited by various flavors of weirdo, sits" (string-append " sits " morpheus ", orbited by weirdos,"))
-     " an obvious " (describe "bigshot") " of this scene. Catwoman gave him the faintest bow when you arrived"
-     (once " (almost imperceptible, but you could tell) and Punk Dwarf snarls at everyone BUT him") ".")
+     " an obvious " (describe "bigshot") " of this scene. Siouxsie gave him the faintest bow when you arrived"
+     (once " (almost imperceptible, but you could tell) and Billy Idol snarls at everyone BUT him") ".")
    ,(if (state "bigshot")
 	`(,(p
 	  "Why 'bigshot'? Well, even loafing in a big comfy chair, he is more than a little intimidating. It doesn't hurt that he's physically domineering, and looks intelligent (you can't see his eyes behind those mirrorshades, but he's got poise).")
-	  ,(p
-	  "Still, you wonder how leather jackets that heavy survived the heyday of " (describe "the-who"))))
+	  ,(p "But that's not the point. This is " morpheus ". " morpheus "! The legendary conqueror of Minitel. Though his dress sense is awful - leather jackets that heavy went out with " (describe "the-who"))))
    ,(once
-     (p "The man introduces himself as " `("b" ,morpheus) " - a name he clearly thought you knew already, and probably expects you to remember how to spell."))
+     (p "'You know well who I am,' says the man in the chair solemnly; rather undermining this claim by holding up a business card, on which is written " `("b" "'" ,morpheus "'" ".")))
    ,(apply p (cons (first "He" morpheus)
 		   (describe "morpheus-intro-gaze")))))
 
@@ -242,7 +251,7 @@
    "the-who"
    "The Who" "."
    "The Who?"
-   (p "(The Who were a British rock band of the 60's and 70's. Their followers - 'mods' - did often wear long leather coats. Probably to stash big bags of pills in, now you come to think of it.)"))
+   (p "(The Who were a British rock band of the 60's and 70's. Their followers - 'mods' - did often wear long leather coats. Why are you even thinking about this now?)"))
 ;; Note that flipping the switch will use up a "turn".
 
 (one-way-switch
@@ -252,11 +261,11 @@
 
 (define (morpheus-intro-choice pre-text stare-text intervening-text speak-text post-text)
   `(,pre-text " "
-    ,(link-goto stare-text "conversation" "Fine, you want to stare?"
+    ,(link-goto stare-text "conversation" (string-append "Stare at " morpheus)
 		`("You stare at each other for a while. Then " ,morpheus " clears his throat."))
     " " ,intervening-text " "
-    ,(link-goto speak-text "conversation" "This guy is extremely irritating."
-		`("'Speak up, then,' you say, irritated. 'You asked me here, after all.'" ,(p morpheus " grins.")))
+    ,(link-goto speak-text "conversation" "Try to say something cool"
+		`("'Speak up, then,' you say, feigning boredom. 'You asked me here, after all.'" ,(p morpheus " grins.")))
     ,post-text))
 
 (fuse-machine
@@ -373,17 +382,17 @@
 (story
  "choice"
  `(,(h1-club)
-   ;; This could be a separately-defined function; it will probably be offered as an exit-point from several chapters
-   ,morpheus " offers you a choice between a "
-   ,(link-goto "red pill" "pill" "Take the red pill."
+   ,(p "\"What I am trying to say,\" says " morpheus ", \"is that there is a reality of which you are completely, completely unaware. And I can show it to you. If you take a blue pill, you can forget your troubles and I am totally cool with that; but if you want to open your mind - and I'm telling you now that we're talking a higher level of consciousness, here - then you are going to want to try the red pill.\"")
+   ,(p morpheus " offers you a choice between a "
+       (link-goto "red pill" "pill" "Take the red pill."
 	       (begin (now "pill" "red") "Silently, he hands over the red pill."))
-   " and a "
-   ,(link-goto "blue pill." "pill" "Take the blue pill."
-	       (begin (now "pill" "blue") "Silently, he hands over the blue pill."))))
+       " and a "
+       (link-goto "blue pill." "pill" "Take the blue pill."
+		  (begin (now "pill" "blue") "Silently, he hands over the blue pill.")))))
 
 ;; Other options:
 ;; Try to politely decline the offer, but Morpheus insists that there 
-;; Try to leave at this point and be physically restrained by Catwoman or PD
+;; Try to leave at this point and be physically restrained by Siouxsie or Billy
 
 (story
  "pill"
@@ -391,9 +400,9 @@
    "You crunch the pill between your teeth. Bitter.")
    ,(p
    morpheus " nods approvingly. 'You will soon see the truth,' he says. 'And now, if you wouldn't mind, that will be "
-   (link-goto "twenty dollars" "payment"
-	       "Twenty dollars. That's a bit expensive, isn't it?"
-	       `(,(p "'Twenty dollars,' you remark. 'Truth is expensive, then?'") ,(p "'The path to insight is not without material externalities,' he agrees.")))
+   (link-goto "fifty pounds" "payment"
+	       "Fifty pounds. That's a bit expensive, isn't it?"
+	       `(,(p "'Fifty pounds,' you remark. 'Truth is expensive, then?'") ,(p "'The path to insight is not without material externalities,' he agrees.")))
    " for the "
    (link-goto "pill.'" "payment"
 	      "I thought this pill was supposed to be free, anyway."
@@ -401,7 +410,7 @@
 
 (story
  "payment"
- `(,(p "You feel strongly motivated to debate this topic further, but are now keenly aware that the attentions of Punk Dwarf are sharply focused upon you, along with several other members of the crew.")
+ `(,(p "You feel strongly motivated to debate this topic further, but are now keenly aware that the attentions of 'Billy Idol' are sharply focused upon you, along with several other members of the crew.")
    ,(p
    "The bottom line, and you now kick yourself for realizing this, is that you have eaten a pill that an unknown stranger has given you, in a nightclub, under an implied contract of payment which - while unstated - is hardly unusual either.")
    ,(goto "payment2")))
@@ -414,7 +423,7 @@
    ,(p
    "Grudgingly, you fork over payment. You hope that whatever 'insight' this pill provides is worth it. Judging by the quality of dancing in the club, you are not optimistic.")
    ("h2" "The End")
-   ,(p "That's the end of this demo so far. You can stop politely suppressing a yawn, now.")))
+   ,(p "That's the end of this demo so far. Reload the page to play it a different way.")))
 
 ;; Vignette ends here. Pill is a complete dud.
 ;; For added lulz, make occasional later references, wondering if it worked.
