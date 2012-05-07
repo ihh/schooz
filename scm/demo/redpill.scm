@@ -160,7 +160,7 @@
 ;; Club music
 (random-machine
  "club-music"  ;; you are a geeky teenager, you hate this
- `("The music is disco, or something, although the kick-drum sounds distorted and the rhythm disrupted. Pretty dull."
+ `("The music is disco, or something, although the kick-drum sounds distorted and the rhythm disrupted."
    "A snare-drum and cymbal rap out a martial duet. How do people even think this is music? It does sound kind of digital, though, which is cool."
    "A sampled vocal shrieks: \"My twisted love affair, m-my twisted love affair...\""
    "Over on the dancefloor strobe lights flicker over vacant faces, jumbled arms and legs."
@@ -191,14 +191,15 @@
    ,(p "\"The computer hacker! "
        (link-goto
 	"Anarchist computer hacker." "meet-morpheus" "Examine myself"
-	`(,(p "It's true what the lady said. You are a teenage hacker, 17 years old and beyond the law.")
+	`(,(p "It's true what the lady said. You are a teenage hacker, 17 years old. Too young to prosecute...")
 	  ,(p "It has to be said, clubs like this wouldn't normally let you in. But your chatline contact promised you'd be welcome, and here you are.")
 	  ,(p "Best do what the Goth asks, I suppose.")
 	  ,(p "You proceed to the back of the club, the aggressive punk unclipping a velvet rope for you. VIP treatment for the l33t hacker. Nice.")))
        " We like anarchy, don't we?\" the one like Siouxsie says.")
    ,(p "\"I have a "
-     (link-goto "colleague" "meet-morpheus" "OK, let's meet this mysterious 'colleague'." "You agree with a smile, as if you have any say in it. The tall gothic lady ushers you to the back of the club, while her other half growls at bad dancers.")
+     (link-goto "colleague" "meet-morpheus" "OK, let's meet this mysterious 'colleague'." "'Yeah, cool!' you burble, as if you have any say in it. The tall gothic lady ushers you to the back of the club, while her other half growls at bad dancers.")
      " in need of your talents,\" she continues, tilting her head towards a back room.")
+   ,(p "Well, this is something. Recognition, at last!")
    ,(simple-button* "First-time player? Click here!" (lambda () (gosub "tutorial") (look)))))
 
 (story
@@ -241,9 +242,9 @@
    ,(if (state "bigshot")
 	`(,(p
 	  "Why 'bigshot'? Well, even loafing in a big comfy chair, he is more than a little intimidating. It doesn't hurt that he's physically domineering, and looks intelligent (you can't see his eyes behind those mirrorshades, but he's got poise).")
-	  ,(p "But that's not the point. This is " morpheus ". " morpheus "! The legendary conqueror of Minitel. Though his dress sense is awful - leather jackets that heavy went out with " (describe "the-who"))))
+	  ,(p "But that's not even the point. This is " morpheus ". " morpheus "! The legendary conqueror of Minitel. Though his dress sense is awful - leather jackets that heavy went out with " (describe "the-who"))))
    ,(once
-     (p "'You know well who I am,' says the man in the chair solemnly; rather undermining this claim by holding up a business card, on which is written " `("b" "'" ,morpheus "'" ".")))
+     (p "'You know well who I am,' says the man in the chair solemnly; perhaps rather undermining this claim by holding up a business card, on which is written " `("b" "'" ,morpheus "'" ".")))
    ,(apply p (cons (first "He" morpheus)
 		   (describe "morpheus-intro-gaze")))))
 
