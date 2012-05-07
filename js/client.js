@@ -32,9 +32,13 @@ function centerObj(obj) {
 
     var curTop = parseInt(obj.style.top);
     var nbrHeight = parseInt(nbr.offsetHeight);
-    var nbrPadding = parseInt(window.getComputedStyle(nbr,null).getPropertyValue("padding"));
+    var nbrPadding = parseInt(getStyle(nbr,"padding-bottom"));
     curTop += nbrHeight - nbrPadding - 1;  // ensure no space between elements
     obj.style.top = curTop + "px";
+}
+
+function getStyle(el,styleProp) {
+    return window.getComputedStyle(el,null).getPropertyValue(styleProp);
 }
 
 function hideIfEventOutsidePopup(e) {
@@ -50,6 +54,7 @@ function hideIfEventOutsidePopup(e) {
     // Click was outside the popup, hide it.
     hideAllPopups();
 }
+
 function hideOnNextClickOutsidePopup() { document.onclick = hideIfEventOutsidePopup; }
 function hideOnNextMouseOutsidePopup() { document.onmouseover = hideIfEventOutsidePopup; }
 
