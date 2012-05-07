@@ -49,6 +49,8 @@ function clickOutsidePopupToHide(e) {
     // Click was outside the popup, hide it.
     hideAllPopups();
 }
+function delayedClickOutsidePopupToHide() { document.onclick = clickOutsidePopupToHide; }
+function delayedMouseOutsidePopupToHide() { document.onmouseover = clickOutsidePopupToHide; }
 
 function hideAllPopups() {
     var elements = (ie) ? document.all : document.getElementsByTagName('*');
@@ -110,10 +112,8 @@ function makePopup (popupId, clicked) {
 	popupElement.onclick = function (e) { e.stopPropagation(); };
 	centerObj (popupElement);
 	
-	var delayedClickOutsidePopupToHide = function() { document.onclick = clickOutsidePopupToHide; };
 	document.onclick = clicked ? delayedClickOutsidePopupToHide : clickOutsidePopupToHide;
 
-	var delayedMouseOutsidePopupToHide = function() { document.onmouseover = clickOutsidePopupToHide; };
 	document.onmouseover = clicked ? null : delayedMouseOutsidePopupToHide;
 
 	popupAnchor.removeAttribute ("title");  // prevent mouseover hint appearing after link already clicked, obscuring popup buttons
