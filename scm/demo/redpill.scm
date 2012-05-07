@@ -203,7 +203,7 @@
 
 (story
  "tutorial"
- `(,(h1 "Instructions")
+ `(,(h1 "Help!")
    ,(p "This is a dynamic hypertext story. Basically, just hypertext with menus.")
    ,(p "Move the mouse pointer over any of the "
        `("i" "pop-up links")
