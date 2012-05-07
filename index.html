@@ -15,5 +15,35 @@
 <script src="lib/biwascheme/biwascheme.js"></script>
 <script src="js/client.js"></script>
 
+
+<div id="hint" style="display:none;">
+<br/>
+<br/>
+<i>
+  Mouse over links for popup menus of options.
+  Click anywhere outside a popup to cancel.
+</i>
+<p class="paragraph"><button type="button" id="hintButton" onclick="toggle('hint');">Hide this hint</button></p>
+</div>
+
+<script src="lib/biwascheme/biwascheme.js"></script>
+<script src="js/client.js"></script>
+
+<script language="javascript"> 
+  function toggle(id) {
+    var ele = document.getElementById(id);
+    var but = document.getElementById(id+"Button");
+    if(ele.style.display == "none") {
+      ele.style.display = "block";
+      but.innerHTML = "Hide";
+    } else {
+      ele.style.display = "none";
+      but.innerHTML = "Show";
+    }
+  }
+</script>
+
+
+
 </body>
 </html>

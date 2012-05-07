@@ -59,7 +59,12 @@ function hideAllPopups() {
     }
     document.onclick = null;
     document.onmouseover = null;
+    if (popupAnchor) {
+//	popupAnchor.style.borderStyle = "none";
+//	popupAnchor.style.borderWidth = 0;
+    }
     popupClicked = 0;
+    popupAnchor = null;
 };
 
 function attachPopups() {
@@ -90,12 +95,17 @@ function centerAllPopups() {
 window.onscroll = window.onresize = centerAllPopups;
 
 var popupClicked = 0;
+var popupAnchor = null;
 function makePopup (popupId, clicked) {
     if (clicked == 1 || popupClicked == 0) {
 	hideAllPopups();
-	popupClicked = clicked;
 	var popupElement = document.getElementById (popupId);
-	var anchorElement = popupElement.parentNode;
+	var popupAnchor = popupElement.parentNode;
+	popupClicked = clicked;
+
+//	popupAnchor.style.borderStyle = "solid";
+//	popupAnchor.style.borderWidth = "thin";
+
 	popupElement.style.display = "block";
 	popupElement.onclick = function (e) { e.stopPropagation(); };
 	centerObj (popupElement);
@@ -106,7 +116,7 @@ function makePopup (popupId, clicked) {
 	var delayedMouseOutsidePopupToHide = function() { document.onmouseover = clickOutsidePopupToHide; };
 	document.onmouseover = clicked ? null : delayedMouseOutsidePopupToHide;
 
-	anchorElement.removeAttribute ("title");  // prevent mouseover hint appearing after link already clicked, obscuring popup buttons
+	popupAnchor.removeAttribute ("title");  // prevent mouseover hint appearing after link already clicked, obscuring popup buttons
     }
 }
 

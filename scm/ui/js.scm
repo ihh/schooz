@@ -8,6 +8,7 @@
 (define schooz:paragraph-css-class "paragraph")
 (define schooz:span-css-class "span")
 (define schooz:popup-css-class "popup")
+(define schooz:popup-link-css-class "popup-link")
 (define schooz:js-popup-function "makePopup")
 (define schooz:choice-list-css-class "choice-list")
 
@@ -134,12 +135,11 @@
     (js-set! elt "id" popup-id)
     (js-set! elt "innerHTML" (schooz:fold-strings (list popup-content)))
     (js-invoke (js-eval "document.body") "appendChild" elt)
-    `(("a" ("@"
-	    ("href" "#")
-	    ("title" ,schooz:popup-mouseover-hint)
-	    ("id" ,(string-append popup-id schooz:popup-parent-element-id-suffix))
-	    ("onclick" ,(string-append schooz:js-popup-function "('" popup-id "',1);"))
-	    ("onmouseover" ,(string-append schooz:js-popup-function "('" popup-id "',0);")))
+    `(("span" ("@"
+	       ("id" ,(string-append popup-id schooz:popup-parent-element-id-suffix))
+	       ("class" ,schooz:popup-link-css-class)
+	       ("onclick" ,(string-append schooz:js-popup-function "('" popup-id "',1);"))
+	       ("onmouseover" ,(string-append schooz:js-popup-function "('" popup-id "',0);")))
        ,link-text))))
 
 (define (schooz:choice-list-wrapper choice-list)
