@@ -163,7 +163,7 @@
    "A snare-drum and hi-hat rap out a martial duet."
    "A sampled vocal shrieks: \"My twisted love affair, m-my twisted love affair...\""
    "Over on the dancefloor strobe lights flicker over vacant faces, jumbled arms and legs."
-   "A gut-wobbling bassline rolls in a maddening loop."
+   "A gut-wobbling bassline rolls a maddening loop."
    "A tortured techno riff pounds from the speaker stacks."
    "On the dancefloor, you can glimpse gurning faces, grinding teeth."
    "Sweat and dry ice. And a stifling humidity."
