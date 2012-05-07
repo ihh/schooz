@@ -6,12 +6,12 @@
 (define schooz:js-notify-function "schoozUpdate")
 
 (define schooz:paragraph-css-class "paragraph")
-(define schooz:span-css-class "span")
 (define schooz:popup-css-class "popup")
 (define schooz:popup-link-css-class "popup-link")
-(define schooz:js-popup-function "makePopup")
+(define schooz:button-css-class "choice-button")
 (define schooz:choice-list-css-class "choice-list")
 
+(define schooz:js-popup-function "makePopup")
 (define schooz:js-hide-popups-function "hideAllPopups")
 (define schooz:js-attach-popups-function "attachPopups")
 
@@ -23,7 +23,7 @@
 
 ;; HTML
 (define p (lambda args `("p" ("@" ("class" ,schooz:paragraph-css-class)) ,@args)))
-(define span (lambda args `("span" ("@" ("class" ,schooz:span-css-class)) ,@args)))
+(define span (lambda args `("span" ,@args)))
 
 ;; Functions
 (define schooz:onclick-binding (make-eq-hashtable))
@@ -118,6 +118,7 @@
   (let ((id (schooz:bound-id func button-text)))
     `("button" ("@"
 		("type" "button")
+		("class" ,schooz:button-css-class)
 		("title" ,schooz:button-mouseover-hint)
 		("id" ,id))
       ,button-text)))
@@ -125,6 +126,7 @@
 (define (schooz:hide-button button-text container-id)
   `("button" ("@"
 	      ("type" "button")
+	      ("class" ,schooz:button-css-class)
 	      ("title" ,schooz:cancel-mouseover-hint)
 	      ("onclick" ,(string-append schooz:js-hide-popups-function "()")))
     ,button-text))

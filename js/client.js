@@ -32,7 +32,7 @@ function centerObj(obj) {
 
     var curTop = parseInt(obj.style.top);
     var nbrHeight = parseInt(nbr.offsetHeight);
-    curTop += nbrHeight - 1;
+    curTop += nbrHeight - 2;  // the -2 is so there's no clear space between popup and link
     obj.style.top = curTop + "px";
 }
 

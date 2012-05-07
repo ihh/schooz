@@ -65,6 +65,19 @@
   (next-look)
   (next-action look))
 
+(define
+  (next-return)
+  (next-action (lambda () (return) (look))))
+
+;; Simple buttons
+(define
+  (simple-button* text action)
+  `(,(p (explicit-menu (choice* text action)))))
+
+(define
+  (simple-button text action-body)
+  (explicit-menu (choice text action-body)))
+
 ;; Self-propelled state machines (generic)
 (define (auto-machine name next-state-function descriptor-list)
   (let ((states (length descriptor-list)))
@@ -154,7 +167,7 @@
    "A tortured techno riff pounds from the speaker stacks."
    "On the dancefloor, you can glimpse gurning faces, grinding teeth."
    "Sweat and dry ice. And a stifling humidity."
-   "A swooping dubstep bass rattles glasses on the tables."))
+   "A spiralling bass whoop rattles glasses on the tables."))
 
 ;; Club ambience
 (define (h1-club-front) `(,(h1 "Nightclub") ,(p `("i" ,(describe "club-music"))) ,(p)))
@@ -175,7 +188,35 @@
    ,(p
      "The tall one invites you to "
      (link-goto "meet her colleague" "meet-morpheus" "OK, let's meet this mysterious 'colleague'." "The tall catlady ushers you to the back of the club, while her grumpier half growls at bad dancers.")
-     " in a back room of the nightclub.")))
+     " in a back room of the nightclub.")
+   ,(simple-button* "First-time player? Click here!" (lambda () (gosub "tutorial") (look)))))
+
+(story
+ "tutorial"
+ `(,(h1 "Instructions")
+   ,(p "This is a dynamic hypertext story.")
+   ,(p "Move the mouse pointer over any of the "
+       `("i" "pop-up links")
+       ", i.e. " (describe "grayed-out boxes")
+       ", to see a choice (or a menu of choices) of action(s) that you can perform in the story.")
+   ,(p "Click on any of the choice buttons to advance the story, or mouseover a different "
+       (describe "pop-up link"))
+   ,(p "Hint: if you want the choice menu to stick around, rather than disappearing"
+       " when you move the mouse away from it, click on the pop-up link.")
+   ,(p "Click on the 'Next' button to go back to the story.")
+   ,(next-return)))
+ 
+(expandable-machine
+ "grayed-out boxes"
+ "grayed-out boxes" ""
+ "Click on this button!"
+ `("b" " just like the one you just clicked on"))
+
+(expandable-machine
+ "pop-up link"
+ "pop-up link" " to see other options."
+ "Click on this button!"
+ `(,(span "...." `("b" "like you just did."))))
 
 ;; Start of main scene
 (story
@@ -195,6 +236,7 @@
      (p "The man introduces himself as " `("b" ,morpheus) " - a name he clearly thought you knew already, and probably expects you to remember how to spell."))
    ,(apply p (cons (first "He" morpheus)
 		   (describe "morpheus-intro-gaze")))))
+
 (expandable-machine
    "the-who"
    "The Who" "."

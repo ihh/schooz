@@ -1,6 +1,10 @@
 ;; Basic terminal interface
 ;; Defines a (schooz:main-loop) function that should be called to start the game.
 
+;; dummy HTML
+(define p (lambda args `("p" ,@args)))
+(define span (lambda args `("span" ,@args)))
+
 ;; Highlighting of links (just to show where they would be)
 (define
   (schooz:highlight text)
