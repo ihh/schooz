@@ -2,11 +2,17 @@ Global Thermonuclear War
 
 Notes.
 
+Scene 1. (Hacker)
+
 Player is trying to impress a girl by hacking into the school
 computer.
 
-Timing puzzle: period-2 and period-3 cyclers must be in sync, then you
-can get into the computer room
+Several locations in the school can be visited, introducing some key
+characters (sadistic PE teacher, school receptionist, geeky love
+interest, gay hacker friend)
+
+Library timing puzzle: period-2 and period-3 cyclers must be in sync,
+then you can get into the computer room
 - librarian putting books away
 - teacher patrolling
 - maybe you also have to flip a couple of selectables
@@ -15,6 +21,52 @@ On the computer, you have the log of a wardialling run
 Dial one of the following: Activision, Mifflin Paper, Stellar Test Prep, Oak Ridge Nat'l Lab
 You can try two before being kicked out of the computer room
 
+Somehow as a result of this, you trigger DEFCON 1 by some charmingly retro method,
+e.g. blowing a PE whistle in the presence of an acoustic coupler
+ (why would this even occur to the player? reference is to Cap'n Crunch...)
+ (Maybe the PE whistle could be obtained as a trophy after hassling the PE teacher)
+
+At some point you get contacts for followup/help. Options may include
+- go to a nightclub and meet Morph33n (suggested by love interest?)
+- go to your allies at the university
+
+
+
+Scene 2. (Love interest)
+
+Hacker tries to tell you about his exploits/problems.
+You are far more interested in telling him about high school social dynamics.
+However when you see he is agitated, you give him Morph33n's number.
+
+
+Scene 3. (Hacker)
+Nightclub.
+
+
+Scene 4. (Hacker)
+University.
+
+
+Scene 5. (Gay love interest)
+Scene 6. (Geeky love interest)
+These scenes open up the possibility of alternate companions.
+
+Scene 7. (Hacker)
+Choice of companion
+
+On the road, with your companion, pursued by the FBI.
+Captured, taken to NORAD: you learn that the computer is self-aware,
+has been taught emotion, etc.
+Escape from capture.
+
+Find the peacenik Professor (he is very like John Lennon).
+Return to NORAD.
+
+Defeat the computer by
+- making it fall in love with you
+- reasoning it into futility
+- asking a serious of mindblowing philosophical questions
+- smashing it up with an axe
 
 
 

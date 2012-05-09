@@ -273,8 +273,9 @@
 (define click-for-more-tips `("Click for more tips." ""))
 (selectable-machine
  "UI tips"
- `("What about undo?" "There is no undo feature in this game. Carefully lawn-mowering options is no way to approach a story. Live for the future, and have no regrets!" ,@click-for-more-tips)
- `("What about save?" "There is no save feature in this game. You have to live for the moment! (Lemons, lemonade, etc.)" ,@click-for-more-tips)
+ `("OK, got it; thanks." "" ,@click-for-more-tips)
+ `("Where's the undo button?" "There is no undo feature in this game. Systematically lawn-mowering options is no way to approach a story! Rest assured that it's impossible to get stuck, although some choices will commit you to different endings." ,@click-for-more-tips)
+ `("How do I save and restore?" "There is, at present, no save feature in this game. The game is designed to be played through quickly, in one sitting." ,@click-for-more-tips)
  `("It's annoying when the choices disappear!" "If you want a choice menu to stick around (rather than disappearing when you move the mouse away), click on the parent pop-up link, rather than just mousing over it." ,@click-for-more-tips))
 
 ;; Start of main scene
