@@ -1,5 +1,24 @@
 Global Thermonuclear War
 
+Notes.
+
+Player is trying to impress a girl by hacking into the school
+computer.
+
+Timing puzzle: period-2 and period-3 cyclers must be in sync, then you
+can get into the computer room
+- librarian putting books away
+- teacher patrolling
+- maybe you also have to flip a couple of selectables
+
+On the computer, you have the log of a wardialling run
+Dial one of the following: Activision, Mifflin Paper, Stellar Test Prep, Oak Ridge Nat'l Lab
+You can try two before being kicked out of the computer room
+
+
+
+
+
 Characters.
 Player character (m or f), a suburban misfit
 

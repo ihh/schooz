@@ -254,7 +254,7 @@
        ", to see a choice (or a menu of choices) of action(s) that you can perform in the story.")
    ,(p "Click on any of the choice buttons to advance the story, or mouseover a different "
        (describe "pop-up link"))
-   ,(describe "UI hints")
+   ,(describe "UI tips")
    ,(p "You can also click on any buttons you see in the text. Click on this 'Next' button to go back to the story:")
    ,(next-return)))
 
@@ -262,7 +262,7 @@
  "gray boxes"
  "gray boxes" ""
  "Click on this button!"
- `("b" " just like the one you just clicked on"))
+ `("b" " just like the one you clicked on in this sentence"))
 
 (expandable-machine
  "pop-up link"
@@ -270,12 +270,12 @@
  "Click on this button!"
  `(,(span "...." `("b" "like you just did."))))
 
-(define click-for-more-hints `("Click for more hints." ""))
+(define click-for-more-tips `("Click for more tips." ""))
 (selectable-machine
- "UI hints"
- `("What about undo?" "There is no undo feature in this game. Carefully lawn-mowering options is no way to approach a story. Live for the future, and have no regrets!" ,@click-for-more-hints)
- `("It's annoying when the choices disappear!" "If you want a choice menu to stick around (rather than disappearing when you move the mouse away), click on the parent pop-up link, rather than just mousing over it." ,@click-for-more-hints)
- `("What about save?" "There is no save feature in this game. You have to live for the moment!" ,@click-for-more-hints))
+ "UI tips"
+ `("What about undo?" "There is no undo feature in this game. Carefully lawn-mowering options is no way to approach a story. Live for the future, and have no regrets!" ,@click-for-more-tips)
+ `("What about save?" "There is no save feature in this game. You have to live for the moment! (Lemons, lemonade, etc.)" ,@click-for-more-tips)
+ `("It's annoying when the choices disappear!" "If you want a choice menu to stick around (rather than disappearing when you move the mouse away), click on the parent pop-up link, rather than just mousing over it." ,@click-for-more-tips))
 
 ;; Start of main scene
 (story
