@@ -118,6 +118,48 @@
   (auto-machine name inc-function descriptor-list)))
 
 
+;; Machines whose state the player can select
+(define 
+  selectable-machine
+  (lambda args
+    (let* ((name (car args))
+	   (state-info-list (cdr args))
+	   (states (length state-info-list))
+	   (state-list (iota states))
+	   (state-action-text (map
+			       (lambda (state-info)
+				 (car state-info))
+			       state-info-list)))
+      (map
+       (lambda (s)
+	 (let* ((state-info (list-ref state-info-list s))
+		(action-text (car state-info))
+		(pre-text (cadr state-info))
+		(link-text (caddr state-info))
+		(post-text (cadddr state-info))
+		(next-state-list (if (>= (length state-info) 5)  ;; optional argument
+				     (caddddr state-info)
+				     (grep-not-equal s state-list))))
+	   (description*
+	    name
+	    s
+	    (lambda ()
+	      (p pre-text
+		 " "
+		 (if (equal? next-state-list '())
+		     link-text
+		     (apply menu
+			    (cons
+			     link-text
+			     (map (lambda (d)
+				    (choice*
+				     (list-ref state-action-text d)
+				     (lambda () (now name d) (look))))
+				  next-state-list))))
+		 " "
+		 post-text)))))
+       state-list))))
+
 ;; Wrapper for simple "Choose Your Own" actions with some text and a menu
 ;; (cyoa text (text1 choice1) (text2 choice2) ...)
 (define cyoa
@@ -212,12 +254,10 @@
        ", to see a choice (or a menu of choices) of action(s) that you can perform in the story.")
    ,(p "Click on any of the choice buttons to advance the story, or mouseover a different "
        (describe "pop-up link"))
-   ,(p "Hint: if you want the choice menu to stick around "
-       "(rather than disappearing when you move the mouse away from it),"
-       " click on the pop-up link.")
+   ,(describe "UI hints")
    ,(p "You can also click on any buttons you see in the text. Click on this 'Next' button to go back to the story:")
    ,(next-return)))
- 
+
 (expandable-machine
  "gray boxes"
  "gray boxes" ""
@@ -229,6 +269,13 @@
  "pop-up link" " to see other options."
  "Click on this button!"
  `(,(span "...." `("b" "like you just did."))))
+
+(define click-for-more-hints `("Click for more hints." ""))
+(selectable-machine
+ "UI hints"
+ `("What about undo?" "There is no undo feature in this game. Carefully lawn-mowering options is no way to approach a story. Live for the future, and have no regrets!" ,@click-for-more-hints)
+ `("It's annoying when the choices disappear!" "If you want a choice menu to stick around (rather than disappearing when you move the mouse away), click on the parent pop-up link, rather than just mousing over it." ,@click-for-more-hints)
+ `("What about save?" "There is no save feature in this game. You have to live for the moment!" ,@click-for-more-hints))
 
 ;; Start of main scene
 (story
