@@ -20,7 +20,117 @@ Sarah Dale (f), game developer, hacker sympathizer
 School receptionist, minor antagonist
 
 
+Design principles:
+Every choice should "mean something", i.e. be active (change "Examine Sioxsie" to "Stare at Siouxsie", etc.)
+
+Ideas for scoring axes:
+Cowardice <--> Bravery
+Script Kiddie <--> L33T
+Story Mover <--> Compulsive Examiner (# of useless clicks)
+
+
+Synopsis.
+
+William lives in Oakland with an overbearing compsci father and a Stepford mother.
+Scorned by boys, pitied by girls, his high school days are tormented.
+A secret black-hat genius is his only superpower.
+
+William's only friends are:
+ a fashion-obsessed physics nerd, Peter;
+ a literary bohemian German girl, Kaaren.
+
+
+The plot is as follows.
+
+SCENE 1: MEET WILLIAM
+1a. POV: William
+Breaks into the school library and installs a keystroke capture.
+Decides to tell Kaaren or Peter.
+
+1b. POV: Kaaren or Peter
+Talks over William's attempts to brag. Tells him about a new nightclub where hackers are cool.
+
+
+SCENE 2: WILLIAM'S HOUSE
+2a. POV: William
+Home. Meet the parents. A Rube Goldberg computer in the bedroom:
+clunky fingerprint scanner, one-time pad, voice synth, acoustic coupler, etc.
+("AdamCad Machine": inspect plaque to get a quote from AdamCad Inc. about infernal machines?)
+(Acoustic coupler will be useful later.)
+
+2b. POV: William (on the computer)
+Wardialling results: 
+Hack into a game company. Play global thermonuclear war AND/OR alien invasion games.
+("Narrow that phalanx!" - Martin Amis space invaders?)
+Can't get into the Oak Ridge game company. Greeted with a mysterious high-pitched tone.
+
+
+SCENE 3: BACK AT SCHOOL
+3a. POV: William
+Back at school, the next day. Get back into library. Retrieve keylogging results.
+Go to class.
+
+3b. POV: William
+Weapons class. (First major hint of alternate universe, apart from minor clues like anachronisms.)
+Teacher is describing ceramic pistols.
+Clearer signals that Kaaren/Peter friendship could develop into more.
+Opportunity to declare sexuality and switch primary focus from Kaaren to Peter (or vice versa).
+Some funny looks from teachers.
+
+3b. POV: William
+Hanging out with a group of peers.
+Awkward attempts at social interaction:
+embarrass yourself by speaking up for gay rights, algebra, foreigners, pacifists, etc.
+(These conversational opportunities should be presented in a random sequence,
+terminating in social ostracization as soon as you speak up,
+so that "lawn-mowering" them means deliberately choosing the most craven, least controversial option.)
+
+3c. POV: Kaaren or Peter
+(conditional on you not being totally craven)
+Decides whether or not they're interested in William.
+
+
+SCENE 4: CONTACT WITH THE UNDERWORLD
+4a. POV: William
+Leaving the school, notices black van trailing him.
+Decides whether to go to nightclub or hacker meetup.
+
+4b. POV: William
+Nightclub. Offered choice of red/blue pill.
+Can decline, but it's difficult.
+
+4c. POV: William
+Hacker meetup.
+Can go dumpster diving or call PBXs.
+
+4d. POV: William
+On the way home from hacker meetup/nightclub.
+
+4e. POV: FBI agent
+Guarding William in the van.
+Some exposition of the main conspiracy.
+If William ate the pill, he is acting funny.
+
+
+SCENE 5: AT NORAD
+5. POV: William
+
+SCENE 6: ON THE LAM
+6. POV: William
+
+SCENE 7: THE PROFESSOR'S ISLAND
+
+SCENE 8: BACK AT NORAD
+
+
+
 Vignettes.
+
+Inspirations:
+Wargames movie, novel
+WhizKids TV series
+My own childhood
+Rudy Rucker's transrealism
 
 Hack into school computer, (nearly) get caught
 Write a computer game. Forget the subroutine for the final explosion
