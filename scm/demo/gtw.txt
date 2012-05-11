@@ -1,98 +1,8 @@
 Global Thermonuclear War
 
-Notes.
-
-Scene 1. (Hacker)
-
-Player is trying to impress a girl by hacking into the school
-computer.
-
-Several locations in the school can be visited, introducing some key
-characters (sadistic PE teacher, school receptionist, geeky love
-interest, gay hacker friend)
-
-Library timing puzzle: period-2 and period-3 cyclers must be in sync,
-then you can get into the computer room
-- librarian putting books away
-- teacher patrolling
-- maybe you also have to flip a couple of selectables
-
-On the computer, you have the log of a wardialling run
-Dial one of the following: Activision, Mifflin Paper, Stellar Test Prep, Oak Ridge Nat'l Lab
-You can try two before being kicked out of the computer room
-
-Somehow as a result of this, you trigger DEFCON 1 by some charmingly retro method,
-e.g. blowing a PE whistle in the presence of an acoustic coupler
- (why would this even occur to the player? reference is to Cap'n Crunch...)
- (Maybe the PE whistle could be obtained as a trophy after hassling the PE teacher)
-
-At some point you get contacts for followup/help. Options may include
-- go to a nightclub and meet Morph33n (suggested by love interest?)
-- go to your allies at the university
-
-
-
-Scene 2. (Love interest)
-
-Hacker tries to tell you about his exploits/problems.
-You are far more interested in telling him about high school social dynamics.
-However when you see he is agitated, you give him Morph33n's number.
-
-
-Scene 3. (Hacker)
-Nightclub.
-
-
-Scene 4. (Hacker)
-University.
-
-
-Scene 5. (Gay love interest)
-Scene 6. (Geeky love interest)
-These scenes open up the possibility of alternate companions.
-
-Scene 7. (Hacker)
-Choice of companion
-
-On the road, with your companion, pursued by the FBI.
-Captured, taken to NORAD: you learn that the computer is self-aware,
-has been taught emotion, etc.
-Escape from capture.
-
-Find the peacenik Professor (he is very like John Lennon).
-Return to NORAD.
-
-Defeat the computer by
-- making it fall in love with you
-- reasoning it into futility
-- asking a serious of mindblowing philosophical questions
-- smashing it up with an axe
-
-
-
-
-Characters.
-Player character (m or f), a suburban misfit
-
-Companion hackers:
-Hacker Zachariah (m), black teen from Bed Stuy NY
-Gina Mackintyre (f), stoner, UK hacker in search of UFOs
-Adie Lamer (m), Lisp programmer, serial turncoat
-Jules de Bourcier (m), activist, transparency advocate, philanderer
-
-Main antagonists:
-Dianne Kill (f), tech-savvy FBI agent in a world of dinosaurs
-Hiroshi Miyamura (m), Japanese-American physicist, biologist, roller-skater, hacker-hunter
-Stephen Eagle-Hawke (m), British computer scientist, classified, faked own death
-
-Minor characters:
-Norbert Cuthridge (m), autistic savant, university lab technician, hacker sympathizer
-Sarah Dale (f), game developer, hacker sympathizer
-School receptionist, minor antagonist
-
-
 Design principles:
-Every choice should "mean something", i.e. be active (change "Examine Sioxsie" to "Stare at Siouxsie", etc.)
+Every choice should "mean something", e.g. be active & intentional (change "Examine Sioxsie" to "Stare at Siouxsie"?) or reveal useful detail
+Extra things to play with (at least 3 vignettes should be highly interactive/combinatoric)
 
 Ideas for scoring axes:
 Cowardice <--> Bravery
@@ -102,13 +12,33 @@ Story Mover <--> Compulsive Examiner (# of useless clicks)
 
 Synopsis.
 
-William lives in Oakland with an overbearing compsci father and a Stepford mother.
+William lives in Schoolville with an overbearing compsci father and a Stepford mother.
 Scorned by boys, pitied by girls, his high school days are tormented.
 A secret black-hat genius is his only superpower.
 
 William's only friends are:
  a fashion-obsessed physics nerd, Peter;
- a literary bohemian German girl, Kaaren.
+ a literary bohemian German girl, Kaaren;
+ a conscientious objector, David.
+
+This is an alternate reality close to ours, with the Cold War slightly escalated,
+so the West is a little more repressive and USSR-like (with hints of "Paranoia").
+
+It turns out this is because the NSA, recruiting Nazi scientists, grew a brain
+in a vat that has become self-aware. Soviet spies copied the
+technology, and now the "brainframes" live in uneasy awareness of each
+others' presence, and a possible third alien brain that they think is
+really fucking with them.
+
+It turns out brainframes, unethical hybrid AIs reared by the military,
+are homicidal killing machines. (Who knew?) They are insanely jealous
+of each others' existence, and instantly murder any other newly-grown
+brainframes who are connected to the same network.
+
+William gets caught up in this by eavesdropping on a teacher who has
+been recruited by the US brainframe as one of its local spies.
+
+
 
 
 The plot is as follows.
@@ -132,7 +62,7 @@ clunky fingerprint scanner, one-time pad, voice synth, acoustic coupler, etc.
 2b. POV: William (on the computer)
 Wardialling results: 
 Hack into a game company. Play global thermonuclear war AND/OR alien invasion games.
-("Narrow that phalanx!" - Martin Amis space invaders?)
+("Narrow that phalanx!" - Martin Amis space invaders? "his most important book")
 Can't get into the Oak Ridge game company. Greeted with a mysterious high-pitched tone.
 
 
@@ -177,7 +107,7 @@ Can go dumpster diving or call PBXs.
 4d. POV: William
 On the way home from hacker meetup/nightclub.
 
-4e. POV: FBI agent
+4e. POV: FBI agent (female)
 Guarding William in the van.
 Some exposition of the main conspiracy.
 If William ate the pill, he is acting funny.
@@ -185,6 +115,15 @@ If William ate the pill, he is acting funny.
 
 SCENE 5: AT NORAD
 5. POV: William
+Council of ten. Black robes. Oak-paneled walls.
+"FBI agent" turns out to be only woman on the council.
+One woman, nine men. Men constantly overruling her, accusing her of
+harassment, telling her to calm down.
+Your choices formulate an elaborate escape plan, against backdrop of expositionary dialogue
+among the council.
+Female council member can help you escape, or you break out of the infirmary and join a
+tour group.
+
 
 SCENE 6: ON THE LAM
 6. POV: William
@@ -192,6 +131,104 @@ SCENE 6: ON THE LAM
 SCENE 7: THE PROFESSOR'S ISLAND
 
 SCENE 8: BACK AT NORAD
+
+
+
+
+
+
+Notes.
+
+Characters.
+Player character (m or f), a suburban misfit
+
+Companion hackers:
+Hacker Zachariah (m), black teen from Bed Stuy NY
+Gina Mackintyre (f), stoner, UK hacker in search of UFOs
+Adie Lamer (m), Lisp programmer, serial turncoat
+Jules de Bourcier (m), activist, transparency advocate, philanderer
+
+Main antagonists:
+Dianne Kill (f), tech-savvy FBI agent in a world of dinosaurs
+Hiroshi Miyamura (m), Japanese-American physicist, biologist, roller-skater, hacker-hunter
+Stephen Eagle-Hawke (m), British computer scientist, classified, faked own death
+
+Minor characters:
+Norbert Cuthridge (m), autistic savant, university lab technician, hacker sympathizer
+Sarah Dale (f), game developer, hacker sympathizer
+School receptionist, minor antagonist
+
+
+Scene 1. (Hacker)
+
+Player is trying to impress a girl by hacking into the school
+computer.
+
+Several locations in the school can be visited, introducing some key
+characters (sadistic PE teacher, school receptionist, geeky love
+interest, gay hacker friend)
+
+Library timing puzzle: period-2 and period-3 cyclers must be in sync,
+then you can get into the computer room
+- librarian putting books away
+- teacher patrolling
+- maybe you also have to flip a couple of selectables
+
+Extra things to play with (at least 3 vignettes should be highly interactive/combinatoric)
+
+
+
+Scene 1b. (Love interest)
+
+Hacker tries to tell you about his exploits/problems.
+You are far more interested in telling him about high school social dynamics.
+(Latest outrageous pranks of the Air Corps, daring pacifism of friend David - cf Donny the Punk...)
+However when you see he is agitated, you give him Morph33n's number.
+
+
+Scene 3. (Hacker)
+Nightclub.
+
+
+Scene 4. (Hacker)
+University.
+
+Ends with a choice: "Your thoughts turn to..."
+
+Scene 5a. (Gay love interest)
+Scene 5b. (Geeky love interest)
+These scenes open up the possibility of alternate companions.
+
+Scene 6. (Hacker)
+Choice of companion
+
+On the road, with your companion, pursued by the FBI.
+Las Vegas casino, DefCon. Bouncer catches you eyeing slot machine.
+Piles of coke in a drab room at Circus Circus with hacks scrawled over the wallpaper
+Casino hallways seem grand the first time around, lame the second
+
+Smoking weed on the road with Mitnick and Lamo
+
+A whistle in a cereal packet that triggers nuclear war
+
+BUSTED
+
+
+(Lame Wargames Ending)
+Captured, taken to NORAD: you learn that the computer is self-aware,
+has been taught emotion, etc.
+Escape from capture.
+
+Find the peacenik Professor (he is very like John Lennon).
+Return to NORAD.
+
+Defeat the computer by
+- making it fall in love with you
+- reasoning it into futility
+- asking a serious of mindblowing philosophical questions
+- smashing it up with an axe
+
+
 
 
 
