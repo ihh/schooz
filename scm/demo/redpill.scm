@@ -358,11 +358,10 @@
     (,morpheus " glares at you, angrily.")
     (,morpheus " looks furious.")
     (,morpheus " seethes with rage.")))
-(define (annoy-morpheus)
-  (let ((text (list-ref morpheus-annoyed-text morpheus-annoyance)))
-    (if (< morpheus-annoyance (- (length morpheus-annoyed-text) 1))
-	(set! morpheus-annoyance (+ morpheus-annoyance 1)))
-    (append text (list " "))))
+(define (annoy-morpheus inc)
+  (if (< morpheus-annoyance (- (length morpheus-annoyed-text) 1))
+      (set! morpheus-annoyance (+ morpheus-annoyance inc)))
+  (append (list-ref morpheus-annoyed-text morpheus-annoyance) (list " ")))
 
 (define (agree-choice statement result dest)
   (choice statement `(,(p "'" statement "', you say.")
@@ -375,38 +374,55 @@
 
 (define (annoy-choice statement result dest)
   (choice statement `(,(p "'" statement "', you say.")
-		      ,(apply p (append (annoy-morpheus) (list result)))
+		      ,(apply p (append (annoy-morpheus 1) (list result)))
+		      ,(next-action dest))))
+
+(define (neutral-choice statement result dest)
+  (choice statement `(,(p "'" statement "', you say.")
+		      ,(apply p (append (annoy-morpheus 0) (list result)))
 		      ,(next-action dest))))
 
 (define (text-func t f) (lambda () `(,(if (string? t) (p t) (apply p t)) ,(f))))
 
+(define convo
+  (lambda args
+    (let ((text (car args))
+	  (opts (cdr args)))
+      (apply cyo (cons (append (h1-club) (list text)) opts)))))
+
 (define (morpheus-alice-gambit)
-  (cyo
+  (convo
    (p "'I bet you feel like the White Rabbit right now,' says " morpheus ". 'Running down a hole. Lost in time.'")
-   (agree-choice "I suppose so." ""
-		 morpheus-alice-gambit)
+   (agree-choice "I suppose so." "" morpheus-reality-gambit)
+   (neutral-choice "What do you mean, 'hole'?" "'That was... just a figure of speech.'" morpheus-reality-gambit)
    (annoy-choice "Not really. The White Rabbit knew where he was going. Maybe you meant Alice?"
 		 "'I meant... following the rabbit, of course.'"
 		 morpheus-reality-gambit)))
 
 (define (morpheus-reality-gambit)
-  (cyo
+  (convo
    (p "'Have you ever wondered about the nature of reality?' " morpheus " asks.")
-   (agree-choice "I suppose so." ""
-		 morpheus-exploits-gambit)
-   (annoy-choice "No. That's a dumb question." ""
-		 morpheus-exploits-gambit)))
+   (neutral-choice "I suppose so." "" morpheus-exploits-gambit)
+   (agree-choice "Now you're speaking my language! I wonder about the nature of reality all the time." "" morpheus-discrete-gambit)
+   (annoy-choice "No. That's a dumb question." "" morpheus-exploits-gambit)))
+
+(define (morpheus-discrete-gambit)
+  (convo
+   (p "'Consider, for example,' " morpheus " says, 'the distinction between discrete... and continuous. Are they really so clear?'")
+   (neutral-choice "You mean it's a grey line, or something?" "'Exactly! When you think about it, they are really two sides of a coin.'" morpheus-exploits-gambit)
+   (agree-choice "You just blew my mind." "" morpheus-exploits-gambit)
+   (annoy-choice "Well, they're both clearly-defined concepts in topology." "'That is what I mean. But you must try to see the poetic truth.'" morpheus-exploits-gambit)))
 
 (define (morpheus-exploits-gambit)
-  (cyo
-   (p "'You are an impressive hacker. Your exploits have come to our attention.'")
+  (convo
+   (p "'Enough chit-chat. To business! You are an impressive hacker! Your exploits have come to our attention.'")
    (agree-choice "I'm flattered." ""
 		 morpheus-own-exploits-gambit)
    (annoy-choice "You haven't heard the least of my exploits." ""
 		 morpheus-own-exploits-gambit)))
 
 (define (morpheus-own-exploits-gambit)
-  (cyo
+  (convo
    (p "'Yes. Well, naturally you have heard of my own modest achievments.'")
    (agree-choice "Are you kidding? You're a hacking legend!" ""
 		 show-choice)
