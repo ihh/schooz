@@ -414,10 +414,10 @@
 
 (define (morpheus-discrete-gambit)
   (convo
-   (p "'Consider, for example,' " morpheus " says, 'the distinction between discrete... and continuous. Are they really so clear?'")
-   (neutral-choice "You mean it's a grey line, or something?" "'Exactly! When you think about it, they are really two sides of a coin.'" morpheus-exploits-gambit)
-   (agree-choice "You just blew my mind." "" morpheus-exploits-gambit)
-   (annoy-choice "Clear enough. They're both precisely-defined concepts in topology." "'Well, yes; that is what I meant, of course. But you must try to see the poetic truth.'" morpheus-exploits-gambit)))
+   (p "'Reality doesn't always have to be what we think it is, on our initial superficial inspection.' " morpheus " intones. 'Quantum mechanics is a good example. Another example, the distinction between the \"discrete\" and the \"continuous\". Is it really so clear that we live in continuous space? Or might we be simulations on a grid?'")
+   (neutral-choice "I guess so, if the grid is fine enough." "'Exactly! When you think about it, the discrete and the continuous are really two sides of a coin.' This doesn't make much sense to you, but you decide to let it slide." morpheus-exploits-gambit)
+   (agree-choice "You just blew my mind." "He makes a gun shape with his fingers, puts it to his head. 'Pow.' (Did he really just do that?)" morpheus-exploits-gambit)
+   (annoy-choice "Actually, continuity has a precise topological definition." "'Well, yes; I am aware of that, of course. But there is a poetic truth, as well, behind the mathematical truth.'" morpheus-exploits-gambit)))
 
 (define (morpheus-exploits-gambit)
   (convo
@@ -433,7 +433,7 @@
 
 (define (morpheus-more-exploits-gambit)
   (convo
-   (p "'Tell me of your hacking exploits!'")
+   (p morpheus " looks at you expectantly, waiting to hear of your hacker exploits.")
    (agree-choice "I don't like to brag too much." "'A man after my own heart!'" morpheus-own-exploits-gambit)
    (once-choice (neutral-choice "I put together a buffer overflow exploit." `(,(p "You describe how you probed the stack using a hexadecimal memory inspector. " morpheus " does appear to perk up at this, temporarily, so you oblige by going into extensive detail.")) morpheus-more-exploits-gambit))
    (once-choice (annoy-choice "I wrote this amazing screengrabber once." "You explain, in detail, the program you wrote that would display a pair of Greek dancers on the screen of anyone connected to the network, while clicking the cassette tape control relay rhythmically." morpheus-more-exploits-gambit))
@@ -450,7 +450,7 @@
 
 
 
-; (morpheus-exploits-gambit)  ;; debug
+;(morpheus-alice-gambit)  ;; debug
 
 
 (story*
