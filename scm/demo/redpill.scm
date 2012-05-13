@@ -33,7 +33,7 @@
 (define h1 (lambda args `("h1" ,@args)))
 (define h2 (lambda args `("h2" ,@args)))
 
-;; Strings
+;; String constants
 (define morpheus "Morph33n")
 
 ;; Helper functions (move these to core libraries?)
@@ -226,9 +226,10 @@
      (link-goto "accosted" "meet-morpheus" "I object to being hustled like this!" "Despite your weak objections, you are easily hustled to the back of the club.")
      " by two punks.")
    ,(p "Well, the girl is more Gothic, maybe. They look a bit like "
-     (link-goto "Siouxsie" "meet-morpheus" "Examine 'Siouxsie'" "You stare at 'Siouxsie'. She smiles, then pushes you in the chest hard. You fall back a step, then all of a sudden she and her friend are hustling you gently, but irresistibly, to the back part of the club.")
+     (link-goto "Siouxsie" "meet-morpheus" "Examine 'Siouxsie'"
+		`(,(p "You stare at the tall Goth. She stares back, then pushes you in the chest hard.") ,(p "You fall back a step, then all of a sudden she and her friend are hustling you gently, but irresistibly, to the back part of the club.")))
      " and "
-     (link-goto "Billy Idol" "meet-morpheus" "Examine 'Billy Idol'" "The punk catches you staring, saunters over and begins preparing a mouthful of spit. Horrified, you turn and run in the direction they evidently want you to go.")
+     (link-goto "Billy Idol" "meet-morpheus" "Examine 'Billy Idol'" "The punk catches you staring, leans over and begins hawking up a mouthful of spit. Horrified, you turn and run in the direction they evidently want you to go.")
    ", actually.")
    ,(p "\"The computer hacker! "
        (link-goto
