@@ -16,8 +16,8 @@
 (define schooz:js-attach-popups-function "attachPopups")
 
 ;; String constants shown to player
-(define schooz:cancel-text "Cancel")  ;; text to cancel a menu choice
-(define schooz:popup-mouseover-hint "Click for options")  ;; mouseover text for popup menu links
+(define schooz:cancel-text "Cancel")  ;; text to cancel a popup choice
+(define schooz:popup-mouseover-hint "Click for options")  ;; mouseover text for popup popup links
 (define schooz:button-mouseover-hint "Click to select")  ;; mouseover text for choice buttons
 (define schooz:cancel-mouseover-hint "Click to hide")  ;; mouseover text for Cancel buttons
 
@@ -105,7 +105,7 @@
 	 (hashtable-ref schooz:onclick-binding id #f))
 	(schooz:js-bind-func-ids rest))))
 
-;; Interface implementation of hyperlinks & menus
+;; Interface implementation of hyperlinks & popups
 (define (schooz:anchor link-text mouseover-text func)
   (let ((id (schooz:bound-id func mouseover-text)))
     `("a" ("@"
@@ -173,11 +173,11 @@
   (let ((popup-id (schooz:next-popup-id)))
     (schooz:popup link-text popup-id (schooz:choice-list `((,action-text ,action-func))))))
 
-(define (schooz:impl-menu* link-text action-list)
+(define (schooz:impl-popup* link-text action-list)
   (let ((popup-id (schooz:next-popup-id)))
     (schooz:popup link-text popup-id (schooz:choice-list action-list))))
 
-(define (schooz:impl-explicit-menu* action-list)
+(define (schooz:impl-menu* action-list)
   (schooz:choice-list action-list))
 
 ;; Initial action

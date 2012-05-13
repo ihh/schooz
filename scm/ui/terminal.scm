@@ -11,15 +11,15 @@
   (string-append
    (string (integer->char 27)) "[1m" text (string (integer->char 27)) "[0m"))
 
-;; Interface implementation of hyperlinks & menus
+;; Interface implementation of hyperlinks & popups
 (define (schooz:impl-link* link-text action-text action-func)
   (schooz:highlight link-text))
 
-(define (schooz:impl-menu* link-text action-list)
+(define (schooz:impl-popup* link-text action-list)
   (schooz:highlight link-text))
 
-(define (schooz:impl-explicit-menu* action-list)
-  (schooz:impl-menu* "" action-list))
+(define (schooz:impl-menu* action-list)
+  (schooz:impl-popup* "" action-list))
 
 (define (schooz:impl-ask X PROMPT)
   (display PROMPT)

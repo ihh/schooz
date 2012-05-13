@@ -56,11 +56,11 @@
 ;; Consistent "Next" links
 (define
   (next-goto state)
-  `(,(p (explicit-menu (choice-goto state "Next" "")))))
+  `(,(p (menu (choice-goto state "Next" "")))))
 
 (define
   (next-action action)
-  `(,(p (explicit-menu (choice* "Next" action)))))
+  `(,(p (menu (choice* "Next" action)))))
 
 (define
   (next-look)
@@ -70,14 +70,15 @@
   (next-return)
   (next-action (lambda () (return) (look))))
 
+
 ;; Simple buttons
 (define
   (simple-button* text action)
-  `(,(p (explicit-menu (choice* text action)))))
+  `(,(p (menu (choice* text action)))))
 
 (define
   (simple-button text action-body)
-  (explicit-menu (choice text action-body)))
+  (menu (choice text action-body)))
 
 ;; Self-propelled state machines (generic)
 (define (auto-machine name next-state-function descriptor-list)
@@ -148,7 +149,7 @@
 		 " "
 		 (if (equal? next-state-list '())
 		     link-text
-		     (apply menu
+		     (apply popup
 			    (cons
 			     link-text
 			     (map (lambda (d)
@@ -160,15 +161,16 @@
 		 post-text)))))
        state-list))))
 
-;; Wrapper for simple "Choose Your Own" actions with some text and a menu
+;; Wrapper for simple "Choose Your Own" actions with some text and a popup
 ;; (cyoa text (text1 choice1) (text2 choice2) ...)
 (define cyoa
   (lambda args
     (let ((text (car args))
 	  (choice-list (cdr args)))
-      `(,text ,(apply explicit-menu choice-list)))))
+      `(,text ,(apply menu choice-list)))))
 
 ;; Wrapper for simple "Choose Your Own" actions that uses the story-machine mechanism
+;; (cyo text (text1 choice1) (text2 choice2) ...)
 (define cyo
   (lambda args
     (let ((state (unique-narrative-state))
@@ -176,9 +178,10 @@
 	  (choice-list (cdr args)))
       (story
        state
-       `(,text ,(apply explicit-menu choice-list)))  ;; putting declaration inside action is a sucky hack, to prevent symbol binding errors by delaying evaluation of choice-list. Note this may give unexpected behavior if the state is re-entered (e.g. embedded initialization code will be re-run every time)
+       `(,text ,(apply menu choice-list)))  ;; putting declaration inside action is a sucky hack, to prevent symbol binding errors by delaying evaluation of choice-list. Note this may give unexpected behavior if the state is re-entered (e.g. embedded initialization code will be re-run every time)
       (goto state)
       (look))))
+
 
 ;; Helpers for the cyo storymachine wrapper
 (define (make-unique-id hash clue)
@@ -227,9 +230,9 @@
      " by two punks.")
    ,(p "Well, the girl is more Gothic, maybe. They look a bit like "
      (link-goto "Siouxsie" "meet-morpheus" "Examine 'Siouxsie'"
-		`(,(p "You stare at the tall Goth. She stares back, then pushes you in the chest hard.") ,(p "You fall back a step, then all of a sudden she and her friend are hustling you gently, but irresistibly, to the back part of the club.")))
+		`(,(p "You stare at the tall Goth. She stares back, then pushes you in the chest hard.") ,(p "Who are you trying to fool? You are not the type of kid who stares people down. Cowed, you are easily hustled to the back of the club.")))
      " and "
-     (link-goto "Billy Idol" "meet-morpheus" "Examine 'Billy Idol'" "The punk catches you staring, leans over and begins hawking up a mouthful of spit. Horrified, you turn and run in the direction they evidently want you to go.")
+     (link-goto "Billy Idol" "meet-morpheus" "Examine 'Billy Idol'" `(,(p "The punk catches you staring, leans over and begins hawking up a mouthful of spit.") ,(p "Your horrified look makes the gothic girl laugh. 'Come with me,' she says, and you do.")))
    ", actually.")
    ,(p "\"The computer hacker! "
        (link-goto
@@ -248,11 +251,11 @@
 (story
  "tutorial"
  `(,(h1 "Help!")
-   ,(p "This is a dynamic hypertext story. Basically, just hypertext with menus.")
+   ,(p "This is a dynamic hypertext story. Basically, just hypertext with popups.")
    ,(p "Move the mouse pointer over any of the "
        `("i" "pop-up links")
        ", i.e. " (describe "gray boxes")
-       ", to see a choice (or a menu of choices) of action(s) that you can perform in the story.")
+       ", to see a choice (or a popup of choices) of action(s) that you can perform in the story.")
    ,(p "Click on any of the choice buttons to advance the story, or mouseover a different "
        (describe "pop-up link"))
    ,(describe "UI tips")
@@ -277,7 +280,7 @@
  `("OK, got it; thanks." "" ,@click-for-more-tips)
  `("Where's the undo button?" "There is no undo feature in this game. Systematically lawn-mowering options is no way to approach a story! Rest assured that it's impossible to get stuck, although some choices will commit you to different endings." ,@click-for-more-tips)
  `("How do I save and restore?" "There is, at present, no save feature in this game. The game is designed to be played through quickly, in one sitting." ,@click-for-more-tips)
- `("It's annoying when the choices disappear!" "If you want a choice menu to stick around (rather than disappearing when you move the mouse away), click on the parent pop-up link, rather than just mousing over it." ,@click-for-more-tips))
+ `("It's annoying when the choices disappear!" "If you want a choice popup to stick around (rather than disappearing when you move the mouse away), click on the parent pop-up link, rather than just mousing over it." ,@click-for-more-tips))
 
 ;; Start of main scene
 (story
@@ -311,8 +314,8 @@
 
 (define (morpheus-intro-choice pre-text stare-text intervening-text speak-text post-text)
   `(,pre-text " "
-    ,(link-goto stare-text "conversation" (string-append "Stare at " morpheus)
-		`("You stare at each other for a while. Then " ,morpheus " clears his throat."))
+    ,(link-goto stare-text "conversation" (string-append "Examine " morpheus)
+		`(,(p "You stare at each other for a while. This sang-froid is rather out of character for you, and you feel sweat prickling.") ,(p "But, eventually, " morpheus " clears his throat.")))
     " " ,intervening-text " "
     ,(link-goto speak-text "conversation" "Try to say something cool"
 		`("'Speak up, then,' you say, feigning boredom. 'You asked me here, after all.'" ,(p morpheus " grins.")))
@@ -370,6 +373,7 @@
 			   (span morpheus " nods, smiling.")
 			   (span morpheus " claps his hands.")
 			   (span "'Exactly!' says " morpheus "."))
+			  " "
 			  result
 			  (next-action dest)))))
 
@@ -385,6 +389,7 @@
 
 (define (text-func t f) (lambda () `(,(if (string? t) (p t) (apply p t)) ,(f))))
 
+;; (convo text (text1 choice1) (text2 choice2) ...)
 (define convo
   (lambda args
     (let ((text (car args))
@@ -395,44 +400,61 @@
   (convo
    (p "'I bet you feel like the White Rabbit right now,' says " morpheus ". 'Running down a hole. Lost in time.'")
    (agree-choice "I suppose so." "" morpheus-reality-gambit)
-   (neutral-choice "What do you mean, 'hole'?" "'That was... just a figure of speech.'" morpheus-reality-gambit)
    (annoy-choice "Not really. The White Rabbit knew where he was going. Maybe you meant Alice?"
 		 "'I meant... following the rabbit, of course.'"
-		 morpheus-reality-gambit)))
+		 morpheus-reality-gambit)
+   (neutral-choice "What do you mean, 'down a hole'?" "'That was... just a figure of speech.'" morpheus-reality-gambit)))
 
 (define (morpheus-reality-gambit)
   (convo
    (p "'Have you ever wondered about the nature of reality?' " morpheus " asks.")
-   (neutral-choice "I suppose so." "" morpheus-exploits-gambit)
-   (agree-choice "Now you're speaking my language! I wonder about the nature of reality all the time." "" morpheus-discrete-gambit)
-   (annoy-choice "No. That's a dumb question." "" morpheus-exploits-gambit)))
+   (neutral-choice "I suppose so." "" morpheus-discrete-gambit)
+   (agree-choice "Now you're speaking my language! I'm constantly wondering about that." "He shoots you a lidded glance, then continues." morpheus-discrete-gambit)
+   (annoy-choice "No. That's a dumb question." "'Not sure why you would say that. No matter...'" morpheus-exploits-gambit)))
 
 (define (morpheus-discrete-gambit)
   (convo
    (p "'Consider, for example,' " morpheus " says, 'the distinction between discrete... and continuous. Are they really so clear?'")
    (neutral-choice "You mean it's a grey line, or something?" "'Exactly! When you think about it, they are really two sides of a coin.'" morpheus-exploits-gambit)
    (agree-choice "You just blew my mind." "" morpheus-exploits-gambit)
-   (annoy-choice "Well, they're both clearly-defined concepts in topology." "'That is what I mean. But you must try to see the poetic truth.'" morpheus-exploits-gambit)))
+   (annoy-choice "Clear enough. They're both precisely-defined concepts in topology." "'Well, yes; that is what I meant, of course. But you must try to see the poetic truth.'" morpheus-exploits-gambit)))
 
 (define (morpheus-exploits-gambit)
   (convo
    (p "'Enough chit-chat. To business! You are an impressive hacker! Your exploits have come to our attention.'")
-   (agree-choice "I'm flattered." ""
+   (agree-choice "I'm flattered." "An oily smile."
 		 morpheus-own-exploits-gambit)
-   (annoy-choice "You haven't heard the least of my exploits." ""
-		 morpheus-own-exploits-gambit)))
+   (agree-choice "Really? What have you heard?" "He waves his hand dismissively. 'Let us not dwell on the past,' he says, rather annoyingly. (You like to brag.)"
+		 morpheus-own-exploits-gambit)
+   (neutral-choice "Let me tell you some of the good stuff." "'I would be delighted to hear more!' You suspect he is not being completely sincere, but cannot resist the chance to brag."
+		   morpheus-more-exploits-gambit)
+   (annoy-choice "I seriously doubt you've heard the least of my exploits, amateur." "'Very well, then; tell me more of your hacking accomplishments.'"
+		 morpheus-more-exploits-gambit)))
+
+(define (morpheus-more-exploits-gambit)
+;  (display "Running morpheus-more-exploits-gambit\n")
+  (convo
+   (p "'Tell me of your hacking exploits!'")
+   (agree-choice "I don't like to brag too much." morpheus-own-exploits-gambit)
+   (once-choice (neutral-choice "I put together a buffer overflow exploit." `(,(p "You describe how you probed the stack using a hexadecimal memory inspector." morpheus " does appear to perk up briefly at this, so you oblige by going into extensive detail.")) morpheus-more-exploits-gambit))
+   (once-choice (annoy-choice "I wrote this amazing hack in computer club once." "You explain, in detail, the program you wrote that would display a pair of Greek dancers on the screen of anyone connected to the network, while clicking the cassette tape control relay rhythmically." morpheus-more-exploits-gambit))
+   (once-choice (annoy-choice "I wrote the first ever 6502 virus." "You patiently explain how your malware attached itself to a timer interrupt and injected itself into BASIC code, hidden within a comment using VDU control codes." morpheus-more-exploits-gambit))))
 
 (define (morpheus-own-exploits-gambit)
   (convo
    (p "'Yes. Well, naturally you have heard of my own modest achievments.'")
-   (agree-choice "Are you kidding? You're a hacking legend!" ""
-		 show-choice)
-   (annoy-choice "Nope. Never heard of you." ""
-		 show-choice)))
+   (agree-choice "Are you kidding? Your takedown of that French teletext network was legendary!" "'Thank you very much!'" show-choice)
+   (neutral-choice "I've heard a few things." "'Very well. This does not, after all, matter much.'" show-choice)
+   (annoy-choice "Nope. Never heard of you." "'Hear that, Delphine?' he says to no-one in particular. 'Not everyone has heard of me, it seems.'" show-choice)))
+
+(set! morpheus-more-exploits-gambit morpheus-own-exploits-gambit) ;; debug
 
 (define (show-choice) (goto "choice") (look))
 
-;(now schooz:narrative "conversation")  ;; debug
+
+(morpheus-exploits-gambit)  ;; debug
+
+
 (story*
  "conversation"
  morpheus-alice-gambit)

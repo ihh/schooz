@@ -26,11 +26,11 @@
   (choice action-text func-body)
   `(schooz:choice ,action-text ,func-body))
 
-;; (menu link-text (text1 action1) (text2 action2) ...)
-(define menu (lambda args (apply schooz:menu args)))
+;; (popup link-text (text1 action1) (text2 action2) ...)
+(define popup (lambda args (apply schooz:popup args)))
 
-;; (explicit-menu (text1 action1) (text2 action2) ...)
-(define explicit-menu (lambda args (apply schooz:explicit-menu args)))
+;; (menu (text1 action1) (text2 action2) ...)
+(define menu (lambda args (apply schooz:menu args)))
 
 
 ;; (ask X PROMPT)
@@ -161,21 +161,21 @@
 (define-macro (schooz:link link-text action func-body)
   `(schooz:link* ,link-text ,action (lambda () ,func-body)))
 
-;; (schooz:menu link-text (text1 action1) (text2 action2) ...)
-(define schooz:menu
+;; (schooz:popup link-text (text1 action1) (text2 action2) ...)
+(define schooz:popup
   (lambda args
     (let* ((link-text (car args))
 	   (action-list (cdr args))
 	   (transformed-action-list (schooz:transform-action-list action-list))
-	   (return-value (schooz:impl-menu* link-text transformed-action-list)))
+	   (return-value (schooz:impl-popup* link-text transformed-action-list)))
     (schooz:register-action-list transformed-action-list)
     return-value)))
 
-;; (schooz:explicit-menu (text1 action1) (text2 action2) ...)
-(define schooz:explicit-menu
+;; (schooz:menu (text1 action1) (text2 action2) ...)
+(define schooz:menu
   (lambda action-list
     (let* ((transformed-action-list (schooz:transform-action-list action-list))
-	   (return-value (schooz:impl-explicit-menu* transformed-action-list)))
+	   (return-value (schooz:impl-menu* transformed-action-list)))
       (schooz:register-action-list transformed-action-list)
       return-value)))
 
@@ -193,7 +193,7 @@
   (schooz:now X (read)))
 
 
-;; We keep track of (link,menu,explicit-menu) actions during calls to descriptors.
+;; We keep track of (link,popup,menu) actions during calls to descriptors.
 (define schooz:action-text-list '())
 (define schooz:action-func-list '())
 
@@ -232,7 +232,7 @@
 (define (schooz:set-initial-action a) (set! schooz:initial-action-untransformed a))
 (define (schooz:initial-action) (schooz:transform-action schooz:initial-action-untransformed))  ;; transformed
 
-;; Action transformations, applied automatically by (link...), (menu...), (explicit-menu...), (fire-action...)
+;; Action transformations, applied automatically by (link...), (popup...), (menu...), (fire-action...)
 ;; Before any part of the action, we reset action-text-list and action-func-list,
 ;; so we can track links to the next action.
 (define (schooz:transform-action action-func)
@@ -291,7 +291,17 @@
    (null? lst)
    lst
    (let* ((action (car lst))
-	  (rest (cdr lst))
-	  (action-text (car action))
-	  (action-func (cadr action)))
-     (cons (list action-text (schooz:transform-action action-func)) (schooz:transform-action-list rest)))))
+	  (rest (cdr lst)))
+     (append
+      (if (null? action)
+	  '()
+	  (let ((action-text (car action))
+		(action-func (cadr action)))
+	    (list (list action-text (schooz:transform-action action-func)))))
+      (schooz:transform-action-list rest)))))
+
+
+
+;; Utilities
+(define nl "\n")
+(define (dnl) (display nl))
