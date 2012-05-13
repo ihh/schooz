@@ -93,7 +93,9 @@
   `(schooz:story ,state ,func-body))
 
 ;; (look)
-(define (look) (schooz:look))
+(define (look)
+(display "In look\n")
+ (schooz:look))
 
 ;; (goto state)
 (define (goto state) (schooz:goto state))

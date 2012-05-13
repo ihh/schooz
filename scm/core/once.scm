@@ -20,14 +20,12 @@
   (let* ((text (car text-func))
 	 (func (cadr text-func))
 	 (val (hashtable-ref schooz:once-cache text #f)))
-;    (display "\nonce-choice:\ntext=") (write text) (display "\nfunc=") (write func) (display "\nval=") (write val) (dnl)
     (if
      val
      '()
-     (choice
+     (choice*
       text
       (lambda ()
 	(let ((result (func)))
-;	  (display "result=") (write result) (dnl)
 	  (hashtable-set! schooz:once-cache text 1)
 	  result))))))

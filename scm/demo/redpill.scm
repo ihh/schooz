@@ -426,18 +426,17 @@
 		 morpheus-own-exploits-gambit)
    (agree-choice "Really? What have you heard?" "He waves his hand dismissively. 'Let us not dwell on the past,' he says, rather annoyingly. (You like to brag.)"
 		 morpheus-own-exploits-gambit)
-   (neutral-choice "Let me tell you some of the good stuff." "'I would be delighted to hear more!' You suspect he is not being completely sincere, but cannot resist the chance to brag."
+   (neutral-choice "Let me tell you some of the good stuff." "'I would be delighted to hear more!' You suspect he is not being completely sincere, but you can't resist the chance to brag."
 		   morpheus-more-exploits-gambit)
    (annoy-choice "I seriously doubt you've heard the least of my exploits, amateur." "'Very well, then; tell me more of your hacking accomplishments.'"
 		 morpheus-more-exploits-gambit)))
 
 (define (morpheus-more-exploits-gambit)
-;  (display "Running morpheus-more-exploits-gambit\n")
   (convo
    (p "'Tell me of your hacking exploits!'")
-   (agree-choice "I don't like to brag too much." morpheus-own-exploits-gambit)
-   (once-choice (neutral-choice "I put together a buffer overflow exploit." `(,(p "You describe how you probed the stack using a hexadecimal memory inspector." morpheus " does appear to perk up briefly at this, so you oblige by going into extensive detail.")) morpheus-more-exploits-gambit))
-   (once-choice (annoy-choice "I wrote this amazing hack in computer club once." "You explain, in detail, the program you wrote that would display a pair of Greek dancers on the screen of anyone connected to the network, while clicking the cassette tape control relay rhythmically." morpheus-more-exploits-gambit))
+   (agree-choice "I don't like to brag too much." "'A man after my own heart!'" morpheus-own-exploits-gambit)
+   (once-choice (neutral-choice "I put together a buffer overflow exploit." `(,(p "You describe how you probed the stack using a hexadecimal memory inspector. " morpheus " does appear to perk up at this, temporarily, so you oblige by going into extensive detail.")) morpheus-more-exploits-gambit))
+   (once-choice (annoy-choice "I wrote this amazing screengrabber once." "You explain, in detail, the program you wrote that would display a pair of Greek dancers on the screen of anyone connected to the network, while clicking the cassette tape control relay rhythmically." morpheus-more-exploits-gambit))
    (once-choice (annoy-choice "I wrote the first ever 6502 virus." "You patiently explain how your malware attached itself to a timer interrupt and injected itself into BASIC code, hidden within a comment using VDU control codes." morpheus-more-exploits-gambit))))
 
 (define (morpheus-own-exploits-gambit)
@@ -447,12 +446,11 @@
    (neutral-choice "I've heard a few things." "'Very well. This does not, after all, matter much.'" show-choice)
    (annoy-choice "Nope. Never heard of you." "'Hear that, Delphine?' he says to no-one in particular. 'Not everyone has heard of me, it seems.'" show-choice)))
 
-(set! morpheus-more-exploits-gambit morpheus-own-exploits-gambit) ;; debug
-
 (define (show-choice) (goto "choice") (look))
 
 
-(morpheus-exploits-gambit)  ;; debug
+
+; (morpheus-exploits-gambit)  ;; debug
 
 
 (story*
