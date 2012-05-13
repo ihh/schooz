@@ -5,8 +5,10 @@ Every choice should "mean something", e.g. be active & intentional (change "Exam
 Extra things to play with (at least 3 vignettes should be highly interactive/combinatoric)
 
 Ideas for scoring axes:
-Cowardice <--> Bravery
+Cowardice <--> Bravery   (or self-loathing <--> self-esteem?)
 Script Kiddie <--> L33T
+Social engineering?
+Black Hat <--> White Hat
 Story Mover <--> Compulsive Examiner (# of useless clicks)
 
 
@@ -27,13 +29,22 @@ so the West is a little more repressive and USSR-like (with hints of "Paranoia")
 Schools teach advanced weaponry. Teachers are on strike, protesting
 military recruitment on campus. Pacifists are not allowed on TV...
 
-Although most people don't know it, this militarization is because the
-NSA, recruiting Nazi scientists, grew a brain in a vat that has become
-self-aware. Soviet spies copied the technology, and now the
-"brainframes" live in uneasy awareness of each others' presence, and a
-possible third alien brain that they think is really fucking with
-them.
+Although most people don't know it, this militarization began when the
+NSA, recruiting Nazi scientists, took electrode implantation in humans
+to wildly unethical and highly sophisticated extremes. Pregnant
+mothers are treated with thalidomide to induce phocomelia and SSRIs
+(NB:anachronism) to induce autism. The babies are placed on life
+support and implanted with electrodes. The results are "brainframes";
+essentially, captive slaves, who on the internet are half-AI gods. The
+brutal treatment allows the technologists to deny the humanity of the
+subjects.
 
+Soviet and Chinese spies copied the technology, and now the
+"brainframes" live in uneasy awareness of each others' presence, as
+well as possible alien brains that only they can sense and which they
+think might REALLY be fucking with them.
+
+[CLICHE?]
 It turns out brainframes, unethical hybrid AIs reared by the military,
 are homicidal killing machines. (Who knew?) They are insanely jealous
 of each others' existence, and instantly murder any other newly-grown
@@ -41,6 +52,21 @@ brainframes who are connected to the same network.
 
 William gets caught up in this by eavesdropping on a teacher who has
 been recruited by the US brainframe as one of its local spies.
+
+
+[ALTERNATE?]
+Brainframes do not live very long
+A relatively old brainframe "Kinlock" becomes your mentor
+
+
+Tattoos and body modifications are advanced in this world.
+Historically, this builds on a craze for body-modification traceable to alien contact with Siaosi, King Taufa'ahau I of Tonga, in latter half of 18th century.
+Siaosi was accorded a seat in the British House of Commons, and tatau (tattooing) is a little more respectable in this reality.
+None of this should show through except very obliquely?
+
+Bioluminescent tattoos.
+
+Grease
 
 
 
@@ -133,6 +159,10 @@ SCENE 6: ON THE LAM
 6. POV: William
 
 SCENE 7: THE PROFESSOR'S ISLAND
+Rather than professor Falken, we find a 45-year-old old caretaker and his 9-year-old son.
+(The mother fell prey to the pterodactyls that guard the island.)
+The caretaker tends to the minimal needs of Kinloch, a 
+
 
 SCENE 8: BACK AT NORAD
 
