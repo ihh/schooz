@@ -147,6 +147,7 @@ var runFirstAction = function() {
 var schemeFiles = ["scm/core/schooz.scm",
 		   "scm/core/machines.scm",
 		   "scm/core/once.scm",
+		   "scm/core/util.scm",
 		   "scm/ui/js.scm",
 //		   "scm/demo/rock.scm"];
 		   "scm/demo/redpill.scm"];

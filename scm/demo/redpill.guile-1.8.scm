@@ -8,6 +8,7 @@
 (load "../core/schooz.scm")
 (load "../core/machines.scm")
 (load "../core/once.scm")
+(load "../core/util.scm")
 (load "../ui/terminal.scm")
 
 (load "redpill.scm")

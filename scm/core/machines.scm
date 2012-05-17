@@ -94,7 +94,6 @@
 
 ;; (look)
 (define (look)
-(display "In look\n")
  (schooz:look))
 
 ;; (goto state)

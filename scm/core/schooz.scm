@@ -27,7 +27,8 @@
   `(schooz:choice ,action-text ,func-body))
 
 ;; (popup link-text (text1 action1) (text2 action2) ...)
-(define popup (lambda args (apply schooz:popup args)))
+(define popup (lambda args
+ (apply schooz:popup args)))
 
 ;; (menu (text1 action1) (text2 action2) ...)
 (define menu (lambda args (apply schooz:menu args)))
@@ -168,7 +169,7 @@
 	   (action-list (cdr args))
 	   (transformed-action-list (schooz:transform-action-list action-list))
 	   (return-value (schooz:impl-popup* link-text transformed-action-list)))
-    (schooz:register-action-list transformed-action-list)
+      (schooz:register-action-list transformed-action-list)
     return-value)))
 
 ;; (schooz:menu (text1 action1) (text2 action2) ...)

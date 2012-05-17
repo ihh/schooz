@@ -24,6 +24,8 @@
 ;; HTML
 (define p (lambda args `("p" ("@" ("class" ,schooz:paragraph-css-class)) ,@args)))
 (define span (lambda args `("span" ,@args)))
+(define h1 (lambda args `("h1" ,@args)))
+(define h2 (lambda args `("h2" ,@args)))
 
 ;; Functions
 (define schooz:onclick-binding (make-eq-hashtable))
@@ -131,7 +133,7 @@
 	      ("onclick" ,(string-append schooz:js-hide-popups-function "()")))
     ,button-text))
 
-(define (schooz:popup link-text popup-id popup-content)
+(define (schooz:js-popup link-text popup-id popup-content)
   (let ((elt (js-eval "document.createElement('div');")))
     (js-invoke elt "setAttribute" "class" schooz:popup-css-class)
     (js-set! elt "id" popup-id)
@@ -171,11 +173,11 @@
 (define (schooz:impl-link* link-text action-text action-func)
 ;  (schooz:anchor link-text action-text action-func))
   (let ((popup-id (schooz:next-popup-id)))
-    (schooz:popup link-text popup-id (schooz:choice-list `((,action-text ,action-func))))))
+    (schooz:js-popup link-text popup-id (schooz:choice-list `((,action-text ,action-func))))))
 
 (define (schooz:impl-popup* link-text action-list)
   (let ((popup-id (schooz:next-popup-id)))
-    (schooz:popup link-text popup-id (schooz:choice-list action-list))))
+    (schooz:js-popup link-text popup-id (schooz:choice-list action-list))))
 
 (define (schooz:impl-menu* action-list)
   (schooz:choice-list action-list))
