@@ -261,7 +261,7 @@
    (p "'Enough chit-chat. To business! You are an impressive hacker! Your accomplishments have come to our attention.'")
    (agree-choice "I'm flattered." "An oily smile."
 		 morpheus-own-exploits-gambit)
-   (agree-choice "Really? What have you heard?" "He waves his hand dismissively. 'Let us not dwell on the past,' he says, rather annoyingly. (You like to brag.)"
+   (agree-choice "I'm sure you have." "He waves his hand dismissively. 'Let us not dwell on the past,' he says (rather annoyingly)."
 		 morpheus-own-exploits-gambit)
    (neutral-choice "Let me tell you some of the really good stuff." "'I would be delighted to hear more!' You suspect he is not being completely sincere, but you can't resist the chance to brag."
 		   morpheus-more-exploits-gambit)
