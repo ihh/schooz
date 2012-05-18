@@ -180,7 +180,7 @@
     (schooz:js-popup link-text popup-id (schooz:choice-list action-list))))
 
 (define (schooz:impl-menu* action-list)
-  (schooz:choice-list action-list))
+  (p (schooz:choice-list action-list)))
 
 ;; Initial action
 (define (schooz:js-call-initial-action)

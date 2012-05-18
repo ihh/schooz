@@ -50,9 +50,9 @@
      " by two punks.")
    ,(p "Well, the girl is more Gothic, maybe. They look a bit like "
      (link-goto "Siouxsie" "meet-morpheus" "Examine 'Siouxsie'"
-		`(,(p "You stare at the tall Goth. She stares back, then pushes you in the chest hard.") ,(p "Who are you trying to fool? You are not the type of kid who stares people down. Cowed, you are easily hustled to the back of the club.")))
+		`(,(p "You stare at the tall Goth, who looks just like the lead singer of Siouxsie and the Banshees. She, however, does not care to be stared at, and pushes you in the chest hard.") ,(p "Who are you trying to fool? You are not the type of kid who stares people down. Cowed, you are easily hustled to the back of the club.")))
      " and "
-     (link-goto "Billy Idol" "meet-morpheus" "Examine 'Billy Idol'" `(,(p "The punk catches you staring, leans over and begins hawking up a mouthful of spit.") ,(p "Your horrified look makes the gothic girl laugh. 'Come with me,' she says, and you do.")))
+     (link-goto "Billy Idol" "meet-morpheus" "Examine 'Billy Idol'" `(,(p "The punk, who really does look like Billy Idol (except more scarred), catches you staring. He leans over and begins hawking up a mouthful of spit.") ,(p "Your horrified look makes the gothic girl laugh. 'Hop this way, sweetie,' she says; and you do.")))
    ", actually.")
    ,(p "\"The computer hacker! "
        (link-goto
@@ -177,20 +177,37 @@
 
 (define morpheus-annoyance 0)
 (define morpheus-annoyed-text  ;; give feedback on his escalating annoyance level
-  `((,morpheus " blinks slightly.")
-    (,morpheus " frowns slightly.")
-    (,morpheus " glares at you, angrily.")
-    (,morpheus " looks furious.")
-    (,morpheus " seethes with rage.")))
+  `("blinks slightly."
+    "frowns slightly."
+    "glares at you, angrily."
+    "looks furious."
+    "seethes with rage."))
+(define morpheus-mood-text
+  `(("seems unruffled. Almost as though no-one has ever thought of ruffling him, in fact.")
+    ("You might just be imagining it, but " ,morpheus " appears slightly off-balance. A thought occurs to you: it couldn't be that he didn't like you disagreeing with him? Surely it would take a lot of dissent to puncture THAT ego.")
+    (,morpheus " looks slightly upset. Only slightly, but he clearly doesn't like his monologues to be interrupted. His nose is faintly wrinkled, as at the smell of sour milk.")
+    (,"You're definitely getting to him, the way you keep disagreeing with him. He's tapping his fingers impatiently on the chair.")
+    (,morpheus " looks furious. Congratulations! This is about as angry as he gets. You have truly succeeded in pissing him off.")))
 (define (annoy-morpheus inc)
-  (if (< morpheus-annoyance (- (length morpheus-annoyed-text) 1))
-      (set! morpheus-annoyance (+ morpheus-annoyance inc)))
-  (append (list-ref morpheus-annoyed-text morpheus-annoyance) (list " ")))
+  (let ((increased-annoyance (+ morpheus-annoyance inc)))
+    (if (< increased-annoyance (length morpheus-annoyed-text) 1)
+	(set! morpheus-annoyance increased-annoyance)))
+  (list (string-append morpheus " " (list-ref morpheus-annoyed-text morpheus-annoyance) " ")))
+
+(define (morpheus-mood)
+  (apply string-append (append (list morpheus " ") (list-ref morpheus-mood-text morpheus-annoyance))))
+
+(define (morpheus-mood-link)
+  (schooz:popup
+   morpheus
+   `(,(string-append "Examine " morpheus) ,morpheus-mood)
+   `(,(string-append "Attack " morpheus) "Violence isn't the answer to this one.")
+   `(,(string-append "Kiss " morpheus) "That seems entirely inappropriate. Well done! Shame you can't pluck up the courage.")))
 
 (define (agree-choice statement result dest)
   (choice statement `(,(p "'" statement "', you say.")
 		      ,(p (one-of
-			   (span morpheus " nods, smiling.")
+			   (span morpheus " nods briskly.")
 			   (span morpheus " claps his hands.")
 			   (span "'Exactly!' says " morpheus "."))
 			  " "
@@ -237,40 +254,41 @@
    (p "'Reality doesn't always have to be what we think it is, on our initial superficial inspection.' " morpheus " intones. 'Quantum mechanics is a good example. Another example, the distinction between the \"discrete\" and the \"continuous\". Is it really so clear that we live in continuous space? Or might we be simulations on a grid?'")
    (neutral-choice "I guess so, if the grid is fine enough." "'Exactly! When you think about it, the discrete and the continuous are really two sides of a coin.' This doesn't make much sense to you, but you decide to let it slide." morpheus-exploits-gambit)
    (agree-choice "You just blew my mind." "He makes a gun shape with his fingers, puts it to his head. 'Pow.' (Did he really just do that?)" morpheus-exploits-gambit)
-   (annoy-choice "Actually, continuity has a precise topological definition." "'Well, yes; I am aware of that, of course. But there is a poetic truth, as well, behind the mathematical truth.'" morpheus-exploits-gambit)))
+   (annoy-choice "Actually, continuity has a precise topological definition." `(,(p "'Well, yes; I am aware of that, of course. But there is a poetic truth, as well, behind the mathematical truth.'" `("i" "What a crock,") " you think to yourself.")) morpheus-exploits-gambit)))
 
 (define (morpheus-exploits-gambit)
   (convo
-   (p "'Enough chit-chat. To business! You are an impressive hacker! Your exploits have come to our attention.'")
+   (p "'Enough chit-chat. To business! You are an impressive hacker! Your accomplishments have come to our attention.'")
    (agree-choice "I'm flattered." "An oily smile."
 		 morpheus-own-exploits-gambit)
    (agree-choice "Really? What have you heard?" "He waves his hand dismissively. 'Let us not dwell on the past,' he says, rather annoyingly. (You like to brag.)"
 		 morpheus-own-exploits-gambit)
-   (neutral-choice "Let me tell you some of the good stuff." "'I would be delighted to hear more!' You suspect he is not being completely sincere, but you can't resist the chance to brag."
+   (neutral-choice "Let me tell you some of the really good stuff." "'I would be delighted to hear more!' You suspect he is not being completely sincere, but you can't resist the chance to brag."
 		   morpheus-more-exploits-gambit)
-   (annoy-choice "I seriously doubt you've heard the least of my exploits, amateur." "'Very well, then; tell me more of your hacking accomplishments.'"
+   (annoy-choice "I seriously doubt you've heard the least of my accomplishments, amateur." "'Very well, then; tell me more of your hacking accomplishments.'"
 		 morpheus-more-exploits-gambit)))
 
 (define (morpheus-more-exploits-gambit)
   (convo
-   (p morpheus " looks at you expectantly, waiting to hear of your hacker exploits.")
-   (agree-choice "I don't like to brag too much." "'A man after my own heart!'" morpheus-own-exploits-gambit)
-   (once-choice (neutral-choice "I put together a buffer overflow exploit." `(,(p "You describe how you probed the stack using a hexadecimal memory inspector. " morpheus " does appear to perk up at this, temporarily, so you oblige by going into extensive detail.")) morpheus-more-exploits-gambit))
-   (once-choice (annoy-choice "I wrote this amazing screengrabber once." "You explain, in detail, the program you wrote that would display a pair of Greek dancers on the screen of anyone connected to the network, while clicking the cassette tape control relay rhythmically." morpheus-more-exploits-gambit))
-   (once-choice (annoy-choice "I wrote the first ever 6502 virus." "You patiently explain how your malware attached itself to a timer interrupt and injected itself into BASIC code, hidden within a comment using VDU control codes." morpheus-more-exploits-gambit))))
+   (p "For the moment, you have hijacked the conversation. (Well done!) " morpheus " is looking at you expectantly (or even impatiently), waiting for you to finish talking about your hacker achievments.")
+   (agree-choice "I don't like to brag too much." "'A man after my own heart! But this is why I brought you here...' he adds, picking up steam again." morpheus-own-exploits-gambit)
+   (once-choice (neutral-choice "I put together a buffer overflow exploit." `(,(p "You describe how you probed the stack using a hexadecimal memory inspector... to the evident discomfort of " morpheus ", who clearly likes to talk about himself. You oblige by going into extensive detail into what was definitely one of your finer hacks, technically speaking.")) morpheus-more-exploits-gambit))
+   (once-choice (annoy-choice "I wrote this amazing screengrabber once." "He clearly is unused to sharing the limelight. Nevertheless you explain, in detail, the program you wrote that would display a pair of Greek dancers on the screen of anyone connected to the network, while clicking the cassette tape control relay rhythmically. (It's hardly your greatest technical achievment, but the spectacularly humorous hack value is enough that you talk very animatedly about it.)" morpheus-more-exploits-gambit))
+   (once-choice (annoy-choice "I wrote the first ever 6502 virus." "He seems to prefer talking about his own exploits, rather than listening to yours. How silly! Yours are quite significant too. You patiently explain how your malware attached itself to a timer interrupt and injected itself into BASIC code, hidden within a comment using VDU control codes. This really is rather good stuff, and you have no problem expanding on the topic at length." morpheus-more-exploits-gambit))
+   (neutral-choice "I know every zero-page address on the Commodore 64." "'Call that an accomplishment! Who doesn't know that? This is why I brought you here, though,' he adds, getting back into his stride." morpheus-own-exploits-gambit)))
 
 (define (morpheus-own-exploits-gambit)
   (convo
-   (p "'Yes. Well, naturally you have heard of my own modest achievments.'")
+   (p "'Yes. Well, naturally you have heard of my own modest achievments,' says " morpheus)
    (agree-choice "Are you kidding? Your takedown of that French teletext network was legendary!" "'Thank you very much!'" show-choice)
    (neutral-choice "I've heard a few things." "'Very well. This does not, after all, matter much.'" show-choice)
-   (annoy-choice "Nope. Never heard of you." "'Hear that, Delphine?' he says to no-one in particular. 'Not everyone has heard of me, it seems.'" show-choice)))
+   (annoy-choice "Nope. Never heard of you." "'Hear that, Delphine?' he says to no-one in particular. 'Not everyone has heard of me, it seems.' ('Delphine'... wonder if he means Siouxsie?)" show-choice)))
 
 (define (show-choice) (goto "choice") (look))
 
 
 
-;(morpheus-alice-gambit)  ;; debug
+(morpheus-alice-gambit)  ;; debug
 
 
 (story*
@@ -288,8 +306,8 @@
 (story
  "choice"
  `(,(h1-club)
-   ,(p "\"What I am trying to say,\" says " morpheus ", \"is that there is a reality of which you are completely, completely unaware. And I can show it to you. If you take a blue pill, you can forget your troubles and I am totally cool with that; but if you want to open your mind - and I'm telling you now that we're talking a higher level of consciousness, here - then you are going to want to try the red pill.\"")
-   ,(p morpheus " offers you a choice between a "
+   ,(p "\"What I am trying to say,\" says " (morpheus-mood-link) ", \"is that there is a reality of which you are completely, completely unaware. And I can show it to you. If you take a blue pill, you can forget your troubles and I am totally cool with that; but if you want to open your mind - and I'm telling you now that we're talking a higher level of consciousness, here - then you are going to want to try the red pill.\"")
+   ,(p (morpheus-mood-link) " offers you a choice between a "
        (link-goto "red pill" "pill" "Take the red pill."
 	       (begin (now "pill" "red") "Silently, he hands over the red pill."))
        " and a "
@@ -305,7 +323,7 @@
  `(,(p
    "You crunch the pill between your teeth. Bitter.")
    ,(p
-   morpheus " nods approvingly. 'You will soon see the truth,' he says. 'And now, if you wouldn't mind, that will be "
+   (morpheus-mood-link) " nods approvingly. 'You will soon see the truth,' he says. 'And now, if you wouldn't mind, that will be "
    (link-goto "fifty pounds" "payment"
 	       "Fifty pounds. That's a bit expensive, isn't it?"
 	       `(,(p "'Fifty pounds,' you remark. 'Truth is expensive, then?'") ,(p "'The path to insight is not without material externalities,' he agrees.")))
