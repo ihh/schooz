@@ -183,19 +183,19 @@
     "looks furious."
     "seethes with rage."))
 (define morpheus-mood-text
-  `(("seems unruffled. Almost as though no-one has ever thought of ruffling him, in fact.")
+  `((,morpheus " seems unruffled. Almost as though no-one has ever thought of ruffling him, in fact.")
     ("You might just be imagining it, but " ,morpheus " appears slightly off-balance. A thought occurs to you: it couldn't be that he didn't like you disagreeing with him? Surely it would take a lot of dissent to puncture THAT ego.")
     (,morpheus " looks slightly upset. Only slightly, but he clearly doesn't like his monologues to be interrupted. His nose is faintly wrinkled, as at the smell of sour milk.")
     (,"You're definitely getting to him, the way you keep disagreeing with him. He's tapping his fingers impatiently on the chair.")
     (,morpheus " looks furious. Congratulations! This is about as angry as he gets. You have truly succeeded in pissing him off.")))
 (define (annoy-morpheus inc)
   (let ((increased-annoyance (+ morpheus-annoyance inc)))
-    (if (< increased-annoyance (length morpheus-annoyed-text) 1)
+    (if (< increased-annoyance (length morpheus-annoyed-text))
 	(set! morpheus-annoyance increased-annoyance)))
   (list (string-append morpheus " " (list-ref morpheus-annoyed-text morpheus-annoyance) " ")))
 
 (define (morpheus-mood)
-  (apply string-append (append (list morpheus " ") (list-ref morpheus-mood-text morpheus-annoyance))))
+  (apply string-append (list-ref morpheus-mood-text morpheus-annoyance)))
 
 (define (morpheus-mood-link)
   (schooz:popup
@@ -204,6 +204,10 @@
    `(,(string-append "Attack " morpheus) "Violence isn't the answer to this one.")
    `(,(string-append "Kiss " morpheus) "That seems entirely inappropriate. Well done! Shame you can't pluck up the courage.")))
 
+;; general format of agree-choice:
+;; 'STATEMENT', you say.
+;; Morpehus <does affirmative action>. <result text>
+;; [Next]
 (define (agree-choice statement result dest)
   (choice statement `(,(p "'" statement "', you say.")
 		      ,(p (one-of
@@ -214,11 +218,19 @@
 			  result
 			  (next-action dest)))))
 
+;; general format of annoy-choice:
+;; 'STATEMENT', you say.
+;; <Morpheus gesture-emotes that he has become more annoyed> <result text>
+;; [Next]
 (define (annoy-choice statement result dest)
   (choice statement `(,(p "'" statement "', you say.")
 		      ,(apply p (append (annoy-morpheus 1) (list result)))
 		      ,(next-action dest))))
 
+;; general format of annoy-choice:
+;; 'STATEMENT', you say.
+;; <Morpheus repeats last 'becomes more annoyed' emote> <result text>
+;; [Next]
 (define (neutral-choice statement result dest)
   (choice statement `(,(p "'" statement "', you say.")
 		      ,(apply p (append (annoy-morpheus 0) (list result)))
@@ -259,36 +271,58 @@
 (define (morpheus-exploits-gambit)
   (convo
    (p "'Enough chit-chat. To business! You are an impressive hacker! Your accomplishments have come to our attention.'")
-   (agree-choice "I'm flattered." "An oily smile."
+   (agree-choice "You honor me by even noticing." "He graces you with an oily, condescending smile. 'It is our pleasure to welcome you here.' (Is that the \"Royal We\"?)"
 		 morpheus-own-exploits-gambit)
-   (agree-choice "I'm sure you have." "He waves his hand dismissively. 'Let us not dwell on the past,' he says (rather annoyingly)."
+   (agree-choice "I'm sure they have, but I don't talk about it." "He waves his hand dismissively. 'Quite. Let us not dwell on the trivial accomplishments of the past, when the future holds so much more!' he says. (OK... now THAT'S annoying.)"
 		 morpheus-own-exploits-gambit)
-   (neutral-choice "Let me tell you some of the really good stuff." "'I would be delighted to hear more!' You suspect he is not being completely sincere, but you can't resist the chance to brag."
+   (neutral-choice "Let me tell you some of the REALLY good stuff." "'I would be delighted to hear more!' You suspect he is not being completely sincere, but you can't resist the chance to brag."
 		   morpheus-more-exploits-gambit)
-   (annoy-choice "I seriously doubt you've heard the least of my accomplishments, amateur." "'Very well, then; tell me more of your hacking accomplishments.'"
+   (annoy-choice "I seriously doubt you've heard the least of my accomplishments, amateur." "'Very well, then; tell me more of your hacking accomplishments, and we shall see who is the amateur.'"
 		 morpheus-more-exploits-gambit)))
 
 (define (morpheus-more-exploits-gambit)
   (convo
-   (p "For the moment, you have hijacked the conversation. (Well done!) " morpheus " is looking at you expectantly (or even impatiently), waiting for you to finish talking about your hacker achievments.")
+   (p "For the moment, you have hijacked the conversation. (Well done!) " morpheus " is looking at you expectantly (or even impatiently), waiting for you to finish talking about your hacking achievments.")
    (agree-choice "I don't like to brag too much." "'A man after my own heart! But this is why I brought you here...' he adds, picking up steam again." morpheus-own-exploits-gambit)
-   (once-choice (neutral-choice "I put together a buffer overflow exploit." `(,(p "You describe how you probed the stack using a hexadecimal memory inspector... to the evident discomfort of " morpheus ", who clearly likes to talk about himself. You oblige by going into extensive detail into what was definitely one of your finer hacks, technically speaking.")) morpheus-more-exploits-gambit))
-   (once-choice (annoy-choice "I wrote this amazing screengrabber once." "He clearly is unused to sharing the limelight. Nevertheless you explain, in detail, the program you wrote that would display a pair of Greek dancers on the screen of anyone connected to the network, while clicking the cassette tape control relay rhythmically. (It's hardly your greatest technical achievment, but the spectacularly humorous hack value is enough that you talk very animatedly about it.)" morpheus-more-exploits-gambit))
-   (once-choice (annoy-choice "I wrote the first ever 6502 virus." "He seems to prefer talking about his own exploits, rather than listening to yours. How silly! Yours are quite significant too. You patiently explain how your malware attached itself to a timer interrupt and injected itself into BASIC code, hidden within a comment using VDU control codes. This really is rather good stuff, and you have no problem expanding on the topic at length." morpheus-more-exploits-gambit))
-   (neutral-choice "I know every zero-page address on the Commodore 64." "'Call that an accomplishment! Who doesn't know that? This is why I brought you here, though,' he adds, getting back into his stride." morpheus-own-exploits-gambit)))
+   (once-choice (annoy-choice "Let me tell you about my buffer overflow exploit." `(,(p "You describe how you probed the stack using a hexadecimal memory inspector... to the evident discomfort of " morpheus ", who clearly likes to talk about himself. You oblige by going into extensive detail into what was definitely one of your finer hacks, technically speaking.")) morpheus-more-exploits-gambit))
+   (once-choice (annoy-choice "I've turned remote control into an artform." "He clearly is unused to sharing the limelight. Nevertheless you explain, in detail, the program you wrote that would display a pair of animated dancing characters in the corner the screen of anyone connected to your school's local network. The program would click the cassette tape control relay rhythmically. (It's hardly your greatest technical achievment, but the spectacularly humorous hack value is enough that you talk very animatedly about it.)" morpheus-more-exploits-gambit))
+   (once-choice (annoy-choice "I wrote the first ever 6502 virus for the BBC Micro." "He seems to prefer talking about his own exploits, rather than listening to yours. How silly! Yours are quite significant too. You patiently explain how your malware attached itself to a timer interrupt and injected itself into BASIC code, hidden within a comment using VDU control codes. This really is rather good stuff, and you have no problem expanding on the topic at length." morpheus-more-exploits-gambit))
+   (neutral-choice "I've made three ZX Spectrum games." "'Call that an accomplishment! Who hasn't done that? This is why I brought you here, though; to share in the society of your peers,' he adds, getting back into his stride." morpheus-own-exploits-gambit)))
 
 (define (morpheus-own-exploits-gambit)
   (convo
-   (p "'Yes. Well, naturally you have heard of my own modest achievments,' says " morpheus)
-   (agree-choice "Are you kidding? Your takedown of that French teletext network was legendary!" "'Thank you very much!'" show-choice)
-   (neutral-choice "I've heard a few things." "'Very well. This does not, after all, matter much.'" show-choice)
-   (annoy-choice "Nope. Never heard of you." "'Hear that, Delphine?' he says to no-one in particular. 'Not everyone has heard of me, it seems.' ('Delphine'... wonder if he means Siouxsie?)" show-choice)))
+   (p "'As a darkside hacker yourself, naturally you have heard of my own modest achievments,' says " morpheus)
+   (agree-choice
+    "Are you kidding? Your takedown of Minitel was legendary!"
+    "'Thank you very much! It's good to find someone who can appreciate the story.'"
+    morpheus-describes-conspiracy)
+   (neutral-choice "Erm, actually I haven't heard much at all." "'You can look it up. This does not, after all, matter much. The point is, I hacked a French email network called Minitel. It was quite widely-reported; I am surprised you didn't... but, again. No matter.'" morpheus-describes-conspiracy)
+   (agree-choice
+    "Didn't you break into some French network?"
+    `(,(span "'Allow me to tell the story...'")
+      ,(p "'Last year, I was working with an organization of environmental activists. The precise details are extraneous, but it suffices to say that France is criminally reckless with nuclear weapons, and this organization sought to draw attention to the fact.'")
+      ,(p "'During the course of these investigations, I broke into the French text network, Minitel. Again, I shall not trouble you with the details. The mechanics of my penetration included all the tricks in my arsenal: social engineering, zero-day exploits... the full playbook. But none of this is as interesting as what my explorations uncovered, once I got in.'"))
+    morpheus-describes-conspiracy)
+   (annoy-choice
+    "Nope. Never heard of you."
+    `(,(p "'Hear that, Delphine?' he says to no-one in particular. 'Not everyone has heard of me, it seems.'")
+      ,(p "(Delphine... wonder if he means Siouxsie?)")
+      ,(p "'It matters little whether you know my name or not,' says " morpheus ". 'It is enough for you to know that, last year, I was able to penetrate a French computer network. You will not have heard of this either, perhaps, but the name of this network is Minitel.'"))
+    morpheus-describes-conspiracy)))
+
+(define (morpheus-describes-conspiracy)
+  (convo
+   `(,(p "'It was during my exploration of Minitel that I uncovered the secret I brought you here to talk about. Oh, the network itself is of little interest: a darknet haven for the sex and drugs industries, mostly. Such human needs hold interest for me as a businessman, but not beyond that.")
+     ,(p "'For myself, I am drawn naturally to the discussions of men of power... I speak five languages, and French is one of the easier ones. A little curious poking led me to some communications between the President's office and the nation of Tahiti. And here I found a most interesting correspondence concerning an asteroid impact in the Pacific Ocean last year.")
+     ,(p morpheus " leans forward. 'Or can we even say \"last year\" with certainty? This is where the story gets mysterious, my young friend. Because, while the asteroid impact was last year, the timestamp on the file was over ten years old!'"))
+   (agree-choice "Yeah, that's pretty weird." "'Weird indeed! And that is not the whole of it!'" show-choice)
+   (annoy-choice "Big deal. Timestamps can be faked." "'I assure you, I'd know the difference,' he says (though you can't see how he could). 'In any case, there is more. Much, much more.'" show-choice)))
 
 (define (show-choice) (goto "choice") (look))
 
 
 
-;(morpheus-alice-gambit)  ;; debug
+(morpheus-exploits-gambit)  ;; debug
 
 
 (story*
@@ -306,7 +340,8 @@
 (story
  "choice"
  `(,(h1-club)
-   ,(p "\"What I am trying to say,\" says " (morpheus-mood-link) ", \"is that there is a reality of which you are completely, completely unaware. And I can show it to you. If you take a blue pill, you can forget your troubles and I am totally cool with that; but if you want to open your mind - and I'm telling you now that we're talking a higher level of consciousness, here - then you are going to want to try the red pill.\"")
+   ,(p "\"What I am trying to say,\" says " (morpheus-mood-link) ", \"is that there is a reality of which you are completely, completely unaware. And I can show it to you, or you can walk away.\"")
+   ,(p "\"If you take a blue pill, you can forget your troubles and I am totally cool with that; but if you want to open your mind - and I'm telling you now that we're talking Illuminatus-level secrets, here - then you are going to want to try the red pill.\"")
    ,(p (morpheus-mood-link) " offers you a choice between a "
        (link-goto "red pill" "pill" "Take the red pill."
 	       (begin (now "pill" "red") "Silently, he hands over the red pill."))
