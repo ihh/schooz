@@ -288,7 +288,7 @@
 
 
 
-(morpheus-alice-gambit)  ;; debug
+;(morpheus-alice-gambit)  ;; debug
 
 
 (story*
