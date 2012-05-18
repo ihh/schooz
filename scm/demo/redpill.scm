@@ -322,7 +322,7 @@
 
 
 
-(morpheus-exploits-gambit)  ;; debug
+;(morpheus-exploits-gambit)  ;; debug
 
 
 (story*
