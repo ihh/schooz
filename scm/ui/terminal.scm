@@ -4,6 +4,8 @@
 ;; dummy HTML
 (define p (lambda args `("p" ,@args)))
 (define span (lambda args `("span" ,@args)))
+(define h1 (lambda args `("h1" ,@args)))
+(define h2 (lambda args `("h2" ,@args)))
 
 ;; Highlighting of links (just to show where they would be)
 (define

@@ -22,6 +22,11 @@
 ;; (1) You escape without taking the pills.
 ;; (2) You take the red or the blue pill.
 
+;; Standard verb responses
+(define no-attack `("Attack" (,(p "Violence isn't the answer to this one.") ,(p "Yes, I know: narrators ALWAYS say that. But in your case, it's something you've learned to tell yourself, if only to save face.") ,(p "Look at you: scrawny, spotty... pure nerd. Despite your encyclopedic knowledge of the Anarchist Cookbook, violence has pretty much never been the answer to anything, for you. (More like the problem you're trying to avoid...)"))))
+(define no-kiss `("Kiss" (,(p "That seems entirely inappropriate. Well done!") ,(p "It's a shame you can't pluck up the courage, really. But I think you deserve some credit for actualizing the thought. Better a frustrated lover than a self-denying one!"))))
+
+
 ;; Club music
 (random-machine
  "club-music"  ;; you are a geeky teenager, you hate this
@@ -49,18 +54,24 @@
      (link-goto "accosted" "meet-morpheus" "I object to being hustled like this!" "Despite your weak objections, you are easily hustled to the back of the club.")
      " by two punks.")
    ,(p "Well, the girl is more Gothic, maybe. They look a bit like "
-     (link-goto "Siouxsie" "meet-morpheus" "Examine 'Siouxsie'"
-		`(,(p "You stare at the tall Goth, who looks just like the lead singer of Siouxsie and the Banshees. She, however, does not care to be stared at, and pushes you in the chest hard.") ,(p "Who are you trying to fool? You are not the type of kid who stares people down. Cowed, you are easily hustled to the back of the club.")))
+       (verb-acts
+	"Siouxsie"
+	(verb-goto "Examine" "meet-morpheus" `(,(p "You stare at the tall Goth, who looks just like the lead singer of Siouxsie and the Banshees. She, however, does not care to be stared at, and pushes you in the chest hard.") ,(p "Who are you trying to fool? You are not the type of kid who stares people down. Cowed, you are easily hustled to the back of the club.")))
+	no-attack no-kiss)
      " and "
-     (link-goto "Billy Idol" "meet-morpheus" "Examine 'Billy Idol'" `(,(p "The punk, who really does look like Billy Idol (except more scarred), catches you staring. He leans over and begins hawking up a mouthful of spit.") ,(p "Your horrified look makes the gothic girl laugh. 'Hop this way, sweetie,' she says; and you do.")))
+     (verb-acts
+      "Billy Idol" 
+      (verb-goto "Examine" "meet-morpheus" `(,(p "The punk, who really does look like Billy Idol (except more scarred), catches you staring. He leans over and begins hawking up a mouthful of spit.") ,(p "Your horrified look makes the gothic girl laugh. 'Hop this way, sweetie,' she says; and you do.")))
+      no-attack no-kiss)
    ", actually.")
    ,(p "\"The computer hacker! "
-       (link-goto
-	"Anarchist computer hacker." "meet-morpheus" "Examine myself"
-	`(,(p "It's true what the lady said. You are a teenage hacker, 17 years old. Too young to prosecute...")
+       (popup
+	"Anarchist computer hacker."
+	(choice-goto "meet-morpheus" "Examine myself"
+		     `(,(p "It's true what the lady said. You are a teenage hacker, 17 years old. Too young to prosecute...")
 	  ,(p "It has to be said, clubs like this wouldn't normally let you in. But your chatline contact promised you'd be welcome, and here you are.")
 	  ,(p "Best do what the Goth asks, I suppose.")
-	  ,(p "You proceed to the back of the club, the aggressive punk unclipping a velvet rope for you. VIP treatment for the l33t hacker. Nice.")))
+	  ,(p "You proceed to the back of the club, the aggressive punk unclipping a velvet rope for you. VIP treatment for the l33t hacker. Nice."))))
        " We like anarchy, don't we?\" the one like Siouxsie says.")
    ,(p "\"I have a "
      (link-goto "colleague" "meet-morpheus" "OK, let's meet this mysterious 'colleague'." "'Yeah, cool!' you burble, as if you have any say in it. The tall gothic lady ushers you to the back of the club, while her other half growls at bad dancers.")
@@ -78,6 +89,7 @@
        ", to see a choice (or a popup of choices) of action(s) that you can perform in the story.")
    ,(p "Click on any of the choice buttons to advance the story, or mouseover a different "
        (describe "pop-up link"))
+   ,(p "The web browser's back arrow will not allow you to \"rewind\" this story. However, you " `("i" "can") " restart the game, by reloading the page.")
    ,(describe "UI tips")
    ,(p "You can also click on any buttons you see in the text. Click on this 'Next' button to go back to the story:")
    ,(next-return)))
@@ -98,7 +110,7 @@
 (selectable-machine
  "UI tips"
  `("OK, got it; thanks." "" ,@click-for-more-tips)
- `("Where's the undo button?" "There is no undo feature in this game. Systematically lawn-mowering options is no way to approach a story! Rest assured that it's impossible to get stuck, although some choices will commit you to different endings." ,@click-for-more-tips)
+ `("Where's the undo button?" "There is no undo feature in this game. Insofar as a piece of software can be said to encode beliefs, this game believes that lawn-mowering through its options is a poor way to approach the story, so the game's user interface deliberately doesn't make that sort of thing easy. Rest assured that it's impossible to get stuck, although some choices will commit you to different endings." ,@click-for-more-tips)
  `("How do I save and restore?" "There is, at present, no save feature in this game. The game is designed to be played through quickly, in one sitting." ,@click-for-more-tips)
  `("It's annoying when the choices disappear!" "If you want a choice popup to stick around (rather than disappearing when you move the mouse away), click on the parent pop-up link, rather than just mousing over it." ,@click-for-more-tips))
 
@@ -133,9 +145,13 @@
    "Bigshot? Why call him that?")
 
 (define (morpheus-intro-choice pre-text stare-text intervening-text speak-text post-text)
-  `(,pre-text " "
-    ,(link-goto stare-text "conversation" (string-append "Examine " morpheus)
-		`(,(p "You stare at each other for a while. This sang-froid is rather out of character for you, and you feel sweat prickling.") ,(p "But, eventually, " morpheus " clears his throat.")))
+  `(,pre-text
+    " "
+    ,(verb-acts*
+      stare-text morpheus
+      (verb-goto "Examine" "conversation"
+		 `(,(p "You stare at each other for a while. This sang-froid is rather out of character for you, and you feel sweat prickling.") ,(p "But, eventually, " morpheus " clears his throat.")))
+      no-attack no-kiss)
     " " ,intervening-text " "
     ,(link-goto speak-text "conversation" "Try to say something cool"
 		`("'Speak up, then,' you say, feigning boredom. 'You asked me here, after all.'" ,(p morpheus " grins.")))
@@ -198,11 +214,10 @@
   (apply string-append (list-ref morpheus-mood-text morpheus-annoyance)))
 
 (define (morpheus-mood-link)
-  (schooz:popup
+  (verb-acts
    morpheus
-   `(,(string-append "Examine " morpheus) ,morpheus-mood)
-   `(,(string-append "Attack " morpheus) "Violence isn't the answer to this one.")
-   `(,(string-append "Kiss " morpheus) "That seems entirely inappropriate. Well done! Shame you can't pluck up the courage.")))
+   `("Examine" ,morpheus-mood)
+   no-attack no-kiss))
 
 ;; general format of agree-choice:
 ;; 'STATEMENT', you say.
@@ -291,7 +306,7 @@
 
 (define (morpheus-own-exploits-gambit)
   (convo
-   (p "'As a darkside hacker yourself, naturally you have heard of my own modest achievments,' says " morpheus)
+   (p "'As a darkside hacker yourself, naturally you have heard of my own modest achievments,' says " morpheus ".")
    (agree-choice
     "Are you kidding? Your takedown of Minitel was legendary!"
     "'Thank you very much! It's good to find someone who can appreciate the story.'"
@@ -342,7 +357,7 @@
  `(,(h1-club)
    ,(p "\"What I am trying to say,\" says " (morpheus-mood-link) ", \"is that there is a reality of which you are completely, completely unaware. And I can show it to you, or you can walk away.\"")
    ,(p "\"If you take a blue pill, you can forget your troubles and I am totally cool with that; but if you want to open your mind - and I'm telling you now that we're talking Illuminatus-level secrets, here - then you are going to want to try the red pill.\"")
-   ,(p (morpheus-mood-link) " offers you a choice between a "
+   ,(p morpheus " offers you a choice between a "
        (link-goto "red pill" "pill" "Take the red pill."
 	       (begin (now "pill" "red") "Silently, he hands over the red pill."))
        " and a "

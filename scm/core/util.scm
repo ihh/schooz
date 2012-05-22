@@ -176,3 +176,32 @@
 
 (define (unique-narrative-state) (unique-state schooz:narrative))
 
+
+;; Verb-noun popup helper
+(define verb-acts
+  (lambda args
+    (let ((noun (car args)))
+      (apply verb-acts* (cons noun args)))))
+
+(define verb-acts*
+  (lambda args
+    (let ((link-text (car args)) (noun (cadr args)) (verb-action-list (cddr args)))
+      (apply
+       popup
+       (cons
+	link-text
+	(map (lambda (verb-action)
+	       (let ((verb (car verb-action))
+		     (action (cadr verb-action)))
+		 `(,(string-append verb " " noun) ,action)))
+	     verb-action-list))))))
+
+;; Goto/gosub verbs
+(define (verb-goto verb dest result)
+  `(,verb ,(lambda () (goto dest) result)))
+
+(define (verb-gosub verb dest result)
+  `(,verb ,(lambda () (gosub dest) result)))
+
+(define (verb-return verb result)
+  `(,verb ,(lambda () (return) result)))
