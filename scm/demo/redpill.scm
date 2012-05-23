@@ -23,8 +23,8 @@
 ;; (2) You take the red or the blue pill.
 
 ;; Standard verb responses
-(define no-attack `("Attack" (,(p "Violence isn't the answer to this one.") ,(p "Yes, I know: narrators ALWAYS say that. But in your case, it's something you've learned to tell yourself, if only to save face.") ,(p "Look at you: scrawny, spotty... pure nerd. Despite your encyclopedic knowledge of the Anarchist Cookbook, violence has pretty much never been the answer to anything, for you. (More like the problem you're trying to avoid...)"))))
-(define no-kiss `("Kiss" (,(p "That seems entirely inappropriate. Well done!") ,(p "It's a shame you can't pluck up the courage, really. But I think you deserve some credit for actualizing the thought. Better a frustrated lover than a self-denying one!"))))
+(define no-attack `("Attack" (,(p "Violence isn't the answer to this one.") ,(p "Yes, I know: narrators ALWAYS say that. But in your case, it's something you've learned to tell yourself; if only to save face.") ,(p "Look at you: scrawny, spotty... pure nerd. Despite your encyclopedic knowledge of the Anarchist Cookbook, violence has pretty much never been the answer to anything, for you. More like the problem you're trying to avoid."))))
+(define no-kiss `("Kiss" (,(p "That seems entirely inappropriate. Well done!") ,(p "It's a shame you can't pluck up the courage, but I think you deserve some credit for actualizing the thought. Better a frustrated lover than a self-denying one!"))))
 
 
 ;; Club music
@@ -281,7 +281,7 @@
    (p "'Reality doesn't always have to be what we think it is, on our initial superficial inspection.' " morpheus " intones. 'Quantum mechanics is a good example. Another example, the distinction between the \"discrete\" and the \"continuous\". Is it really so clear that we live in continuous space? Or might we be simulations on a grid?'")
    (neutral-choice "I guess so, if the grid is fine enough." "'Exactly! When you think about it, the discrete and the continuous are really two sides of a coin.' This doesn't make much sense to you, but you decide to let it slide." morpheus-exploits-gambit)
    (agree-choice "You just blew my mind." "He makes a gun shape with his fingers, puts it to his head. 'Pow.' (Did he really just do that?)" morpheus-exploits-gambit)
-   (annoy-choice "Actually, continuity has a precise topological definition." `(,(p "'Well, yes; I am aware of that, of course. But there is a poetic truth, as well, behind the mathematical truth.'" `("i" "What a crock,") " you think to yourself.")) morpheus-exploits-gambit)))
+   (annoy-choice "Actually, continuity has a precise topological definition." `(,(p "'Well, yes; I am aware of that, of course. But there is a poetic truth, as well, behind the mathematical truth.' (" `("i" "What a crock,") " you think to yourself.)")) morpheus-exploits-gambit)))
 
 (define (morpheus-exploits-gambit)
   (convo
@@ -328,7 +328,7 @@
 (define (morpheus-describes-conspiracy)
   (convo
    `(,(p "'It was during my exploration of Minitel that I uncovered the secret I brought you here to talk about. Oh, the network itself is of little interest: a darknet haven for the sex and drugs industries, mostly. Such human needs hold interest for me as a businessman, but not beyond that.")
-     ,(p "'For myself, I am drawn naturally to the discussions of men of power... I speak five languages, and French is one of the easier ones. A little curious poking led me to some communications between the President's office and the nation of Tahiti. And here I found a most interesting correspondence concerning an asteroid impact in the Pacific Ocean last year.")
+     ,(p "'For myself, I am drawn naturally to the discussions of men of power... I speak five languages, and French is one of the easier ones. A little curious poking led me to some communications between the President's office and the nation of Tahiti. And here I found a most interesting correspondence concerning an asteroid impact in the Pacific Ocean last year.'")
      ,(p morpheus " leans forward. 'Or can we even say \"last year\" with certainty? This is where the story gets mysterious, my young friend. Because, while the asteroid impact was last year, the timestamp on the file was over ten years old!'"))
    (agree-choice "Yeah, that's pretty weird." "'Weird indeed! And that is not the whole of it!'" show-choice)
    (annoy-choice "Big deal. Timestamps can be faked." "'I assure you, I'd know the difference,' he says (though you can't see how he could). 'In any case, there is more. Much, much more.'" show-choice)))
