@@ -327,7 +327,7 @@
 
 (define (morpheus-describes-conspiracy)
   (convo
-   `(,(p "'It was during my exploration of Minitel that I uncovered the secret I brought you here to talk about. Oh, the network itself is of little interest: a darknet haven for the sex and drugs industries, mostly. Such human needs hold interest for me as a businessman, but not beyond that.")
+   `(,(p "'It was during my exploration of Minitel that I uncovered the terrible secret I brought you here to share. Oh, the network itself is of little interest: a darknet haven for the sex and drugs industries, mostly. Such human needs hold interest for me as a businessman, but not beyond that.")
      ,(p "'For myself, I am drawn naturally to the discussions of men of power... I speak five languages, and French is one of the easier ones. A little curious poking led me to some communications between the President's office and the nation of Tahiti. And here I found a most interesting correspondence concerning an asteroid impact in the Pacific Ocean last year.'")
      ,(p morpheus " leans forward. 'Or can we even say \"last year\" with certainty? This is where the story gets mysterious, my young friend. Because, while the asteroid impact was last year, the timestamp on the file was over ten years old!'"))
    (agree-choice "Yeah, that's pretty weird." "'Weird indeed! And that is not the whole of it!'" show-choice)
