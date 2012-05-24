@@ -6,6 +6,8 @@
 (define span (lambda args `("span" ,@args)))
 (define h1 (lambda args `("h1" ,@args)))
 (define h2 (lambda args `("h2" ,@args)))
+(define i (lambda args `("i" ,@args)))
+(define b (lambda args `("b" ,@args)))
 
 ;; Highlighting of links (just to show where they would be)
 (define

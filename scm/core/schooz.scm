@@ -120,7 +120,7 @@
 	 rest))))
 
 (define (schooz:fold-strings-sxml lst)
-  (schooz:fold-sxml-inner "" lst))
+  (schooz:convert-quotes (schooz:fold-sxml-inner "" lst)))
 
 ;; alternate (non-SXML) output adapter: just flattens everything
 (define (schooz:fold-plain str lst)
@@ -143,12 +143,33 @@
 (define (schooz:output-sxml)
   (set! schooz:fold-strings schooz:fold-strings-sxml))
 
+
+;; Convert '' to "
+(define (schooz:convert-quotes str)
+  (list->string
+   (schooz:reverse-list
+    (schooz:fold-right
+     (lambda (lst chr)
+       (if (null? lst)
+	   (list chr)
+	   (if (and (equal? chr #\') (equal? (car lst) #\'))
+	       (cons #\" (cdr lst))
+	       (cons chr lst))))
+     '()
+     (string->list str)))))
+
 ;; list helpers
 (define (schooz:as-list lst) (if (pair? lst) lst (list lst)))
 
 (define (schooz:append-as-lists lst1 lst2)
   (append (schooz:as-list lst1) (schooz:as-list lst2)))
 
+(define (schooz:reverse-list lst)
+  (define (schooz:reverse-list-2 lst acc)
+    (if (null? lst)
+	acc
+	(schooz:reverse-list-2 (cdr lst) (cons (car lst) acc))))
+  (schooz:reverse-list-2 lst '()))
 
 
 ;; (schooz:link* text action-text func-body)

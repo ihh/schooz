@@ -26,6 +26,8 @@
 (define span (lambda args `("span" ,@args)))
 (define h1 (lambda args `("h1" ,@args)))
 (define h2 (lambda args `("h2" ,@args)))
+(define i (lambda args `("i" ,@args)))
+(define b (lambda args `("b" ,@args)))
 
 ;; Functions
 (define schooz:onclick-binding (make-eq-hashtable))
