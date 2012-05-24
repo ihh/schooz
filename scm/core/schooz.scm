@@ -145,18 +145,19 @@
 
 
 ;; Convert '' to "
+;; Seems to be a bit slow...
 (define (schooz:convert-quotes str)
-  (list->string
-   (schooz:reverse-list
-    (schooz:fold-right
-     (lambda (lst chr)
-       (if (null? lst)
-	   (list chr)
-	   (if (and (equal? chr #\') (equal? (car lst) #\'))
-	       (cons #\" (cdr lst))
-	       (cons chr lst))))
-     '()
-     (string->list str)))))
+  (define (schooz:convert-quotes-pos str pos lst)
+    (let* ((chr (string-ref str pos))
+	   (next-lst (if (null? lst)
+			 (list chr)
+			 (if (and (equal? chr #\') (equal? (car lst) #\'))
+			     (cons #\" (cdr lst))
+			     (cons chr lst)))))
+      (if (= pos 0)
+	  (list->string next-lst)
+	  (schooz:convert-quotes-pos str (- pos 1) next-lst))))
+  (schooz:convert-quotes-pos str (- (string-length str) 1) '()))
 
 ;; list helpers
 (define (schooz:as-list lst) (if (pair? lst) lst (list lst)))

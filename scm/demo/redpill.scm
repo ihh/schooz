@@ -36,7 +36,7 @@
    "Over on the dancefloor strobe lights flicker over vacant faces, jumbled arms and legs."
    "A gut-wobbling bassline rolls in a maddeningly repetitive loop."
    "A tortured techno riff pounds from the speaker stacks, killing your ears."
-   "On the dancefloor, you can glimpse gurning faces, grinding teeth."
+   "On the dancefloor, gurning faces. You almost hear the grinding teeth."
    "Sweat and dry ice. And a stifling humidity."
    "A spiralling bass whoop rattles glasses on the tables."
    "The music is, like, really hypnotic American disco or something. Very repetitive vocals."))
@@ -77,7 +77,10 @@
      (link-goto "colleague" "meet-morpheus" "OK, let's meet this mysterious ''colleague'." "''Yeah, cool!'' you burble, as if you have any say in it. The tall gothic lady ushers you to the back of the club, while her other half growls at bad dancers.")
      " in need of your talents,'' she continues, tilting her head towards a back room.")
    ,(p "Well, this is something. Recognition, at last!")
-   ,(simple-button* "First-time player? Click here!" (lambda () (gosub "tutorial") (look)))))
+   ,(simple-button* "First-time player? Click here!" (lambda () (gosub "tutorial") (look)))
+   ,(simple-button*
+     "Comments on the user interface? Click here!"
+     (lambda () `(,(p "Look, pal. I grew up in the 80's. Back then computers had EIGHT BITS. That's like counting on your fingers. ASCII was all we had, and you're lucky to even get basic HTML.") ,(p "If you---and enough others---like the " (i "content") " of this game, maybe I'll make a better UI:-- one with graceful menus, translucent textures and gentle transitions. And yes I will use JQuerious, Fidget, Hobo, Noed, Selenia, or whatever your favorite library is.") ,(p "Until then, do " (i "please") " be awesome: look past the basic stylings, and try to enjoy the text.") ,(p "Now GET OFF MY LAWN"))))))
 
 (story
  "tutorial"
@@ -337,7 +340,7 @@
    `(,(p "''It was during my exploration of Minitel that I uncovered the terrible secret I brought you here to share. Oh, the network itself is of little interest: a darknet haven for the sex and drugs industries, mostly. Such human needs hold interest for me as a businessman, but not beyond that.")
      ,(p "''For myself, I am drawn naturally to the discussions of men of power... I speak five languages, and French is one of the easier ones. A little curious poking led me to some communications between the President's office and the nation of Tahiti. A mysterious spate of... disappearance... kidnappings?''")
      ,(p morpheus " leans forward. ''You remember the tsunami, last year?'' You nod. Many died. It was on TV. But " morpheus " sneers manically, as if he has caught you in a trap. ''I thought I did, too... But this is the great puzzle. I found reference to this tsunami, many references. But the timestamps on these email were over ten years old!''"))
-   (agree-choice "Are you talking about time travel, or something?" `(,(p "''You said that. I did not. As they say... out of the mouths of babes? In this case I think it might be more accurate to use another phrase... time distortion, perhaps?''") ,(p (i ("Babes?!")))) morpheus-bullshits-about-relativity)
+   (agree-choice "Are you talking about time travel, or something?" `(,(p "''You said that. I did not. As they say... out of the mouths of babes? In this case I think it might be more accurate to use another phrase... time distortion, perhaps?''") ,(p (i "Babes?!"))) morpheus-bullshits-about-relativity)
    (annoy-choice "Big deal. Timestamps can be faked." "''I assure you, I'd know the difference,'' he says (though you can't see how he could). ''In any case, there is more. Much, much more.''" morpheus-bullshits-about-relativity)
    (neutral-choice "Wait, kidnappings?" "''You are right to be shocked.''" morpheus-describes-kidnappings)
    (agree-choice
