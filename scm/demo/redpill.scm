@@ -39,7 +39,7 @@
    "On the dancefloor, gurning faces. You almost hear the grinding teeth."
    "Sweat and dry ice. And a stifling humidity."
    "A spiralling bass whoop rattles glasses on the tables."
-   "The music is, like, really hypnotic American disco or something. Very repetitive vocals."))
+   "The music is, like, really hypnotic American disco or something. Repetitive, meaningless vocals."))
 
 ;; Club ambience
 (define (h1-club-front) `(,(h1 "Nightclub") ,(h2 "London, 1985") ,(p (i (describe "club-music"))) ,(p)))
@@ -79,8 +79,8 @@
    ,(p "Well, this is something. Recognition, at last!")
    ,(simple-button* "First-time player? Click here!" (lambda () (gosub "tutorial") (look)))
    ,(simple-button*
-     "Comments on the user interface? Click here!"
-     (lambda () `(,(p "Look, pal. I grew up in the 80's. Back then computers had EIGHT BITS. That's like counting on your fingers. ASCII was all we had, and you're lucky to even get basic HTML.") ,(p "If you---and enough others---like the " (i "content") " of this game, maybe I'll make a better UI:-- one with graceful menus, translucent textures and gentle transitions. And yes I will use JQuerious, Fidget, Hobo, Noed, Selenia, or whatever your favorite library is.") ,(p "Until then, do " (i "please") " be awesome: look past the basic stylings, and try to enjoy the text.") ,(p "Now GET OFF MY LAWN"))))))
+     "Complaints about the user interface? Click here!"
+     (lambda () `(,(h1 "Beach hut") ,(h2 "Somewhere in the South Pacific, 2011") ,(p (i "Through the window, a distant pulse of reggae from the ever-present party. In front of you is an open laptop, running a badly-written choose-your-adventure game set in mid-80's London. Behind the laptop, a mosquito net hangs over a dishevelled bed.")) ,(p "''Please,'' you say, pushing the laptop away. ''I... can't... you don't understand. I'm just not used to this, and... my family... they'll be wondering...''") ,(p "The author nods, and waves the minder out of the room. He frowns, and it's a while before he speaks again. But when he does, he looks you straight in the eye:") ,(p "''Look, pal. No-one wants to be a play-tester. You think you've got it tough? I grew up when computers had " (b "eight bits.") " That's like counting on your fingers.") ,(p "''ASCII was all we had, back then. You ought to count yourself lucky to even get basic HTML...") ,(p "''If you---and enough others---like the " (i "content") " of this game, maybe I'll make a better UI:-- one with graceful menus, translucent textures and gentle transitions.") ,(p "''And yes,'' a dark edge creeps into his voice, ''I will use JQuerious. Fidget. Hobo. Nod. Selenia. And whatever your favorite JavaScript library is.'' (Now he just sounds bitter.)") ,(p "''Until then, do " (i "please") " be awesome: look past the basic stylings, and try to enjoy the text.''") ,(i "At a nod, the armed guard returns to the hut. Looks like you're going to have to play a bit more of this game, before you get off the island."))))))
 
 (story
  "tutorial"
@@ -339,30 +339,31 @@
   (convo
    `(,(p "''It was during my exploration of Minitel that I uncovered the terrible secret I brought you here to share. Oh, the network itself is of little interest: a darknet haven for the sex and drugs industries, mostly. Such human needs hold interest for me as a businessman, but not beyond that.")
      ,(p "''For myself, I am drawn naturally to the discussions of men of power... I speak five languages, and French is one of the easier ones. A little curious poking led me to some communications between the President's office and the nation of Tahiti. A mysterious spate of... disappearance... kidnappings?''")
-     ,(p morpheus " leans forward. ''You remember the tsunami, last year?'' You nod. Many died. It was on TV. But " morpheus " sneers manically, as if he has caught you in a trap. ''I thought I did, too... But this is the great puzzle. I found reference to this tsunami, many references. But the timestamps on these email were over ten years old!''"))
-   (agree-choice "Are you talking about time travel, or something?" `(,(p "''You said that. I did not. As they say... out of the mouths of babes? In this case I think it might be more accurate to use another phrase... time distortion, perhaps?''") ,(p (i "Babes?!"))) morpheus-bullshits-about-relativity)
+     ,(p morpheus " leans forward. ''You remember the tsunami, last year?'' You nod. Many died. It was on TV.")
+     ,(p "But " morpheus " barks---''Aha!''---as if he has caught you in a trap. ''I thought I remembered it, too... " (b "last year.") " But this is the great puzzle.''")
+     ,(p "''I found references to this tsunami, in these emails, many references. But the timestamps on these email were over ten years old!''"))
+   (agree-choice "Are you talking about time travel, or something?" `(,(p "''To be clear, you said that. I did not. As they say... out of the mouths of babes? In this case I think it might be more accurate to use another phrase, rather than time " (i "travel") "... time " (i "distortion") ", perhaps?''") ,(p (i "Babes?!"))) morpheus-bullshits-about-relativity)
    (annoy-choice "Big deal. Timestamps can be faked." "''I assure you, I'd know the difference,'' he says (though you can't see how he could). ''In any case, there is more. Much, much more.''" morpheus-bullshits-about-relativity)
    (neutral-choice "Wait, kidnappings?" "''You are right to be shocked.''" morpheus-describes-kidnappings)
    (agree-choice
-    "What did the emails say about the tsunami?"
-    `(,(p "''I cannot reveal everything...''"))
-    morpheus-describes-kidnappings)))
-
-
+    "The emails said something about the tsunami?"
+    `(,(p "''I cannot reveal everything... The emails spoke of an asteroid. I can tell you more, but these are dangerous secrets. I need some kind of... guarantee.''"))
+    show-choice)))
 
 (define (morpheus-bullshits-about-relativity)
   (convo
-   `(,(p "Blah blah relativity blows your mind."))
-   (agree-choice "Yep" "" morpheus-describes-kidnappings)
-   (neutral-choice "Maybe" "" morpheus-describes-kidnappings)
-   (annoy-choice "Nope" "" morpheus-describes-kidnappings)))
+   `(,(p "''The theory of relativity tells us that space and time are not real. We now know it to be true, from experiments on animals. And yet leading scientists of the time resisted the concept... If such apparently fundamental concepts as the fixity of time and space can be mere illusions of the mind, is it not possible that time itself can be undone? Especially if, as you pointed out, we are living in a simulation?''"))
+   (agree-choice "Actually, I didn't say that." "''I'm pretty sure you did. But it's not important.''" morpheus-describes-kidnappings)
+   (neutral-choice "Animals?" "''Yes, relativity was first proved with monkeys.'' He waves away your objections: ''We can look it up. I assure you I am correct. But this is not important - let us move on.''" morpheus-describes-kidnappings)
+   (annoy-choice "I think you have fundamentally misunderstood relativity." "''My years of study would strongly disagree. But this is not what I brought you here to discuss.''" morpheus-describes-kidnappings)))
 
 (define (morpheus-describes-kidnappings)
   (convo
-   `(,(p "Blah blah aliens harvesting humans for energy."))
-   (agree-choice "Yep" "" show-choice)
-   (neutral-choice "Maybe" "" show-choice)
-   (annoy-choice "Nope" "" show-choice)))
+   `(,(p "''The emails that I intercepted,''" morpheus " continues, ''were encrypted using an unbreakable Bellaso cipher. It goes without saying,'' he adds smugly, ''that I broke it. Only to be horrified beyond belief by what I found.''")
+     ,(p "He leans forward, adopting a conspiratorial posture, but continuing to shout over the music. ''Let me ask you a hypothetical question. You're the sort of person who's read some science fiction, I'm sure. In any of those stories, do you ever recall reading about aliens harvesting humans as an energy source?''"))
+   (agree-choice "I'm pretty sure I've heard that somewhere." "''Good,'' he says. ''Then, perhaps, what I'm about to tell you won't blow your mind all over the wall.'' He chuckles darkly. ''I'm not sure about that, though.''" show-choice)
+   (annoy-choice "That's ridiculous - humans are net energy sinks, not generators." "''I am afraid that if you come here with a closed mind, you will not learn anything. It's time for you to make a decision.''" show-choice)
+   (neutral-choice "Are you trying to say there are aliens in the South Pacific?" "''Well... not exactly.'' He shifts uncomfortably in his seat. ''To explain, I would need... how would you say... a guarantee.''" show-choice)))
 
 
 (define (show-choice) (goto "choice") (look))
