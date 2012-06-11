@@ -18,7 +18,7 @@
 ;; String constants shown to player
 (define schooz:cancel-text "Cancel")  ;; text to cancel a popup choice
 (define schooz:popup-mouseover-hint "Click for options")  ;; mouseover text for popup popup links
-(define schooz:button-mouseover-hint "Click to select")  ;; mouseover text for choice buttons
+(define schooz:button-mouseover-hint "Click to choose")  ;; mouseover text for choice buttons
 (define schooz:cancel-mouseover-hint "Click to hide")  ;; mouseover text for Cancel buttons
 
 ;; HTML
