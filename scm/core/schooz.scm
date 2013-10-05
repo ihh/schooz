@@ -77,7 +77,7 @@
   (if (procedure? f) f (lambda () f)))
 
 ;; convert an SXML S-expression to an XML string
-;; Can't yet handle attributes...
+;; (this is actually very buggy & wrong... tag names should be symbols not strings. oh well. Corrected in PixelZoo version of this code...)
 (define (schooz:fold-sxml-outer str lst)
   (cond ((string? lst) (string-append str lst))
 	((null? lst) str)
